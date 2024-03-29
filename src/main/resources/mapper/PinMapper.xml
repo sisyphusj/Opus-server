@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.opus.pin.mapper.PinMapper">
+
+    <insert id="savePin">
+        insert into pins (p_id, m_id, tag, image_path) values (#{p_id},#{m_id}, #{tag}, #{image_path})
+    </insert>
+
+    <select id="findById" resultType="com.opus.pin.domain.Pin">
+        select p_id, m_id, image_path, tag from pins where p_id=#{pId}
+    </select>
+
+    <update id="updatePin">
+        update pins set tag=#{tag}, image_path=#{image_path} where p_id=#{p_id}
+    </update>
+
+    <delete id="deletePin">
+        delete from pins where p_id=#{pId}
+    </delete>
+
+</mapper>

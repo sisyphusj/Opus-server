@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.opus.member.mapper.MemberMapper">
+
+    <insert id="saveMember">
+        insert into member (m_id, id, pw, nickname, email) values (#{m_id}, #{id}, #{pw}, #{nickname}, #{email})
+    </insert>
+
+    <select id="findById" resultType="com.opus.member.domain.Member">
+        select m_id, id, pw, nickname, email from member where m_id=#{mId}
+    </select>
+
+    <update id="updateMember">
+        update member set id=#{id}, pw=#{pw}, nickname=#{nickname}, email=#{email} where m_id=#{m_id}
+    </update>
+
+    <delete id="deleteMember">
+        delete from member where m_id=#{mId}
+    </delete>
+
+</mapper>
