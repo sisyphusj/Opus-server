@@ -9,4 +9,8 @@ public interface PinMapper {
     void savePin(Pin pin);
 
     Pin findById(int pid);
+
+    void updatePin(Pin pin);
+
+    void deletePin(int pid);
 }
