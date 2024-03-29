@@ -18,6 +18,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.nio.charset.StandardCharsets;
+import java.util.concurrent.ThreadLocalRandom;
 
 @Service
 @RequiredArgsConstructor
@@ -30,33 +31,53 @@ public class PinService {
 
     private final PinMapper pinMapper;
 
+    int a = (int) (Math.random() * 1000);
+
     @Transactional
     public ResponseEntity<String> savePin(Pin pin) {
 
-        log.info("env = {}", localUrl);
-
-        // 로컬에 이미지를 저장하는 방식이지만 추후 서버에 이미지를 저장하는 방식으로 변경해야함
         try{
             URL url = new URL(pin.getImage_path());
             InputStream inputStream = url.openStream();
-            File tempFile = File.createTempFile("tempfile", ".jpg");
-            FileOutputStream outputStream = new FileOutputStream(tempFile);
+            OutputStream outputStream = null;
+            File tempFile = null;
+            try {
+                tempFile = File.createTempFile("tempfile", ".jpg");
+                outputStream = new FileOutputStream(tempFile);
 
-            byte[] buffer = new byte[2048];
-            int bytesRead = 0;
-            while ((bytesRead = inputStream.read(buffer)) != -1) {
-                outputStream.write(buffer, 0, bytesRead);
+                byte[] buffer = new byte[2048];
+                int bytesRead = 0;
+                while ((bytesRead = inputStream.read(buffer)) != -1) {
+                    outputStream.write(buffer, 0, bytesRead);
+                }
+
+                outputStream.flush();
+            } finally {
+                // 리소스 해제
+                if (outputStream != null) {
+                    try {
+                        outputStream.close();
+                    } catch (IOException e) {
+                        log.error("outputStream close error", e);
+                    }
+                }
+                if (inputStream != null) {
+                    try {
+                        inputStream.close();
+                    } catch (IOException e) {
+                        log.error("inputStream close error", e);
+                    }
+                }
             }
 
-            inputStream.close();
-            outputStream.close();
-
-//            String directoryPath = "C:\\Users\\gpflv\\Desktop\\imageRepository\\";
             String directoryPath = localUrl;
+            int random =  ThreadLocalRandom.current().nextInt(1, 1001);
+            File destinationFile = new File(directoryPath + File.separator + "image" + random +".jpg");
 
-            int random = (int)(Math.random() * 1000)+1;
-            File destinationFile = new File(directoryPath + "image" + random +".jpg");
-            tempFile.renameTo(destinationFile);
+
+            if(!tempFile.renameTo(destinationFile)) {
+                throw new IOException("Faild to move temporary file to destination file");
+            };
 
             log.info("File name = {}", destinationFile.getName());
 
