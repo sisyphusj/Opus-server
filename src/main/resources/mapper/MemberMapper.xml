@@ -5,8 +5,12 @@
 <mapper namespace="com.opus.member.mapper.MemberMapper">
 
     <insert id="saveMember">
-        insert into member (m_id, id, pw, nickname, email) values (#{m_id}, #{id}, #{pw}, #{nickname}, #{email})
+        insert into member (id, pw, nickname, email) values (#{id}, #{pw}, #{nickname}, #{email})
     </insert>
+
+    <select id="login" resultType="com.opus.member.domain.Member">
+        select * from member where id=#{id} and pw=#{pw}
+    </select>
 
     <select id="findById" resultType="com.opus.member.domain.Member">
         select m_id, id, pw, nickname, email from member where m_id=#{mId}

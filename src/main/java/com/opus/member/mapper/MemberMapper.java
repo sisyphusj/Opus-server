@@ -8,6 +8,8 @@ public interface MemberMapper {
 
     void saveMember(Member member);
 
+    Member login(Member member);
+
     Member findById(int mId);
 
     void updateMember(Member member);

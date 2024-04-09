@@ -20,6 +20,11 @@ public class MemberService {
     }
 
     @Transactional
+    public Member login(Member member) {
+        return memberMapper.login(member);
+    }
+
+    @Transactional
     public Member findById(int mId) {
         log.info("findById inS = {}", mId);
         log.info("findById inS = {}", memberMapper.findById(mId));
