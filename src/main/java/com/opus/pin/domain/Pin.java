@@ -8,8 +8,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class Pin {
-    private int m_id;
-    private int p_id;
+    private Integer m_id;
+    private Integer p_id;
     private String image_path;
     private String tag;
 }

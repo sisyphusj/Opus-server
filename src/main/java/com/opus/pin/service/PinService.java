@@ -2,6 +2,7 @@ package com.opus.pin.service;
 
 import com.opus.pin.controller.PinController;
 import com.opus.pin.domain.Pin;
+import com.opus.pin.domain.PinListDTO;
 import com.opus.pin.mapper.PinMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -18,6 +19,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.nio.charset.StandardCharsets;
+import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 
 @Service
@@ -28,6 +30,9 @@ public class PinService {
 
     @Value("${local.url}")
     private String localUrl;
+
+    @Value("${local.url1}")
+    private String localUrl1;
 
     private final PinMapper pinMapper;
 
@@ -72,7 +77,10 @@ public class PinService {
 
             String directoryPath = localUrl;
             int random =  ThreadLocalRandom.current().nextInt(1, 1001);
-            File destinationFile = new File(directoryPath + File.separator + "image" + random +".jpg");
+            log.info(directoryPath + "image" + random +".jpg");
+            File destinationFile = new File(directoryPath + "image" + random +".jpg");
+            // 클라이언트 url 상대 경로
+            String urlPath = localUrl1 + "/image" + random + ".jpg";
 
 
             if(!tempFile.renameTo(destinationFile)) {
@@ -83,7 +91,7 @@ public class PinService {
 
             // 컨트롤러의 image_path는 이미지 URL이고, 여기에서 로컬 주소로 변경함
             // 골저 완성 이후 해당 필드 수정 필요
-            pin.setImage_path(destinationFile.getPath());
+            pin.setImage_path(urlPath);
             pinMapper.savePin(pin);
 
             return ResponseEntity.status(HttpStatus.OK).body("File downloaded successfully");
@@ -100,6 +108,16 @@ public class PinService {
     @Transactional
     public Pin findById(int pid) {
         return pinMapper.findById(pid);
+    }
+
+    @Transactional
+    public List<Pin> pinList(PinListDTO pinListDTO) {
+        return pinMapper.pinList(pinListDTO);
+    }
+
+    @Transactional
+    public int getTotalCount() {
+        return pinMapper.getTotalCount();
     }
 
     @Transactional
