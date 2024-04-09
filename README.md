@@ -48,5 +48,5 @@ Opus project backend server
 - 좋아요 수
 - 댓글
 - 게시글 작성 시간
-  - 게시글 수정 시간
+  - 게시z글 수정 시간
 - seed
