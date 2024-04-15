@@ -10,9 +10,10 @@
     </insert>
 
     <select id="findById" resultType="com.opus.pin.domain.Pin">
-        select p_id, m_id, image_path, tag
+        select *
         from pins
-        where p_id = #{pId}
+        where m_id = #{m_id}
+        order by p_id desc limit #{amount} offset #{offset}
     </select>
 
     <select id="pinList" resultType="com.opus.pin.domain.Pin">

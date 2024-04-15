@@ -13,7 +13,7 @@ public interface PinMapper {
 
     void savePin(Pin pin);
 
-    Pin findById(int pid);
+    List<Pin> findById(PinListDTO pinListDTO);
 
     List<Pin> pinList(PinListDTO pinListDTO);
 

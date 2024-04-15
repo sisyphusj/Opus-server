@@ -106,8 +106,8 @@ public class PinService {
     }
 
     @Transactional
-    public Pin findById(int pid) {
-        return pinMapper.findById(pid);
+    public List<Pin> findById(PinListDTO pinListDTO) {
+        return pinMapper.findById(pinListDTO);
     }
 
     @Transactional
