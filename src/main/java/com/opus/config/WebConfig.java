@@ -1,4 +1,4 @@
-package com.opus.member.config;
+package com.opus.config;
 
 import com.opus.member.interceptor.LogInterceptor;
 import com.opus.member.interceptor.LoginCheckInterceptor;
