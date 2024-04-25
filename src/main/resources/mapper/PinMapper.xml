@@ -5,14 +5,14 @@
 <mapper namespace="com.opus.pin.mapper.PinMapper">
 
     <insert id="savePin">
-        insert into pins (m_id, tag, image_path)
+        insert into pins (member_id, tag, image_path)
         values (#{m_id}, #{tag}, #{image_path})
     </insert>
 
     <select id="findById" resultType="com.opus.pin.domain.Pin">
         select *
         from pins
-        where m_id = #{m_id}
+        where member_id = #{m_id}
         order by p_id desc limit #{amount} offset #{offset}
     </select>
 
