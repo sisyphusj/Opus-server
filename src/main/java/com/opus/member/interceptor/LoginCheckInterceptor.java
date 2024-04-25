@@ -16,14 +16,15 @@ public class LoginCheckInterceptor implements HandlerInterceptor {
 
         String requestURI = request.getRequestURI();
 
-        log.info("인증 체크 인터셉터 실행 {}", requestURI);
-
         HttpSession session = request.getSession(false);
 
-        if(session == null || session.getAttribute("loginMember") == null) {
-            // 수정이 필요함 아래의 조건문의 필요성을 따져야 한다.
-            if(!requestURI.equals("/member/login")) {
-                log.info("미인증 사용자 요청");
+        if (session == null || session.getAttribute("loginMember") == null) {
+            if (!requestURI.equals("/member/login") && !requestURI.equals("/member/signup")) {
+                log.info("미인증 사용자 요청 : {}", request);
+
+                request.setAttribute("message", "로그인이 필요한 서비스입니다.");
+                request.setAttribute("exception", "AuthenticationException");
+                request.getRequestDispatcher("/error").forward(request, response);
                 return false;
             }
         }

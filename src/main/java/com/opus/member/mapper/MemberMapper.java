@@ -1,5 +1,6 @@
 package com.opus.member.mapper;
 
+import com.opus.member.domain.LoginDTO;
 import com.opus.member.domain.Member;
 import org.apache.ibatis.annotations.Mapper;
 
@@ -8,7 +9,13 @@ public interface MemberMapper {
 
     void saveMember(Member member);
 
-    Member login(Member member);
+    boolean checkDuplicateId(String id);
+
+    boolean checkDuplicateNickname(String nick);
+
+    boolean checkDuplicateEmail(String email);
+
+    Integer login(LoginDTO loginDTO);
 
     Member findById(int mId);
 

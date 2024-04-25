@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
+import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.MissingRequestHeaderException;
 import org.springframework.web.bind.MissingServletRequestParameterException;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.servlet.NoHandlerFoundException;
 
+import javax.security.sasl.AuthenticationException;
 import java.io.IOException;
 
 @RestControllerAdvice
@@ -85,6 +87,19 @@ public class GlobalExceptionHandler {
     }
 
     /**
+     * IO Exception
+     *
+     * @param e IOException
+     * @return ResponseEntity<ErrorResponse>
+     */
+    @ExceptionHandler(IOException.class)
+    protected ResponseEntity<ErrorResponse> handleIOException(IOException e) {
+        log.error("handleIOException", e);
+        final ErrorResponse response = ErrorResponse.of(ResponseCode.IO_EXCEPTION, e.getMessage());
+        return new ResponseEntity<>(response, HTTP_STATUS_OK);
+    }
+
+    /**
      * 잘못된 서버 요청
      *
      * @param e HttpClientErrorException
@@ -94,6 +109,19 @@ public class GlobalExceptionHandler {
     protected ResponseEntity<ErrorResponse> handleHttpClientErrorException(HttpClientErrorException e) {
         log.error("handleHttpClientErrorException", e);
         final ErrorResponse response = ErrorResponse.of(ResponseCode.BAD_REQUEST, e.getMessage());
+        return new ResponseEntity<>(response, HTTP_STATUS_OK);
+    }
+
+    /**
+     * 인증 예외 처리
+     *
+     * @param e AuthenticationException
+     * @return ResponseEntity<ErrorResponse>
+     */
+    @ExceptionHandler(AuthenticationException.class)
+    public ResponseEntity<ErrorResponse> handleAuthenticationException(AuthenticationException e) {
+        log.error("handleAuthenticationException", e);
+        final ErrorResponse response = ErrorResponse.of(ResponseCode.USER_UNAUTHORIZED, e.getMessage());
         return new ResponseEntity<>(response, HTTP_STATUS_OK);
     }
 
@@ -124,15 +152,28 @@ public class GlobalExceptionHandler {
     }
 
     /**
-     * IO Exception
+     * 잘못된 HTTP 메소드로 요청한 경우
      *
-     * @param e IOException
+     * @param e HttpRequestMethodNotSupportedException
      * @return ResponseEntity<ErrorResponse>
      */
-    @ExceptionHandler(IOException.class)
-    protected ResponseEntity<ErrorResponse> handleIOException(IOException e) {
-        log.error("handleIOException", e);
-        final ErrorResponse response = ErrorResponse.of(ResponseCode.IO_EXCEPTION, e.getMessage());
+    @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
+    protected ResponseEntity<ErrorResponse> handleHttpRequestMethodNotSupportedException(HttpRequestMethodNotSupportedException e) {
+        log.error("handleHttpRequestMethodNotSupportedException", e);
+        final ErrorResponse response = ErrorResponse.of(ResponseCode.METHOD_NOT_ALLOWED, e.getMessage());
+        return new ResponseEntity<>(response, HTTP_STATUS_OK);
+    }
+
+    /**
+     * 중복된 데이터가 있는 경우
+     *
+     * @param e DuplicateEntryException
+     * @return ResponseEntity<ErrorResponse>
+     */
+    @ExceptionHandler(DuplicateEntryException.class)
+    protected ResponseEntity<ErrorResponse> handleDuplicateEntryException(DuplicateEntryException e) {
+        log.error("handleDuplicateEntryException", e);
+        final ErrorResponse response = ErrorResponse.of(ResponseCode.DATA_ALREADY_EXIST, e.getMessage());
         return new ResponseEntity<>(response, HTTP_STATUS_OK);
     }
 
@@ -144,8 +185,21 @@ public class GlobalExceptionHandler {
      */
     @ExceptionHandler(Exception.class)
     protected final ResponseEntity<ErrorResponse> handleAllExceptions(Exception e) {
-        log.error("handleException", e);
+        log.error("handleException {} , {}", e, e.toString());
         final ErrorResponse response = ErrorResponse.of(ResponseCode.INTERNAL_SERVER_ERROR, e.getMessage());
+        return new ResponseEntity<>(response, HTTP_STATUS_OK);
+    }
+
+    /**
+     * 비즈니스 로직에서 발생하는 예외 처리
+     *
+     * @param e BusinessExceptionHandler
+     * @return ResponseEntity<ErrorResponse>
+     */
+    @ExceptionHandler(BusinessExceptionHandler.class)
+    public ResponseEntity<ErrorResponse> handleBusinessException(BusinessExceptionHandler e) {
+        log.error("handleBusinessException", e);
+        final ErrorResponse response = ErrorResponse.of(ResponseCode.BUSINESS_ERROR, e.getMessage());
         return new ResponseEntity<>(response, HTTP_STATUS_OK);
     }
 }

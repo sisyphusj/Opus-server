@@ -8,8 +8,20 @@
         insert into member (id, pw, nickname, email) values (#{id}, #{pw}, #{nickname}, #{email})
     </insert>
 
-    <select id="login" resultType="com.opus.member.domain.Member">
-        select * from member where id=#{id} and pw=#{pw}
+    <select id="checkDuplicateId" resultType="boolean">
+        select exists(select 1 from member where id=#{id});
+    </select>
+
+    <select id="checkDuplicateNickname" resultType="boolean">
+        select exists(select 1 from member where nickname=#{nickname});
+    </select>
+
+    <select id="checkDuplicateEmail" resultType="boolean">
+        select exists(select 1 from member where email=#{email});
+    </select>
+
+    <select id="login" resultType="int">
+        select m_id from member where id=#{id} and pw=#{pw}
     </select>
 
     <select id="findById" resultType="com.opus.member.domain.Member">
