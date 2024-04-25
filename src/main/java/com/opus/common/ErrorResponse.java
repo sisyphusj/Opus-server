@@ -15,7 +15,7 @@ import java.util.stream.Collectors;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class ErrorResponse {
 
-    private HttpStatus status;
+    private int status;
     private String code;
     private String msg;
     private List<FieldError> errors;
