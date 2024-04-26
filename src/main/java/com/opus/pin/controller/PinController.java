@@ -1,14 +1,15 @@
 package com.opus.pin.controller;
 
-import com.opus.member.domain.Member;
+import com.opus.common.ResponseCode;
 import com.opus.pin.domain.Pin;
-import com.opus.pin.domain.PinListDTO;
+import com.opus.pin.domain.PinDTO;
+import com.opus.pin.domain.PinListRequestDTO;
 import com.opus.pin.service.PinService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -28,46 +29,31 @@ public class PinController {
 
     // pin 추가
     @PostMapping
-    public ResponseEntity<String> addPin(@RequestBody Pin pin, HttpServletRequest request) {
+    public ResponseEntity<ResponseCode> addPin(@Valid @RequestBody PinDTO pinDTO, HttpServletRequest request) {
+
         HttpSession session = request.getSession(false);
-
-        if (session == null) {
-            throw new IllegalStateException("로그인이 필요합니다.");
-        }
-
         Integer memberId = (Integer) session.getAttribute("loginMember");
-        pin.setM_id(memberId);
-        log.info("addPin = {}", pin);
-        return pinService.savePin(pin);
+
+        log.info("addPin = {}", pinDTO);
+        return pinService.savePin(pinDTO, memberId);
     }
 
     // pin 리스트 요청
     @PostMapping("/list")
-    public List<Pin> getPinList(@RequestBody PinListDTO pinListDTO) {
-        log.info("getPinList = {}", pinListDTO);
-        return pinService.pinList(pinListDTO);
+    public List<Pin> getPinList(@RequestBody PinListRequestDTO pinListRequestDTO) {
+
+        log.info("getPinList = {}", pinListRequestDTO);
+        return pinService.pinList(pinListRequestDTO);
     }
 
     // id로 pin 찾기
     @PostMapping("/myPins")
-    public List<Pin> findById(@RequestBody PinListDTO pinListDTO, HttpServletRequest request) {
+    public List<Pin> getPinListById(@RequestBody PinListRequestDTO pinListRequestDTO, HttpServletRequest request) {
         HttpSession session = request.getSession(false);
-
-        if (session == null) {
-            throw new IllegalStateException("로그인이 필요합니다.");
-        }
         Integer memberId = (Integer) session.getAttribute("loginMember");
 
-        if (memberId == null) {
-            log.error("memberId is null");
-            throw new IllegalStateException("서버 오류");
-        }
-
-        pinListDTO.setM_id(memberId);
-        log.info("findById = {}", pinListDTO);
-
-        return pinService.findById(pinListDTO);
-
+        log.info("findById = {}", pinListRequestDTO);
+        return pinService.pinListById(pinListRequestDTO, memberId);
     }
 
     // 전체 pin 개수
@@ -80,14 +66,21 @@ public class PinController {
 
 
     @PutMapping
-    public void updatePin(@RequestBody Pin pin) {
-        log.info("updatePin = {}", pin);
-        pinService.updatePin(pin);
+    public void updatePin(@Valid @RequestBody PinDTO pinDTO, HttpServletRequest request) {
+
+        HttpSession session = request.getSession(false);
+        Integer memberId = (Integer) session.getAttribute("loginMember");
+
+        log.info("updatePin = {}", pinDTO);
+        pinService.updatePin(pinDTO, memberId);
     }
 
     @DeleteMapping("/{pid}")
-    public void deletePin(@PathVariable int pid) {
+    public void deletePin(@PathVariable int pid, HttpServletRequest request) {
+
+        HttpSession session = request.getSession(false);
+        Integer memberId = (Integer) session.getAttribute("loginMember");
         log.info("deletePin = {}", pid);
-        pinService.deletePin(pid);
+        pinService.deletePin(pid, memberId);
     }
 }

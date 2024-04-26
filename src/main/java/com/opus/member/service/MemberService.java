@@ -5,7 +5,7 @@ import com.opus.config.exception.BusinessExceptionHandler;
 import com.opus.config.exception.DuplicateEntryException;
 import com.opus.member.domain.LoginDTO;
 import com.opus.member.domain.Member;
-import com.opus.member.domain.SignupDTO;
+import com.opus.member.domain.MemberDTO;
 import com.opus.member.mapper.MemberMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -22,13 +22,13 @@ public class MemberService {
     private final MemberMapper memberMapper;
 
 
-    public void saveMember(SignupDTO signupDTO) {
+    public void saveMember(MemberDTO memberDTO) {
 
         Member member = Member.builder()
-                .id(signupDTO.getId())
-                .pw(signupDTO.getPw())
-                .nickname(signupDTO.getNickname())
-                .email(signupDTO.getEmail())
+                .id(memberDTO.getId())
+                .pw(memberDTO.getPw())
+                .nickname(memberDTO.getNickname())
+                .email(memberDTO.getEmail())
                 .build();
 
         log.info("saveMember inS = {}", member);
@@ -71,16 +71,41 @@ public class MemberService {
     }
 
     public Integer login(LoginDTO loginDTO) {
-        return memberMapper.login(loginDTO);
+        log.info("login inS = {}", loginDTO.getId());
+
+        Member member = Member.builder()
+                .id(loginDTO.getId())
+                .pw(loginDTO.getPw())
+                .build();
+
+        if(memberMapper.login(member) == null) {
+            throw new BusinessExceptionHandler(ResponseCode.NOT_FOUND_ERROR, "아이디 또는 비밀번호가 일치하지 않습니다.");
+        }
+
+        return memberMapper.login(member);
     }
 
     public Member findById(int mId) {
+
+        if(memberMapper.findById(mId) == null) {
+            throw new BusinessExceptionHandler(ResponseCode.NOT_FOUND_ERROR);
+        }
+
         log.info("findById inS = {}", mId);
         log.info("findById inS = {}", memberMapper.findById(mId));
         return memberMapper.findById(mId);
     }
 
-    public void updateMember(Member member) {
+    public void updateMember(MemberDTO memberDTO, int mId) {
+
+        Member member = Member.builder()
+                .m_id(mId)
+                .id(memberDTO.getId())
+                .pw(memberDTO.getPw())
+                .nickname(memberDTO.getNickname())
+                .email(memberDTO.getEmail())
+                .build();
+
         memberMapper.updateMember(member);
     }
 

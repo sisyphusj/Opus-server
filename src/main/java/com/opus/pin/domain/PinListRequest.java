@@ -9,9 +9,11 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class Pin {
+public class PinListRequest {
+
     private Integer mId;
-    private Integer pId;
-    private String image_path;
-    private String tag;
+
+    private Integer amount;
+
+    private Integer offset;
 }

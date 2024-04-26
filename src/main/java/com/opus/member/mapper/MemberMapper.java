@@ -15,7 +15,7 @@ public interface MemberMapper {
 
     boolean checkDuplicateEmail(String email);
 
-    Integer login(LoginDTO loginDTO);
+    Integer login(Member member);
 
     Member findById(int mId);
 

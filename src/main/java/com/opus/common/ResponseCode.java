@@ -14,6 +14,7 @@ public enum ResponseCode {
 
     // User
     USER_LOGIN_SUCCESS(200, "200", "사용자 로그인 성공"),
+    USER_LOGOUT_SUCCESS(200, "200", "사용자 로그아웃 성공"),
     USER_READ_SUCCESS(200, "200", "사용자 조회 성공"),
     USER_UPDATE_SUCCESS(200, "200", "사용자 정보 수정 성공"),
     USER_DELETE_SUCCESS(200, "200", "사용자 탈퇴 성공"),
@@ -48,7 +49,7 @@ public enum ResponseCode {
      * 401 Unauthorized
      */
     USER_UNAUTHORIZED(401, "A001", "허가받지 않은 요청입니다."),
-    SESSION_NOT_VALID(401, "A002", "세션이 종료되었습니다."),
+    SESSION_NOT_VALID(401, "A002", "세션이 유효하지 않습니다."),
 
     /**
      * 404 Not Found

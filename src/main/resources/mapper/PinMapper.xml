@@ -6,19 +6,19 @@
 
     <insert id="savePin">
         insert into pins (member_id, tag, image_path)
-        values (#{m_id}, #{tag}, #{image_path})
+        values (#{mId}, #{tag}, #{image_path})
     </insert>
-
-    <select id="findById" resultType="com.opus.pin.domain.Pin">
-        select *
-        from pins
-        where member_id = #{m_id}
-        order by p_id desc limit #{amount} offset #{offset}
-    </select>
 
     <select id="pinList" resultType="com.opus.pin.domain.Pin">
         select *
         from pins
+        order by p_id desc limit #{amount} offset #{offset}
+    </select>
+
+    <select id="pinListById" resultType="com.opus.pin.domain.Pin">
+        select *
+        from pins
+        where member_id = #{mId}
         order by p_id desc limit #{amount} offset #{offset}
     </select>
 
@@ -31,13 +31,13 @@
         update pins
         set tag=#{tag},
             image_path=#{image_path}
-        where p_id = #{p_id}
+        where p_id = #{pId} and member_id = #{mId}
     </update>
 
     <delete id="deletePin">
         delete
         from pins
-        where p_id = #{pId}
+        where p_id = #{pid} and member_id = #{mid}
     </delete>
 
 </mapper>

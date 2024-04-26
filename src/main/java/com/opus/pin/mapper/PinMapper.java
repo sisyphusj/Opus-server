@@ -1,11 +1,10 @@
 package com.opus.pin.mapper;
 
 import com.opus.pin.domain.Pin;
-import com.opus.pin.domain.PinListDTO;
+import com.opus.pin.domain.PinListRequest;
+import com.opus.pin.domain.PinListRequestDTO;
 import org.apache.ibatis.annotations.Mapper;
-import org.springframework.data.repository.query.Param;
 
-import java.util.HashMap;
 import java.util.List;
 
 @Mapper
@@ -13,13 +12,13 @@ public interface PinMapper {
 
     void savePin(Pin pin);
 
-    List<Pin> findById(PinListDTO pinListDTO);
+    List<Pin> pinList(PinListRequest pinListRequest);
 
-    List<Pin> pinList(PinListDTO pinListDTO);
+    List<Pin> pinListById(PinListRequest pinListRequest);
 
     int getTotalCount();
 
     void updatePin(Pin pin);
 
-    void deletePin(int pid);
+    void deletePin(int pid, int mid);
 }

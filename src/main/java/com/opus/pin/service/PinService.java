@@ -1,15 +1,14 @@
 package com.opus.pin.service;
 
-import com.opus.pin.controller.PinController;
+import com.opus.common.ResponseCode;
+import com.opus.pin.domain.PinListRequest;
 import com.opus.pin.domain.Pin;
-import com.opus.pin.domain.PinListDTO;
+import com.opus.pin.domain.PinDTO;
+import com.opus.pin.domain.PinListRequestDTO;
 import com.opus.pin.mapper.PinMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.tomcat.util.http.fileupload.IOUtils;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.PropertySource;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,8 +16,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.io.*;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.net.URLConnection;
-import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 
@@ -38,10 +35,16 @@ public class PinService {
 
     int a = (int) (Math.random() * 1000);
 
-    @Transactional
-    public ResponseEntity<String> savePin(Pin pin) {
+    public ResponseEntity<ResponseCode> savePin(PinDTO pinDTO, int memberId) {
 
-        try{
+        Pin pin = Pin.builder()
+                .image_path(pinDTO.getImage_path())
+                .tag(pinDTO.getTag())
+                .mId(memberId)
+                .build();
+
+
+        try {
             URL url = new URL(pin.getImage_path());
             InputStream inputStream = url.openStream();
             OutputStream outputStream = null;
@@ -76,16 +79,17 @@ public class PinService {
             }
 
             String directoryPath = localUrl;
-            int random =  ThreadLocalRandom.current().nextInt(1, 1001);
-            log.info(directoryPath + "image" + random +".jpg");
-            File destinationFile = new File(directoryPath + "image" + random +".jpg");
+            int random = ThreadLocalRandom.current().nextInt(1, 1001);
+            log.info(directoryPath + "image" + random + ".jpg");
+            File destinationFile = new File(directoryPath + "image" + random + ".jpg");
             // 클라이언트 url 상대 경로
             String urlPath = localUrl1 + "/image" + random + ".jpg";
 
 
-            if(!tempFile.renameTo(destinationFile)) {
+            if (!tempFile.renameTo(destinationFile)) {
                 throw new IOException("Faild to move temporary file to destination file");
-            };
+            }
+            ;
 
             log.info("File name = {}", destinationFile.getName());
 
@@ -94,40 +98,55 @@ public class PinService {
             pin.setImage_path(urlPath);
             pinMapper.savePin(pin);
 
-            return ResponseEntity.status(HttpStatus.OK).body("File downloaded successfully");
+            return ResponseEntity.ok(ResponseCode.SUCCESS);
 
         } catch (MalformedURLException e) {
             log.info("URL is not valid", e);
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("URL is not valid");
+            return ResponseEntity.badRequest().body(ResponseCode.INVALID_INPUT_VALUE);
         } catch (IOException e) {
             log.info("IO Exception", e);
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("IO Exception");
+            return ResponseEntity.badRequest().body(ResponseCode.IO_EXCEPTION);
         }
     }
 
-    @Transactional
-    public List<Pin> findById(PinListDTO pinListDTO) {
-        return pinMapper.findById(pinListDTO);
+    public List<Pin> pinList(PinListRequestDTO pinListRequestDTO) {
+
+        PinListRequest pinListRequest = PinListRequest.builder()
+                .offset(pinListRequestDTO.getOffset())
+                .amount(pinListRequestDTO.getAmount())
+                .build();
+
+        return pinMapper.pinList(pinListRequest);
     }
 
-    @Transactional
-    public List<Pin> pinList(PinListDTO pinListDTO) {
-        return pinMapper.pinList(pinListDTO);
+    public List<Pin> pinListById(PinListRequestDTO pinListRequestDTO, int memberId) {
+
+        PinListRequest pinListRequest = PinListRequest.builder()
+                .offset(pinListRequestDTO.getOffset())
+                .amount(pinListRequestDTO.getAmount())
+                .mId(memberId)
+                .build();
+
+        return pinMapper.pinListById(pinListRequest);
     }
 
-    @Transactional
     public int getTotalCount() {
         return pinMapper.getTotalCount();
     }
 
-    @Transactional
-    public void updatePin(Pin pin) {
+    public void updatePin(PinDTO pinDTO, int memberId) {
+
+        Pin pin = Pin.builder()
+                .pId(pinDTO.getPId())
+                .image_path(pinDTO.getImage_path())
+                .tag(pinDTO.getTag())
+                .mId(memberId)
+                .build();
+
         pinMapper.updatePin(pin);
     }
 
-    @Transactional
-    public void deletePin(int pid) {
-        pinMapper.deletePin(pid);
+    public void deletePin(int pid, int memberId) {
+        pinMapper.deletePin(pid, memberId);
     }
-
 }
