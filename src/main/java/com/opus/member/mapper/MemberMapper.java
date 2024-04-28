@@ -1,6 +1,5 @@
 package com.opus.member.mapper;
 
-import com.opus.member.domain.LoginDTO;
 import com.opus.member.domain.Member;
 import org.apache.ibatis.annotations.Mapper;
 

@@ -2,7 +2,6 @@ package com.opus.pin.mapper;
 
 import com.opus.pin.domain.Pin;
 import com.opus.pin.domain.PinListRequest;
-import com.opus.pin.domain.PinListRequestDTO;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;
