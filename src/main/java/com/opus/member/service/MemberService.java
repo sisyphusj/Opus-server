@@ -21,18 +21,8 @@ public class MemberService {
 
     private final MemberMapper memberMapper;
 
-
     public void saveMember(MemberDTO memberDTO) {
-
-        Member member = Member.builder()
-                .id(memberDTO.getId())
-                .pw(memberDTO.getPw())
-                .nickname(memberDTO.getNickname())
-                .email(memberDTO.getEmail())
-                .build();
-
-        log.info("saveMember inS = {}", member);
-
+        Member member = Member.of(memberDTO);
         memberMapper.saveMember(member);
     }
 
@@ -71,14 +61,9 @@ public class MemberService {
     }
 
     public Integer login(LoginDTO loginDTO) {
-        log.info("login inS = {}", loginDTO.getId());
+        Member member = Member.of(loginDTO);
 
-        Member member = Member.builder()
-                .id(loginDTO.getId())
-                .pw(loginDTO.getPw())
-                .build();
-
-        if(memberMapper.login(member) == null) {
+        if (memberMapper.login(member) == null) {
             throw new BusinessExceptionHandler(ResponseCode.NOT_FOUND_ERROR, "아이디 또는 비밀번호가 일치하지 않습니다.");
         }
 
@@ -87,25 +72,16 @@ public class MemberService {
 
     public Member findById(int mId) {
 
-        if(memberMapper.findById(mId) == null) {
+        if (memberMapper.findById(mId) == null) {
             throw new BusinessExceptionHandler(ResponseCode.NOT_FOUND_ERROR);
         }
 
-        log.info("findById inS = {}", mId);
-        log.info("findById inS = {}", memberMapper.findById(mId));
         return memberMapper.findById(mId);
     }
 
     public void updateMember(MemberDTO memberDTO, int mId) {
-
-        Member member = Member.builder()
-                .m_id(mId)
-                .id(memberDTO.getId())
-                .pw(memberDTO.getPw())
-                .nickname(memberDTO.getNickname())
-                .email(memberDTO.getEmail())
-                .build();
-
+        
+        Member member = Member.of(memberDTO, mId);
         memberMapper.updateMember(member);
     }
 

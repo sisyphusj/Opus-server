@@ -1,17 +1,17 @@
 package com.opus.pin.domain;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @Data
-@Builder
-@AllArgsConstructor
-@NoArgsConstructor
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class Pin {
     private Integer mId;
     private Integer pId;
-    private String image_path;
+    private String imagePath;
     private String tag;
+
+    public static Pin of(PinDTO pinDTO, Integer mId) {
+        return new Pin(mId, pinDTO.getPId(), pinDTO.getImagePath(), pinDTO.getTag());
+    }
 }

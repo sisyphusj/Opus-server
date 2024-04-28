@@ -10,7 +10,7 @@ public class PinDTO {
     private Integer pId;
 
     @NotBlank
-    private String image_path;
+    private String imagePath;
 
     @NotBlank
     private String tag;

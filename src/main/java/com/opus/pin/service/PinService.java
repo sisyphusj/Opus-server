@@ -33,19 +33,12 @@ public class PinService {
 
     private final PinMapper pinMapper;
 
-    int a = (int) (Math.random() * 1000);
-
     public ResponseEntity<ResponseCode> savePin(PinDTO pinDTO, int memberId) {
 
-        Pin pin = Pin.builder()
-                .image_path(pinDTO.getImage_path())
-                .tag(pinDTO.getTag())
-                .mId(memberId)
-                .build();
-
+        Pin pin = Pin.of(pinDTO, memberId);
 
         try {
-            URL url = new URL(pin.getImage_path());
+            URL url = new URL(pin.getImagePath());
             InputStream inputStream = url.openStream();
             OutputStream outputStream = null;
             File tempFile = null;
@@ -81,6 +74,7 @@ public class PinService {
             String directoryPath = localUrl;
             int random = ThreadLocalRandom.current().nextInt(1, 1001);
             log.info(directoryPath + "image" + random + ".jpg");
+            // 변경 처리 + 쓰지마
             File destinationFile = new File(directoryPath + "image" + random + ".jpg");
             // 클라이언트 url 상대 경로
             String urlPath = localUrl1 + "/image" + random + ".jpg";
@@ -95,7 +89,7 @@ public class PinService {
 
             // 컨트롤러의 image_path는 이미지 URL이고, 여기에서 로컬 주소로 변경함
             // 골저 완성 이후 해당 필드 수정 필요
-            pin.setImage_path(urlPath);
+            pin.setImagePath(urlPath);
             pinMapper.savePin(pin);
 
             return ResponseEntity.ok(ResponseCode.SUCCESS);
@@ -111,22 +105,14 @@ public class PinService {
 
     public List<Pin> pinList(PinListRequestDTO pinListRequestDTO) {
 
-        PinListRequest pinListRequest = PinListRequest.builder()
-                .offset(pinListRequestDTO.getOffset())
-                .amount(pinListRequestDTO.getAmount())
-                .build();
-
+        PinListRequest pinListRequest = PinListRequest.of(pinListRequestDTO);
+        log.info("pinListRequest = {}", pinMapper.pinList(pinListRequest));
         return pinMapper.pinList(pinListRequest);
     }
 
     public List<Pin> pinListById(PinListRequestDTO pinListRequestDTO, int memberId) {
 
-        PinListRequest pinListRequest = PinListRequest.builder()
-                .offset(pinListRequestDTO.getOffset())
-                .amount(pinListRequestDTO.getAmount())
-                .mId(memberId)
-                .build();
-
+        PinListRequest pinListRequest = PinListRequest.of(pinListRequestDTO, memberId);
         return pinMapper.pinListById(pinListRequest);
     }
 
@@ -136,13 +122,7 @@ public class PinService {
 
     public void updatePin(PinDTO pinDTO, int memberId) {
 
-        Pin pin = Pin.builder()
-                .pId(pinDTO.getPId())
-                .image_path(pinDTO.getImage_path())
-                .tag(pinDTO.getTag())
-                .mId(memberId)
-                .build();
-
+        Pin pin = Pin.of(pinDTO, memberId);
         pinMapper.updatePin(pin);
     }
 
