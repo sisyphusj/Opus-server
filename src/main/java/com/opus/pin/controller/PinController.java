@@ -1,6 +1,7 @@
 package com.opus.pin.controller;
 
 import com.opus.common.ResponseCode;
+import com.opus.common.SessionConst;
 import com.opus.pin.domain.Pin;
 import com.opus.pin.domain.PinDTO;
 import com.opus.pin.domain.PinListRequestDTO;
@@ -32,7 +33,7 @@ public class PinController {
     public ResponseEntity<ResponseCode> addPin(@Valid @RequestBody PinDTO pinDTO, HttpServletRequest request) {
 
         HttpSession session = request.getSession(false);
-        Integer memberId = (Integer) session.getAttribute("loginMember");
+        Integer memberId = (Integer) session.getAttribute(SessionConst.LOGIN_SESSION);
 
         log.info("addPin = {}", pinDTO);
         return pinService.savePin(pinDTO, memberId);
@@ -50,7 +51,7 @@ public class PinController {
     @PostMapping("/myPins")
     public List<Pin> getPinListById(@RequestBody PinListRequestDTO pinListRequestDTO, HttpServletRequest request) {
         HttpSession session = request.getSession(false);
-        Integer memberId = (Integer) session.getAttribute("loginMember");
+        Integer memberId = (Integer) session.getAttribute(SessionConst.LOGIN_SESSION);
 
         log.info("findById = {}", pinListRequestDTO);
         return pinService.pinListById(pinListRequestDTO, memberId);
@@ -69,7 +70,7 @@ public class PinController {
     public void updatePin(@Valid @RequestBody PinDTO pinDTO, HttpServletRequest request) {
 
         HttpSession session = request.getSession(false);
-        Integer memberId = (Integer) session.getAttribute("loginMember");
+        Integer memberId = (Integer) session.getAttribute(SessionConst.LOGIN_SESSION);
 
         log.info("updatePin = {}", pinDTO);
         pinService.updatePin(pinDTO, memberId);
@@ -79,7 +80,7 @@ public class PinController {
     public void deletePin(@PathVariable int pid, HttpServletRequest request) {
 
         HttpSession session = request.getSession(false);
-        Integer memberId = (Integer) session.getAttribute("loginMember");
+        Integer memberId = (Integer) session.getAttribute(SessionConst.LOGIN_SESSION);
         log.info("deletePin = {}", pid);
         pinService.deletePin(pid, memberId);
     }

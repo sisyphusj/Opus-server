@@ -2,6 +2,7 @@ package com.opus.member.controller;
 
 import com.opus.common.ErrorResponse;
 import com.opus.common.ResponseCode;
+import com.opus.common.SessionConst;
 import com.opus.config.exception.BusinessExceptionHandler;
 import com.opus.member.domain.LoginDTO;
 import com.opus.member.domain.Member;
@@ -12,7 +13,6 @@ import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.relational.core.sql.In;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -39,14 +39,23 @@ public class MemberController {
                                                        @RequestParam(required = false) String nickname,
                                                        @RequestParam(required = false) String email) {
 
+
+
         if (id != null && nickname == null && email == null && !id.trim().isEmpty()) {
+
             return memberService.checkDuplicate(0, id);
+
         } else if (nickname != null && id == null && email == null && !nickname.trim().isEmpty()) {
+
             return memberService.checkDuplicate(1, nickname);
+
         } else if (email != null && id == null && nickname == null && !email.trim().isEmpty()) {
+
             return memberService.checkDuplicate(2, email);
         } else {
+
             throw new BusinessExceptionHandler(ResponseCode.INVALID_INPUT_VALUE);
+
         }
 
     }
@@ -56,7 +65,7 @@ public class MemberController {
 
         Integer memberId = memberService.login(loginDTO);
         HttpSession session = request.getSession();
-        session.setAttribute("loginMember", memberId);
+        session.setAttribute(SessionConst.LOGIN_SESSION, memberId);
 
 
         ErrorResponse response = ErrorResponse.builder()
@@ -82,10 +91,10 @@ public class MemberController {
     @GetMapping("/profile")
     public ResponseEntity<Member> findById(HttpServletRequest request) {
         HttpSession session = request.getSession(false);
-        Integer memberId = (Integer) session.getAttribute("loginMember");
+        Integer memberId = (Integer) session.getAttribute(SessionConst.LOGIN_SESSION);
 
         Member member = memberService.findById(memberId);
-        log.info("findById = {}", member.getM_id());
+        log.info("findById = {}", member.getMId());
         return ResponseEntity.ok(member);
     }
 
@@ -93,7 +102,7 @@ public class MemberController {
     public ResponseEntity<ResponseCode> updateMember(@Valid @RequestBody MemberDTO memberDTO, HttpServletRequest request) {
 
         HttpSession session = request.getSession(false);
-        Integer memberId = (Integer) session.getAttribute("loginMember");
+        Integer memberId = (Integer) session.getAttribute(SessionConst.LOGIN_SESSION);
 
         memberService.updateMember(memberDTO, memberId);
         return ResponseEntity.ok(ResponseCode.SUCCESS);
@@ -103,7 +112,7 @@ public class MemberController {
     public ResponseEntity<ResponseCode> deleteMember(HttpServletRequest request) {
 
         HttpSession session = request.getSession(false);
-        Integer memberId = (Integer) session.getAttribute("loginMember");
+        Integer memberId = (Integer) session.getAttribute(SessionConst.LOGIN_SESSION);
 
         memberService.deleteMember(memberId);
         return ResponseEntity.ok(ResponseCode.SUCCESS);
