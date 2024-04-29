@@ -22,7 +22,6 @@ import java.util.concurrent.ThreadLocalRandom;
 @Service
 @RequiredArgsConstructor
 @Slf4j
-@Transactional
 public class PinService {
 
     @Value("${local.url}")
@@ -33,6 +32,7 @@ public class PinService {
 
     private final PinMapper pinMapper;
 
+    @Transactional
     public ResponseEntity<ResponseCode> savePin(PinDTO pinDTO, int memberId) {
 
         Pin pin = Pin.of(pinDTO, memberId);
@@ -83,7 +83,6 @@ public class PinService {
             if (!tempFile.renameTo(destinationFile)) {
                 throw new IOException("Faild to move temporary file to destination file");
             }
-            ;
 
             log.info("File name = {}", destinationFile.getName());
 
@@ -103,29 +102,33 @@ public class PinService {
         }
     }
 
+    @Transactional(readOnly = true)
     public List<Pin> pinList(PinListRequestDTO pinListRequestDTO) {
 
         PinListRequest pinListRequest = PinListRequest.of(pinListRequestDTO);
-        log.info("pinListRequest = {}", pinMapper.pinList(pinListRequest));
         return pinMapper.pinList(pinListRequest);
     }
 
+    @Transactional(readOnly = true)
     public List<Pin> pinListById(PinListRequestDTO pinListRequestDTO, int memberId) {
 
         PinListRequest pinListRequest = PinListRequest.of(pinListRequestDTO, memberId);
         return pinMapper.pinListById(pinListRequest);
     }
 
+    @Transactional(readOnly = true)
     public int getTotalCount() {
         return pinMapper.getTotalCount();
     }
 
+    @Transactional
     public void updatePin(PinDTO pinDTO, int memberId) {
 
         Pin pin = Pin.of(pinDTO, memberId);
         pinMapper.updatePin(pin);
     }
 
+    @Transactional
     public void deletePin(int pid, int memberId) {
         pinMapper.deletePin(pid, memberId);
     }
