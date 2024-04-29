@@ -8,11 +8,11 @@ public interface MemberMapper {
 
     void saveMember(Member member);
 
-    boolean checkDuplicateId(String id);
+    int checkDuplicateId(String id);
 
-    boolean checkDuplicateNickname(String nick);
+    int checkDuplicateNick(String nick);
 
-    boolean checkDuplicateEmail(String email);
+    int checkDuplicateEmail(String email);
 
     Integer login(Member member);
 

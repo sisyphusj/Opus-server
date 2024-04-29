@@ -5,19 +5,19 @@
 <mapper namespace="com.opus.member.mapper.MemberMapper">
 
     <insert id="saveMember">
-        insert into member (id, pw, nickname, email) values (#{id}, #{pw}, #{nickname}, #{email})
+        insert into member (id, pw, nick, email) values (#{id}, #{pw}, #{nick}, #{email})
     </insert>
 
-    <select id="checkDuplicateId" resultType="boolean">
-        select exists(select 1 from member where id=#{id});
+    <select id="checkDuplicateId" resultType="int">
+        select count(*) from member where id=#{id}
     </select>
 
-    <select id="checkDuplicateNickname" resultType="boolean">
-        select exists(select 1 from member where nickname=#{nickname});
+    <select id="checkDuplicateNick" resultType="int">
+        select count(*) from member where nick=#{nick}
     </select>
 
-    <select id="checkDuplicateEmail" resultType="boolean">
-        select exists(select 1 from member where email=#{email});
+    <select id="checkDuplicateEmail" resultType="int">
+        select count(*) from member where email=#{email}
     </select>
 
     <select id="login" resultType="int">
@@ -25,11 +25,11 @@
     </select>
 
     <select id="findById" resultType="com.opus.member.domain.Member">
-        select mId, id, pw, nickname, email from member where mId=#{mId}
+        select * from member where mId=#{mId}
     </select>
 
     <update id="updateMember">
-        update member set id=#{id}, pw=#{pw}, nickname=#{nickname}, email=#{email} where mId=#{mId}
+        update member set id=#{id}, pw=#{pw}, nick=#{nick}, email=#{email} where mId=#{mId}
     </update>
 
     <delete id="deleteMember">
