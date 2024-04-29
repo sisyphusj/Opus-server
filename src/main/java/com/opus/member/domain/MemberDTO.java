@@ -13,7 +13,7 @@ public class MemberDTO {
     private String pw;
 
     @NotBlank
-    private String nickname;
+    private String nick;
 
     @NotBlank
     private String email;
