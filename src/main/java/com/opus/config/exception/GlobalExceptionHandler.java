@@ -4,6 +4,7 @@ import com.opus.common.ErrorResponse;
 import com.opus.common.ResponseCode;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.validation.BindingResult;
@@ -24,8 +25,6 @@ import java.io.IOException;
 @Slf4j
 public class GlobalExceptionHandler {
 
-    private final HttpStatus HTTP_STATUS_OK = HttpStatus.OK;
-
     /**
      * API 호출 시 유효하지 않은 값인 경우
      *
@@ -43,7 +42,7 @@ public class GlobalExceptionHandler {
             sb.append(", ");
         }
         final ErrorResponse response = ErrorResponse.of(ResponseCode.INVALID_INPUT_VALUE, String.valueOf(sb));
-        return new ResponseEntity<>(response, HTTP_STATUS_OK);
+        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
     }
 
     /**
@@ -57,7 +56,7 @@ public class GlobalExceptionHandler {
     protected ResponseEntity<ErrorResponse> handleMissingRequestHeaderException(MissingRequestHeaderException e) {
         log.error("handleMissingRequestHeaderException", e);
         final ErrorResponse response = ErrorResponse.of(ResponseCode.REQUEST_BODY_NOT_READABLE);
-        return new ResponseEntity<>(response, HTTP_STATUS_OK);
+        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
     }
 
     /**
@@ -96,7 +95,7 @@ public class GlobalExceptionHandler {
     protected ResponseEntity<ErrorResponse> handleIOException(IOException e) {
         log.error("handleIOException", e);
         final ErrorResponse response = ErrorResponse.of(ResponseCode.IO_EXCEPTION, e.getMessage());
-        return new ResponseEntity<>(response, HTTP_STATUS_OK);
+        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
     }
 
     /**
@@ -109,7 +108,7 @@ public class GlobalExceptionHandler {
     protected ResponseEntity<ErrorResponse> handleHttpClientErrorException(HttpClientErrorException e) {
         log.error("handleHttpClientErrorException", e);
         final ErrorResponse response = ErrorResponse.of(ResponseCode.BAD_REQUEST, e.getMessage());
-        return new ResponseEntity<>(response, HTTP_STATUS_OK);
+        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
     }
 
     /**
@@ -122,7 +121,7 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ErrorResponse> handleAuthenticationException(AuthenticationException e) {
         log.error("handleAuthenticationException", e);
         final ErrorResponse response = ErrorResponse.of(ResponseCode.USER_UNAUTHORIZED, e.getMessage());
-        return new ResponseEntity<>(response, HTTP_STATUS_OK);
+        return new ResponseEntity<>(response, HttpStatus.UNAUTHORIZED);
     }
 
     /**
@@ -135,7 +134,7 @@ public class GlobalExceptionHandler {
     protected ResponseEntity<ErrorResponse> handleNoHandlerFoundException(NoHandlerFoundException e) {
         log.error("handleNoHandlerFoundException", e);
         final ErrorResponse response = ErrorResponse.of(ResponseCode.NOT_FOUND_ERROR, e.getMessage());
-        return new ResponseEntity<>(response, HTTP_STATUS_OK);
+        return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
     }
 
     /**
@@ -148,7 +147,7 @@ public class GlobalExceptionHandler {
     protected ResponseEntity<ErrorResponse> handleNullPointerException(NullPointerException e) {
         log.error("handleNullPointerException", e);
         final ErrorResponse response = ErrorResponse.of(ResponseCode.NULL_POINT_ERROR, e.getMessage());
-        return new ResponseEntity<>(response, HTTP_STATUS_OK);
+        return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
     }
 
     /**
@@ -161,7 +160,7 @@ public class GlobalExceptionHandler {
     protected ResponseEntity<ErrorResponse> handleHttpRequestMethodNotSupportedException(HttpRequestMethodNotSupportedException e) {
         log.error("handleHttpRequestMethodNotSupportedException", e);
         final ErrorResponse response = ErrorResponse.of(ResponseCode.METHOD_NOT_ALLOWED, e.getMessage());
-        return new ResponseEntity<>(response, HTTP_STATUS_OK);
+        return new ResponseEntity<>(response, HttpStatus.METHOD_NOT_ALLOWED);
     }
 
     /**
@@ -174,7 +173,7 @@ public class GlobalExceptionHandler {
     protected ResponseEntity<ErrorResponse> handleDuplicateEntryException(DuplicateEntryException e) {
         log.error("handleDuplicateEntryException", e);
         final ErrorResponse response = ErrorResponse.of(ResponseCode.DATA_ALREADY_EXIST, e.getMessage());
-        return new ResponseEntity<>(response, HTTP_STATUS_OK);
+        return new ResponseEntity<>(response, HttpStatus.CONFLICT);
     }
 
     /**
@@ -187,7 +186,7 @@ public class GlobalExceptionHandler {
     protected final ResponseEntity<ErrorResponse> handleAllExceptions(Exception e) {
         log.error("handleException {} , {}", e, e.toString());
         final ErrorResponse response = ErrorResponse.of(ResponseCode.INTERNAL_SERVER_ERROR, e.getMessage());
-        return new ResponseEntity<>(response, HTTP_STATUS_OK);
+        return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
     /**
@@ -200,6 +199,6 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ErrorResponse> handleBusinessException(BusinessExceptionHandler e) {
         log.error("handleBusinessException", e);
         final ErrorResponse response = ErrorResponse.of(ResponseCode.BUSINESS_ERROR, e.getMessage());
-        return new ResponseEntity<>(response, HTTP_STATUS_OK);
+        return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 }
