@@ -1,4 +1,4 @@
-package com.opus.member.interceptor;
+package com.opus.common.interceptor;
 
 import jakarta.annotation.Nullable;
 import jakarta.servlet.http.HttpServletRequest;

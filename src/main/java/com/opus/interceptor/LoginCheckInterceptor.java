@@ -1,4 +1,4 @@
-package com.opus.member.interceptor;
+package com.opus.common.interceptor;
 
 import com.opus.common.SessionConst;
 import jakarta.servlet.http.HttpServletRequest;

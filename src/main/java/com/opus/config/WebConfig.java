@@ -1,7 +1,7 @@
 package com.opus.config;
 
-import com.opus.member.interceptor.LogInterceptor;
-import com.opus.member.interceptor.LoginCheckInterceptor;
+import com.opus.interceptor.LogInterceptor;
+import com.opus.interceptor.LoginCheckInterceptor;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
@@ -26,10 +26,9 @@ public class WebConfig implements WebMvcConfigurer {
                 .addPathPatterns("/**")
                 .excludePathPatterns("/css/**", "/*.ico", "/error");
 
-        registry.addInterceptor(new LoginCheckInterceptor())
-                .order(2)
-                .addPathPatterns("/**")
-                .excludePathPatterns("/", "/pin/list", "/pin/total", "/pin/myPins" ,"/member/login", "/member/logout", "/member/signup"
-                        ,"/member/signup/check", "/*.ico", "/error");
+//        registry.addInterceptor(new LoginCheckInterceptor())
+//                .order(2)
+//                .addPathPatterns("/**")
+//                .excludePathPatterns("/", "/pin/list", "/pin/total", "/pin/myPins" ,"/member/login", "/member/logout", "/member/signup/**", "/*.ico", "/error");
     }
 }
