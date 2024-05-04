@@ -1,13 +1,12 @@
 package com.opus.pin.controller;
 
+import com.opus.auth.SecurityUtil;
 import com.opus.common.ResponseCode;
-import com.opus.common.SessionConst;
 import com.opus.pin.domain.Pin;
 import com.opus.pin.domain.PinDTO;
 import com.opus.pin.domain.PinListRequestDTO;
 import com.opus.pin.service.PinService;
 import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -30,13 +29,10 @@ public class PinController {
 
     // pin 추가
     @PostMapping
-    public ResponseEntity<ResponseCode> addPin(@Valid @RequestBody PinDTO pinDTO, HttpServletRequest request) {
+    public ResponseEntity<ResponseCode> addPin(@RequestBody PinDTO pinDTO, HttpServletRequest request) {
 
-        HttpSession session = request.getSession(false);
-        Integer memberId = (Integer) session.getAttribute(SessionConst.LOGIN_SESSION);
-
-        log.info("addPin = {}", pinDTO);
-        return pinService.savePin(pinDTO, memberId);
+        log.info("addPin = {} {}", pinDTO.getImagePath(), pinDTO.getTag());
+        return pinService.savePin(pinDTO, SecurityUtil.getCurrentUserId());
     }
 
     // pin 리스트 요청
@@ -50,11 +46,9 @@ public class PinController {
     // id로 pin 찾기
     @PostMapping("/myPins")
     public List<Pin> getPinListById(@RequestBody PinListRequestDTO pinListRequestDTO, HttpServletRequest request) {
-        HttpSession session = request.getSession(false);
-        Integer memberId = (Integer) session.getAttribute(SessionConst.LOGIN_SESSION);
 
         log.info("findById = {}", pinListRequestDTO);
-        return pinService.pinListById(pinListRequestDTO, memberId);
+        return pinService.pinListById(pinListRequestDTO, SecurityUtil.getCurrentUserId());
     }
 
     // 전체 pin 개수
@@ -65,23 +59,19 @@ public class PinController {
         return pinService.getTotalCount();
     }
 
-
+    // pin 수정
     @PutMapping
     public void updatePin(@Valid @RequestBody PinDTO pinDTO, HttpServletRequest request) {
 
-        HttpSession session = request.getSession(false);
-        Integer memberId = (Integer) session.getAttribute(SessionConst.LOGIN_SESSION);
-
         log.info("updatePin = {}", pinDTO);
-        pinService.updatePin(pinDTO, memberId);
+        pinService.updatePin(pinDTO, SecurityUtil.getCurrentUserId());
     }
 
+    // pin 삭제
     @DeleteMapping("/{pid}")
     public void deletePin(@PathVariable int pid, HttpServletRequest request) {
 
-        HttpSession session = request.getSession(false);
-        Integer memberId = (Integer) session.getAttribute(SessionConst.LOGIN_SESSION);
         log.info("deletePin = {}", pid);
-        pinService.deletePin(pid, memberId);
+        pinService.deletePin(pid, SecurityUtil.getCurrentUserId());
     }
 }

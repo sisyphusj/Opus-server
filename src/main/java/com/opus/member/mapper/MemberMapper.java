@@ -1,7 +1,10 @@
 package com.opus.member.mapper;
 
 import com.opus.member.domain.Member;
+import com.opus.member.domain.MemberVO;
 import org.apache.ibatis.annotations.Mapper;
+
+import java.util.Optional;
 
 @Mapper
 public interface MemberMapper {
@@ -14,9 +17,9 @@ public interface MemberMapper {
 
     int checkDuplicateEmail(String email);
 
-    Integer login(Member member);
+    MemberVO findById(int mId);
 
-    Member findById(int mId);
+    Optional<Member> findByUserId(String userId);
 
     void updateMember(Member member);
 

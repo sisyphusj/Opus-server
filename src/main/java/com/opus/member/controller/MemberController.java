@@ -1,23 +1,18 @@
 package com.opus.member.controller;
 
+import com.opus.auth.SecurityUtil;
 import com.opus.common.ErrorResponse;
 import com.opus.common.ResponseCode;
-import com.opus.common.SessionConst;
-import com.opus.config.exception.BusinessExceptionHandler;
-import com.opus.member.domain.LoginDTO;
-import com.opus.member.domain.Member;
-import com.opus.member.domain.MemberDTO;
+import com.opus.member.domain.*;
 import com.opus.member.service.MemberService;
 import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotEmpty;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
-
-import javax.security.sasl.AuthenticationException;
 
 @Slf4j
 @RestController
@@ -27,12 +22,21 @@ import javax.security.sasl.AuthenticationException;
 public class MemberController {
 
     private final MemberService memberService;
+    private final PasswordEncoder passwordEncoder;
 
     // 회원가입
     @PostMapping("/signup")
-    public void addMember(@Valid @RequestBody MemberDTO memberDTO) {
+    public ResponseEntity<ErrorResponse> addMember(@Valid @RequestBody MemberDTO memberDTO) {
         log.info("addMember = {}", memberDTO);
+
+        String rawPw = memberDTO.getPw();
+        String encPw = passwordEncoder.encode(rawPw);
+        memberDTO.setPw(encPw);
+
+        log.info("encPw = {}", encPw);
+
         memberService.saveMember(memberDTO);
+        return ResponseEntity.ok().body(ErrorResponse.of(ResponseCode.SUCCESS));
     }
 
     // 아이디 중복 체크
@@ -58,47 +62,36 @@ public class MemberController {
 
     // 로그인
     @PostMapping("/login")
-    public ResponseEntity<ErrorResponse> login(@Valid @RequestBody LoginDTO loginDTO, HttpServletRequest request) {
+    public TokenDTO login(@Valid @RequestBody LoginDTO loginDTO, HttpServletRequest request) {
+        return memberService.login(loginDTO);
+    }
 
-        Integer memberId = memberService.login(loginDTO);
-        HttpSession session = request.getSession();
-        session.setAttribute(SessionConst.LOGIN_SESSION, memberId);
-
-        return ResponseEntity.ok().body(ErrorResponse.of(ResponseCode.USER_LOGIN_SUCCESS));
+    @PostMapping("/reissue")
+    public TokenDTO reissue(@Valid @RequestBody TokenDTO requestTokenDTO) {
+        return memberService.reissue(requestTokenDTO);
     }
 
     // 로그아웃
     @GetMapping("/logout")
-    public ResponseEntity<ErrorResponse> logout(HttpServletRequest request) throws AuthenticationException {
-        HttpSession session = request.getSession(false);
-        if (session != null) {
-            session.invalidate();
-            log.info("logout");
-            return ResponseEntity.ok().body(ErrorResponse.of(ResponseCode.USER_LOGOUT_SUCCESS));
-        } else {
-            throw new AuthenticationException();
-        }
+    public ResponseEntity<ErrorResponse> logout() {
+
+        memberService.logout(String.valueOf(SecurityUtil.getCurrentUserId()));
+        return ResponseEntity.ok().body(ErrorResponse.of(ResponseCode.SUCCESS));
     }
 
     // 프로필 조회
     @GetMapping("/profile")
-    public ResponseEntity<Member> findById(HttpServletRequest request) {
-        HttpSession session = request.getSession(false);
-        Integer memberId = (Integer) session.getAttribute(SessionConst.LOGIN_SESSION);
+    public ResponseEntity<MemberVO> findById() {
 
-        Member member = memberService.findById(memberId);
-        log.info("findById = {}", member.getMId());
-        return ResponseEntity.ok(member);
+        MemberVO memberVO = memberService.findById(SecurityUtil.getCurrentUserId());
+        return ResponseEntity.ok(memberVO);
     }
 
     // 프로필 수정
     @PutMapping
-    public ResponseEntity<ResponseCode> updateMember(@Valid @RequestBody MemberDTO memberDTO, HttpServletRequest request) {
+    public ResponseEntity<ResponseCode> updateMember(@Valid @RequestBody MemberDTO memberDTO) {
 
-        HttpSession session = request.getSession(false);
-        Integer memberId = (Integer) session.getAttribute(SessionConst.LOGIN_SESSION);
-
-        memberService.updateMember(memberDTO, memberId);
+        memberService.updateMember(memberDTO, SecurityUtil.getCurrentUserId());
         return ResponseEntity.ok(ResponseCode.SUCCESS);
     }
 
@@ -106,10 +99,7 @@ public class MemberController {
     @DeleteMapping
     public ResponseEntity<ResponseCode> deleteMember(HttpServletRequest request) {
 
-        HttpSession session = request.getSession(false);
-        Integer memberId = (Integer) session.getAttribute(SessionConst.LOGIN_SESSION);
-
-        memberService.deleteMember(memberId);
+        memberService.deleteMember(SecurityUtil.getCurrentUserId());
         return ResponseEntity.ok(ResponseCode.SUCCESS);
     }
 

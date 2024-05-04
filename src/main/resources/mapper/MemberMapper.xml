@@ -20,12 +20,16 @@
         select count(*) from member where email=#{email}
     </select>
 
-    <select id="login" resultType="int">
-        select mId from member where id=#{id} and pw=#{pw}
+    <select id="login" resultType="com.opus.member.domain.MemberVO">
+        select mId, pw from member where id=#{id}
     </select>
 
-    <select id="findById" resultType="com.opus.member.domain.Member">
-        select * from member where mId=#{mId}
+    <select id="findById" resultType="com.opus.member.domain.MemberVO">
+        select id, nick, email from member where mId=#{mId}
+    </select>
+
+    <select id="findByUserId" resultType="com.opus.member.domain.Member">
+        select * from member where id=#{id}
     </select>
 
     <update id="updateMember">
