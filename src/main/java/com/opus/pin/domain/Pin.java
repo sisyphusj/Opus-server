@@ -12,6 +12,6 @@ public class Pin {
     private String tag;
 
     public static Pin of(PinDTO pinDTO, Integer mId) {
-        return new Pin(mId, pinDTO.getPId(), pinDTO.getImagePath(), pinDTO.getTag());
+        return new Pin(mId, null, pinDTO.getImagePath(), pinDTO.getTag());
     }
 }
