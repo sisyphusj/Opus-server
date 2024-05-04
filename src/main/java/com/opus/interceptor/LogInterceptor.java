@@ -1,10 +1,9 @@
-package com.opus.common.interceptor;
+package com.opus.interceptor;
 
 import jakarta.annotation.Nullable;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -19,12 +18,6 @@ public class LogInterceptor implements HandlerInterceptor {
 
         String requestURI = request.getRequestURI();
         String uuid = UUID.randomUUID().toString();
-
-        // @RequestMapping: HandlerMethod
-        // 정적 리소스: ResourceHttpRequestHandler
-        if (handler instanceof HandlerMethod) {
-            HandlerMethod hm = (HandlerMethod) handler;
-        }
 
         log.info("REQUEST [{}][{}][{}]", uuid, requestURI, handler);
         return true;

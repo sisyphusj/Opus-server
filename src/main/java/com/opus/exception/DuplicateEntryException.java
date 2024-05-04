@@ -1,4 +1,4 @@
-package com.opus.config.exception;
+package com.opus.exception;
 
 import com.opus.common.ResponseCode;
 import lombok.Builder;

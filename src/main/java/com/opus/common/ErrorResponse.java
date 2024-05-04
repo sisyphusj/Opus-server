@@ -4,12 +4,10 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.validation.BindingResult;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -112,7 +110,9 @@ public class ErrorResponse {
             return errors.stream()
                     .map(error -> new FieldError(error.getField(),
                             error.getRejectedValue() == null ? "" : error.getRejectedValue().toString(),
-                            error.getDefaultMessage())).collect(Collectors.toList());
+            //                error.getDefaultMessage())).collect(Collectors.toList());
+                            // 수정불가능
+                            error.getDefaultMessage())).toList();
         }
 
         @Builder
