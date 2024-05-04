@@ -1,10 +1,9 @@
-package com.opus.config.exception;
+package com.opus.exception;
 
 import com.opus.common.ErrorResponse;
 import com.opus.common.ResponseCode;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.validation.BindingResult;
@@ -44,6 +43,20 @@ public class GlobalExceptionHandler {
         final ErrorResponse response = ErrorResponse.of(ResponseCode.INVALID_INPUT_VALUE, String.valueOf(sb));
         return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
     }
+
+    /**
+     * 인수가 잘못된 경우
+     * @param e IllegalArgumentException
+     * @return ResponseEntity<ErrorResponse>
+     */
+    @ExceptionHandler(IllegalArgumentException.class)
+    protected ResponseEntity<ErrorResponse> handleIllegalArgumentException(IllegalArgumentException e) {
+        log.error("handleIllegalArgumentException", e);
+        final String message = e.getMessage() != null ? e.getMessage() : "Invalid arguments provided";
+        final ErrorResponse response = ErrorResponse.of(ResponseCode.INVALID_INPUT_VALUE, message);
+        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+    }
+
 
     /**
      * API 호출 시 필수 요청 헤더가 없는 경우
