@@ -7,6 +7,8 @@ public class MemberVO {
 
     private String id;
 
+    private String pw;
+
     private String nick;
 
     private String email;

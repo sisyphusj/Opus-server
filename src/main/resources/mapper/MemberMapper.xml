@@ -21,11 +21,11 @@
     </select>
 
     <select id="login" resultType="com.opus.member.domain.MemberVO">
-        select mId, pw from member where id=#{id}
+        select member.m_id, pw from member where id=#{id}
     </select>
 
     <select id="findById" resultType="com.opus.member.domain.MemberVO">
-        select id, nick, email from member where mId=#{mId}
+        select id, pw, nick, email from member where member.m_id=#{mId}
     </select>
 
     <select id="findByUserId" resultType="com.opus.member.domain.Member">
@@ -33,11 +33,11 @@
     </select>
 
     <update id="updateMember">
-        update member set id=#{id}, pw=#{pw}, nick=#{nick}, email=#{email} where mId=#{mId}
+        update member set id=#{id}, pw=#{pw}, nick=#{nick}, email=#{email} where member.m_id=#{mId}
     </update>
 
     <delete id="deleteMember">
-        delete from member where mId=#{mId}
+        delete from member where member.m_id=#{mId}
     </delete>
 
 </mapper>

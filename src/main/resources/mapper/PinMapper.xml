@@ -5,21 +5,21 @@
 <mapper namespace="com.opus.pin.mapper.PinMapper">
 
     <insert id="savePin">
-        insert into pins (mId, tag, imagePath)
-        values (#{mId}, #{tag}, #{imagePath})
+        insert into pins (pins.m_id, tag, img_path, width, height, seed, n_tag)
+        values (#{mId}, #{tag}, #{imagePath}, #{width}, #{height}, #{seed}, #{nTag})
     </insert>
 
-    <select id="pinList" resultType="com.opus.pin.domain.Pin">
+    <select id="pinList" resultMap = "pinList">
         select *
         from pins
-        order by pId desc limit #{amount} offset #{offset}
+        order by pins.p_id desc limit #{amount} offset #{offset}
     </select>
 
-    <select id="pinListById" resultType="com.opus.pin.domain.Pin">
+    <select id="pinListById" resultMap = "pinList">
         select *
         from pins
-        where mId = #{mId}
-        order by pId desc limit #{amount} offset #{offset}
+        where pins.m_id = #{mId}
+        order by p_id desc limit #{amount} offset #{offset}
     </select>
 
     <select id="getTotalCount" resultType="int">
@@ -30,14 +30,25 @@
     <update id="updatePin">
         update pins
         set tag=#{tag},
-            imagePath=#{imagePath}
-        where pId = #{pId} and mId = #{mId}
+            img_path=#{imagePath}
+        where p_id = #{pId} and pins.m_id = #{mId}
     </update>
 
     <delete id="deletePin">
         delete
         from pins
-        where pId = #{pid} and mId = #{mid}
+        where p_id = #{pid} and pins.m_id = #{mid}
     </delete>
+
+    <resultMap id="pinList" type="com.opus.pin.domain.Pin">
+        <id property="pId" column="p_id"/>
+        <result property="mId" column="m_id"/>
+        <result property="tag" column="tag"/>
+        <result property="imagePath" column="img_path"/>
+        <result property="width" column="width"/>
+        <result property="height" column="height"/>
+        <result property="seed" column="seed"/>
+        <result property="nTag" column="n_tag"/>
+    </resultMap>
 
 </mapper>
