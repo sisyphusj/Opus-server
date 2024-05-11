@@ -7,6 +7,7 @@ import com.opus.auth.TokenProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
@@ -28,7 +29,7 @@ public class SecurityConfig {
     private final TokenProvider tokenProvider;
     private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
     private final JwtAccessDeniedHandler jwtAccessDeniedHandler;
-    private final String[] PermittedUrls = {"/", "/pin/list", "/pin/total", "/pin/myPins" ,"/member/login", "/member/logout", "/member/signup/**", "/*.ico", "/error"};
+    private final String[] PermittedUrls = {"/", "/pin/list", "/pin/total", "/pin/myPins", "/comment/list/**" ,"/member/login", "/member/logout", "/member/signup/**", "/*.ico", "/error"};
 
     @Bean
     public PasswordEncoder passwordEncoder() {
@@ -40,6 +41,7 @@ public class SecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
         // 모든 요청에 대해 CSRF 보호 기능을 비활성화
         httpSecurity
+
                 .csrf(AbstractHttpConfigurer::disable
                 )
 
@@ -63,6 +65,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests(
                         (authorizeRequests) -> authorizeRequests
                                 .requestMatchers(PermittedUrls).permitAll()
+                                .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                                 .anyRequest().authenticated()
                 )
 
