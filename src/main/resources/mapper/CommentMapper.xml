@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.opus.comment.mapper.CommentMapper">
+
+    <insert id="addComment">
+        INSERT INTO comment (p_id, m_id, parent_comment_id, level, content)
+        values (#{pId}, #{mId}, #{parentCommentId}, #{level}, #{content})
+    </insert>
+
+    <select id="getCommentList" resultMap="commentList">
+        SELECT c_id, comment.p_id, member.nick, parent_comment_id, level, content
+        FROM comment
+        INNER JOIN member ON comment.m_id = member.m_id
+        WHERE comment.p_id = #{pId}
+    </select>
+
+    <resultMap id="commentList" type="com.opus.comment.domain.CommentVO">
+        <id property="cId" column="c_id"/>
+        <result property="pId" column="p_id"/>
+        <result property="parentCommentId" column="parent_comment_id"/>
+        <result property="level" column="level"/>
+        <result property="content" column="content"/>
+    </resultMap>
+
+</mapper>
