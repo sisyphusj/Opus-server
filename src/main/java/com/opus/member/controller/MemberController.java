@@ -68,6 +68,7 @@ public class MemberController {
 
     @PostMapping("/reissue")
     public TokenDTO reissue(@Valid @RequestBody TokenDTO requestTokenDTO) {
+        // 기존 엑세스 토큰을 검사해야 할듯.
         return memberService.reissue(requestTokenDTO);
     }
 
@@ -90,6 +91,10 @@ public class MemberController {
     // 프로필 수정
     @PutMapping
     public ResponseEntity<ResponseCode> updateMember(@Valid @RequestBody MemberDTO memberDTO) {
+
+        String rawPw = memberDTO.getPw();
+        String encPw = passwordEncoder.encode(rawPw);
+        memberDTO.setPw(encPw);
 
         memberService.updateMember(memberDTO, SecurityUtil.getCurrentUserId());
         return ResponseEntity.ok(ResponseCode.SUCCESS);
