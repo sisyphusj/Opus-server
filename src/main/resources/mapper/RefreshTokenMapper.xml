@@ -4,22 +4,22 @@
 <mapper namespace="com.opus.member.mapper.RefreshTokenMapper">
 
     <insert id="save">
-        insert into refresh_token
-            (rKey, rValue)
+        insert into TOKENS
+            (r_key, r_value)
         values
             (#{key}, #{value})
     </insert>
 
     <select id="findByKey" resultType="com.opus.member.domain.RefreshToken">
-        select rKey as "key", rValue as "value" from refresh_token where rKey=#{key}
+        select r_key as "key", r_value as "value" from TOKENS where r_key=#{key}
     </select>
 
     <update id="update">
-        update refresh_token set rValue=#{value} where rKey=#{key}
+        update TOKENS set r_value=#{value} where r_key=#{key}
     </update>
 
     <delete id="delete">
-        delete from refresh_token where rKey=#{key}
+        delete from TOKENS where r_key=#{key}
     </delete>
 
 </mapper>
