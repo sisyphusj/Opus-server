@@ -5,6 +5,7 @@ import com.opus.common.ResponseCode;
 import com.opus.pin.domain.Pin;
 import com.opus.pin.domain.PinDTO;
 import com.opus.pin.domain.PinListRequestDTO;
+import com.opus.pin.domain.PinVO;
 import com.opus.pin.service.PinService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
@@ -29,7 +30,7 @@ public class PinController {
 
     // pin 추가
     @PostMapping
-    public ResponseEntity<ResponseCode> addPin(@RequestBody PinDTO pinDTO, HttpServletRequest request) {
+    public ResponseEntity<ResponseCode> addPin(@RequestBody PinDTO pinDTO) {
 
         log.info("addPin = {} {}", pinDTO.getImagePath(), pinDTO.getTag());
         return pinService.savePin(pinDTO, SecurityUtil.getCurrentUserId());
@@ -37,15 +38,14 @@ public class PinController {
 
     // pin 리스트 요청
     @PostMapping("/list")
-    public List<Pin> getPinList(@RequestBody PinListRequestDTO pinListRequestDTO) {
-
+    public List<PinVO> getPinList(@RequestBody PinListRequestDTO pinListRequestDTO) {
         log.info("getPinList = {}", pinListRequestDTO);
         return pinService.pinList(pinListRequestDTO);
     }
 
     // id로 pin 찾기
     @PostMapping("/myPins")
-    public List<Pin> getPinListById(@RequestBody PinListRequestDTO pinListRequestDTO, HttpServletRequest request) {
+    public List<PinVO> getPinListById(@RequestBody PinListRequestDTO pinListRequestDTO, HttpServletRequest request) {
 
         log.info("findById = {}", pinListRequestDTO);
         return pinService.pinListById(pinListRequestDTO, SecurityUtil.getCurrentUserId());

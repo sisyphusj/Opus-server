@@ -9,17 +9,21 @@
         values (#{mId}, #{tag}, #{imagePath}, #{width}, #{height}, #{seed}, #{nTag})
     </insert>
 
-    <select id="pinList" resultMap = "pinList">
-        select *
-        from pins
-        order by pins.p_id desc limit #{amount} offset #{offset}
+    <select id="pinList" resultMap="pinList">
+        SELECT pins.p_id, member.nick, pins.img_path, pins.tag, pins.n_tag, pins.width, pins.height, pins.seed
+        FROM pins
+                 INNER JOIN member ON pins.m_id = member.m_id
+        ORDER BY pins.p_id DESC
+        LIMIT #{amount} OFFSET #{offset}
     </select>
 
-    <select id="pinListById" resultMap = "pinList">
-        select *
-        from pins
-        where pins.m_id = #{mId}
-        order by p_id desc limit #{amount} offset #{offset}
+    <select id="pinListById" resultMap ="pinList">
+        SELECT pins.p_id, member.nick, pins.img_path, pins.tag, pins.n_tag, pins.width, pins.height, pins.seed
+        FROM pins
+        INNER JOIN member ON pins.m_id = member.m_id
+        WHERE member.m_id = #{mId}
+        ORDER BY pins.p_id DESC
+        LIMIT #{amount} OFFSET #{offset}
     </select>
 
     <select id="getTotalCount" resultType="int">
@@ -40,9 +44,8 @@
         where p_id = #{pid} and pins.m_id = #{mid}
     </delete>
 
-    <resultMap id="pinList" type="com.opus.pin.domain.Pin">
+    <resultMap id="pinList" type="com.opus.pin.domain.PinVO">
         <id property="pId" column="p_id"/>
-        <result property="mId" column="m_id"/>
         <result property="tag" column="tag"/>
         <result property="imagePath" column="img_path"/>
         <result property="width" column="width"/>
