@@ -77,19 +77,29 @@ public class PinService {
     public List<PinVO> pinList(PinListRequestDTO pinListRequestDTO) {
 
         PinListRequest pinListRequest = PinListRequest.of(pinListRequestDTO);
-        return pinMapper.pinList(pinListRequest);
+
+        if(pinListRequest.getKeyword() == null || pinListRequest.getKeyword().trim().isEmpty()) {
+            return pinMapper.pinList(pinListRequest);
+        } else {
+            return pinMapper.pinListByKeyword(pinListRequest);
+        }
     }
 
     @Transactional(readOnly = true)
-    public List<PinVO> pinListById(PinListRequestDTO pinListRequestDTO, int memberId) {
+    public List<PinVO> pinListById(PinListRequestDTO pinListRequestDTO, int currentUserId) {
 
-        PinListRequest pinListRequest = PinListRequest.of(pinListRequestDTO, memberId);
+        PinListRequest pinListRequest = PinListRequest.of(pinListRequestDTO, currentUserId);
         return pinMapper.pinListById(pinListRequest);
     }
 
     @Transactional(readOnly = true)
-    public int getTotalCount() {
-        return pinMapper.getTotalCount();
+    public int getTotalCount(String keyword) {
+
+        if (keyword == null || keyword.trim().isEmpty()) {
+            return pinMapper.getTotalCount();
+        } else {
+            return pinMapper.getTotalCountByKeyword(keyword);
+        }
     }
 
     @Transactional

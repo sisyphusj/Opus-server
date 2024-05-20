@@ -14,9 +14,13 @@ public interface PinMapper {
 
     List<PinVO> pinList(PinListRequest pinListRequest);
 
+    List<PinVO> pinListByKeyword(PinListRequest pinListRequest);
+
     List<PinVO> pinListById(PinListRequest pinListRequest);
 
     int getTotalCount();
+
+    int getTotalCountByKeyword(String keyword);
 
     void updatePin(Pin pin);
 

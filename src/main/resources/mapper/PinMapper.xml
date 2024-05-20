@@ -12,7 +12,7 @@
     <select id="pinList" resultMap="pinList">
         SELECT pins.p_id, member.nick, pins.img_path, pins.tag, pins.n_tag, pins.width, pins.height, pins.seed
         FROM pins
-                 INNER JOIN member ON pins.m_id = member.m_id
+        INNER JOIN member ON pins.m_id = member.m_id
         ORDER BY pins.p_id DESC
         LIMIT #{amount} OFFSET #{offset}
     </select>
@@ -29,6 +29,22 @@
     <select id="getTotalCount" resultType="int">
         select count(*)
         from pins
+    </select>
+
+
+    <select id="getTotalCountByKeyword" resultType="int">
+        select count(*)
+        from pins
+        where tag LIKE CONCAT('%', #{keyword}, '%')
+    </select>
+
+    <select id="pinListByKeyword" resultMap="pinList">
+        SELECT pins.p_id, member.nick, pins.img_path, pins.tag, pins.n_tag, pins.width, pins.height, pins.seed
+        FROM pins
+        INNER JOIN member ON pins.m_id = member.m_id
+        WHERE pins.tag LIKE CONCAT('%', #{keyword}, '%')
+        ORDER BY pins.p_id DESC
+        LIMIT #{amount} OFFSET #{offset}
     </select>
 
     <update id="updatePin">

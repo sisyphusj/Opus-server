@@ -10,4 +10,6 @@ public class PinListRequestDTO {
 
     @NotBlank
     private Integer offset;
+
+    private String keyword;
 }

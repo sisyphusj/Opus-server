@@ -29,7 +29,7 @@ public class SecurityConfig {
     private final TokenProvider tokenProvider;
     private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
     private final JwtAccessDeniedHandler jwtAccessDeniedHandler;
-    private final String[] PermittedUrls = {"/", "/pin/list", "/pin/total", "/pin/myPins", "/comment/list/**" ,"/member/login", "/member/logout", "/member/signup/**", "/*.ico", "/error"};
+    private final String[] PermittedUrls = {"/", "/pin/list", "/pin/total", "/pin/myPins", "/comment/list/**","/member/login", "/member/logout", "/member/signup/**", "/*.ico", "/error"};
 
     @Bean
     public PasswordEncoder passwordEncoder() {

@@ -15,11 +15,13 @@ public class PinListRequest {
 
     private Integer offset;
 
+    private String keyword;
+
     public static PinListRequest of(PinListRequestDTO pinListRequestDTO, Integer mId) {
-        return new PinListRequest(mId, pinListRequestDTO.getAmount(), pinListRequestDTO.getOffset());
+        return new PinListRequest(mId, pinListRequestDTO.getAmount(), pinListRequestDTO.getOffset(), null);
     }
 
     public static PinListRequest of(PinListRequestDTO pinListRequestDTO) {
-        return new PinListRequest(null, pinListRequestDTO.getAmount(), pinListRequestDTO.getOffset());
+        return new PinListRequest(null, pinListRequestDTO.getAmount(), pinListRequestDTO.getOffset(), pinListRequestDTO.getKeyword());
     }
 }

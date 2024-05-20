@@ -45,7 +45,7 @@ public class PinController {
 
     // id로 pin 찾기
     @PostMapping("/myPins")
-    public List<PinVO> getPinListById(@RequestBody PinListRequestDTO pinListRequestDTO, HttpServletRequest request) {
+    public List<PinVO> getPinListById(@RequestBody PinListRequestDTO pinListRequestDTO) {
 
         log.info("findById = {}", pinListRequestDTO);
         return pinService.pinListById(pinListRequestDTO, SecurityUtil.getCurrentUserId());
@@ -53,15 +53,13 @@ public class PinController {
 
     // 전체 pin 개수
     @GetMapping("/total")
-    public int getTotalAmount() {
-        int a = pinService.getTotalCount();
-        log.info(String.valueOf(a));
-        return pinService.getTotalCount();
+    public int getTotalAmount(@RequestParam(required = false) String keyword) {
+        return pinService.getTotalCount(keyword);
     }
 
     // pin 수정
     @PutMapping
-    public void updatePin(@Valid @RequestBody PinDTO pinDTO, HttpServletRequest request) {
+    public void updatePin(@Valid @RequestBody PinDTO pinDTO) {
 
         log.info("updatePin = {}", pinDTO);
         pinService.updatePin(pinDTO, SecurityUtil.getCurrentUserId());
@@ -69,7 +67,7 @@ public class PinController {
 
     // pin 삭제
     @DeleteMapping("/{pid}")
-    public void deletePin(@PathVariable int pid, HttpServletRequest request) {
+    public void deletePin(@PathVariable int pid) {
 
         log.info("deletePin = {}", pid);
         pinService.deletePin(pid, SecurityUtil.getCurrentUserId());

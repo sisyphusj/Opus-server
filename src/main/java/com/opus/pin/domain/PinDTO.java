@@ -1,5 +1,6 @@
 package com.opus.pin.domain;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
 
 @Getter
@@ -9,6 +10,7 @@ public class PinDTO {
 
     private String tag;
 
+    @JsonProperty("nTag")
     private String nTag;
 
     private String width;
