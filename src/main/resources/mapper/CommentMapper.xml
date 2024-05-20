@@ -10,10 +10,11 @@
     </insert>
 
     <select id="getCommentList" resultMap="commentList">
-        SELECT c_id, comment.p_id, member.nick, parent_comment_id, level, content
+        SELECT c_id, comment.p_id, member.nick, parent_comment_id, level, content, created_at
         FROM comment
         INNER JOIN member ON comment.m_id = member.m_id
         WHERE comment.p_id = #{pId}
+        ORDER BY c_id ASC, level ASC
     </select>
 
     <resultMap id="commentList" type="com.opus.comment.domain.CommentVO">
@@ -22,6 +23,7 @@
         <result property="parentCommentId" column="parent_comment_id"/>
         <result property="level" column="level"/>
         <result property="content" column="content"/>
+        <result property="createdDate" column="created_at"/>
     </resultMap>
 
 </mapper>
