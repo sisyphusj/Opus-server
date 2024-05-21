@@ -33,9 +33,16 @@ public class CommentService {
         commentMapper.addComment(comment);
     }
 
+    // 게시글에 달린 댓글 리스트
     @Transactional(readOnly = true)
-    public List<CommentVO> getCommentList(int pid, int currentUserId) {
+    public List<CommentVO> getComments(int pid) {
+        return commentMapper.getComments(pid);
+    }
 
-        return commentMapper.getCommentList(pid);
+    // 내가 쓴 댓글 리스트
+    @Transactional(readOnly = true)
+    public List<CommentVO> getMyComments(int currentUserId) {
+
+        return commentMapper.getMyComments(currentUserId);
     }
 }

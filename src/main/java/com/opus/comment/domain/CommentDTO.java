@@ -14,6 +14,7 @@ public class CommentDTO {
 
     private Integer mId;
 
+    @JsonProperty("parentCommentId")
     private Integer parentCommentId;
 
     private int level;

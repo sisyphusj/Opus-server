@@ -30,8 +30,14 @@ public class CommentController {
     }
 
     @GetMapping("/list/{pid}")
-    public List<CommentVO> getCommentList(@PathVariable int pid) {
+    public List<CommentVO> getComments(@PathVariable int pid) {
 
-       return commentService.getCommentList(pid, SecurityUtil.getCurrentUserId());
+       return commentService.getComments(pid);
+    }
+
+    @GetMapping("/list/my-comments")
+    public List<CommentVO> getMyComments() {
+
+        return commentService.getMyComments(SecurityUtil.getCurrentUserId());
     }
 }

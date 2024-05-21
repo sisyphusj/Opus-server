@@ -11,6 +11,8 @@ public interface CommentMapper {
 
     void addComment(Comment comment);
 
-    List<CommentVO> getCommentList(int pId);
+    List<CommentVO> getComments(int pId);
+
+    List<CommentVO> getMyComments(int mId);
 
 }
