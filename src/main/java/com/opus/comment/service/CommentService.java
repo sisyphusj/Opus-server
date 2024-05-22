@@ -24,9 +24,10 @@ public class CommentService {
         Comment comment = Comment.builder()
                 .pId(commentDTO.getPId())
                 .mId(currentUserId)
-                .parentCommentId(commentDTO.getParentCommentId())
+                .topLevelCommentId(commentDTO.getTopLevelCommentId())
                 .level(commentDTO.getLevel())
                 .content(commentDTO.getContent())
+                .parentNick(commentDTO.getParentNick())
                 .build();
 
         log.info("{}", commentDTO.getPId());
@@ -44,5 +45,28 @@ public class CommentService {
     public List<CommentVO> getMyComments(int currentUserId) {
 
         return commentMapper.getMyComments(currentUserId);
+    }
+
+    public void updateComment(CommentDTO commentDTO, int currentUserId) {
+
+        Comment comment = Comment.builder()
+                .cId(commentDTO.getCId())
+                .pId(commentDTO.getPId())
+                .mId(currentUserId)
+                .topLevelCommentId(commentDTO.getTopLevelCommentId())
+                .parentNick(commentDTO.getParentNick())
+                .level(commentDTO.getLevel())
+                .content(commentDTO.getContent())
+                .build();
+
+        commentMapper.updateComment(comment);
+    }
+
+    public void deleteComment(int cid, int currentUserId) {
+        Comment comment = Comment.builder()
+                .cId(cid)
+                .mId(currentUserId)
+                .build();
+        commentMapper.deleteComment(comment);
     }
 }

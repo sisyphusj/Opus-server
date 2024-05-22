@@ -2,8 +2,6 @@ package com.opus.comment.domain;
 
 import lombok.Getter;
 
-import java.util.Date;
-
 @Getter
 public class CommentVO {
 
@@ -13,11 +11,15 @@ public class CommentVO {
 
     private String nick;
 
-    private Integer parentCommentId;
+    private Integer topLevelCommentId;
+
+    private String parentNick;
 
     private int level;
 
     private String content;
 
     private String createdDate;
+
+    private String updatedDate;
 }

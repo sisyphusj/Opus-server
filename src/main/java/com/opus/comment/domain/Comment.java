@@ -14,9 +14,12 @@ public class Comment {
 
     private Integer mId;
 
-    private Integer parentCommentId;
+    private Integer topLevelCommentId;
+
+    private String parentNick;
 
     private int level;
 
     private String content;
+
 }

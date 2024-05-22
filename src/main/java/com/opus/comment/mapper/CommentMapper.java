@@ -15,4 +15,7 @@ public interface CommentMapper {
 
     List<CommentVO> getMyComments(int mId);
 
+    void updateComment(Comment comment);
+
+    void deleteComment(Comment comment);
 }

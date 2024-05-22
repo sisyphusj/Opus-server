@@ -40,4 +40,19 @@ public class CommentController {
 
         return commentService.getMyComments(SecurityUtil.getCurrentUserId());
     }
+
+    @PostMapping("/update")
+    public ResponseEntity<ResponseCode> updateComment(@Valid @RequestBody CommentDTO commentDTO) {
+
+        log.info("{} {} {}", commentDTO.getPId(), commentDTO.getCId(), commentDTO.getContent());
+
+        commentService.updateComment(commentDTO, SecurityUtil.getCurrentUserId());
+        return ResponseEntity.ok(ResponseCode.SUCCESS);
+    }
+
+    @DeleteMapping("/delete/{cid}")
+    public ResponseEntity<ResponseCode> deleteComment(@PathVariable int cid) {
+        commentService.deleteComment(cid, SecurityUtil.getCurrentUserId());
+        return ResponseEntity.ok(ResponseCode.SUCCESS);
+    }
 }
