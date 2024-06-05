@@ -1,0 +1,39 @@
+logging:
+  level:
+    org.mybatis: DEBUG
+    com.opus: DEBUG
+
+mybatis:
+  configuration:
+    map-underscore-to-camel-case: true
+  type-aliases-package: com.opus.pin.domain
+  mapper-locations: classpath:mapper/*.xml
+
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3307/opusdb?serverTimezone=UTC&characterEncoding=UTF-8
+    username: root
+    password: 1234
+
+local:
+  url: C:\\Users\\gpflv\\Desktop\\Opus-front\\public\\images\\
+  url1: /images/
+
+jwt:
+  secret: 9de40f72d94d5bbce017acf7cbe4b3c04cbeef6e96f94b47cbaff1414afe831b73486c124e2417c6ebf897124d6954714fa61d83dfbe230d052757f967a1d517
+  header: Authorization
+  token-validity-in-seconds: 86400
+
+security:
+  permitted-urls:
+    - "/"
+    - "/pin/list"
+    - "/pin/total"
+    - "/pin/myPins"
+    - "/comment/list/**"
+    - "/member/login"
+    - "/member/logout"
+    - "/member/signup/**"
+    - "/*.ico"
+    - "/error"
