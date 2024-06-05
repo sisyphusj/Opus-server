@@ -78,7 +78,7 @@ public class PinService {
 
         PinListRequest pinListRequest = PinListRequest.of(pinListRequestDTO);
 
-        if(pinListRequest.getKeyword() == null || pinListRequest.getKeyword().trim().isEmpty()) {
+        if (pinListRequest.getKeyword() == null || pinListRequest.getKeyword().trim().isEmpty()) {
             return pinMapper.pinList(pinListRequest);
         } else {
             return pinMapper.pinListByKeyword(pinListRequest);
@@ -97,20 +97,19 @@ public class PinService {
 
         if (keyword == null || keyword.trim().isEmpty()) {
             return pinMapper.getTotalCount();
-        } else {
-            return pinMapper.getTotalCountByKeyword(keyword);
         }
+
+        return pinMapper.getTotalCountByKeyword(keyword);
+
     }
 
-    @Transactional
-    public void updatePin(PinDTO pinDTO, int memberId) {
-
-        Pin pin = Pin.of(pinDTO, memberId);
-        pinMapper.updatePin(pin);
+    public PinVO getPinByPId(int pid) {
+        return pinMapper.getPinByPId(pid);
     }
 
     @Transactional
     public void deletePin(int pid, int memberId) {
         pinMapper.deletePin(pid, memberId);
     }
+
 }

@@ -2,12 +2,10 @@ package com.opus.pin.controller;
 
 import com.opus.auth.SecurityUtil;
 import com.opus.common.ResponseCode;
-import com.opus.pin.domain.Pin;
 import com.opus.pin.domain.PinDTO;
 import com.opus.pin.domain.PinListRequestDTO;
 import com.opus.pin.domain.PinVO;
 import com.opus.pin.service.PinService;
-import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -21,48 +19,50 @@ import java.util.List;
 @RequestMapping("/pin")
 @RequiredArgsConstructor
 
-@CrossOrigin(origins = "http://localhost:3000")
-
-
 public class PinController {
 
     private final PinService pinService;
 
     // pin 추가
     @PostMapping
-    public ResponseEntity<ResponseCode> addPin(@RequestBody PinDTO pinDTO) {
+    public ResponseEntity<ResponseCode> savePin(@RequestBody PinDTO pinDTO) {
 
-        log.info("addPin = {} {}", pinDTO.getImagePath(), pinDTO.getTag());
+        log.info("addPin = {} {} {} {}", pinDTO.getTag(), pinDTO.getImagePath(), pinDTO.getNTag(), pinDTO.getSeed());
         return pinService.savePin(pinDTO, SecurityUtil.getCurrentUserId());
     }
 
-    // pin 리스트 요청
+    // pin 전체 리스트
     @PostMapping("/list")
     public List<PinVO> getPinList(@RequestBody PinListRequestDTO pinListRequestDTO) {
-        log.info("getPinList = {}", pinListRequestDTO);
+
+        log.info( "getPinList = {} {} {} ", pinListRequestDTO.getOffset(), pinListRequestDTO.getAmount(), pinListRequestDTO.getKeyword());
         return pinService.pinList(pinListRequestDTO);
     }
 
-    // id로 pin 찾기
+    // 사용자 pin 리스트
     @PostMapping("/myPins")
     public List<PinVO> getPinListById(@RequestBody PinListRequestDTO pinListRequestDTO) {
 
-        log.info("findById = {}", pinListRequestDTO);
+        log.info( "getPinListById = {} {} {} ", pinListRequestDTO.getOffset(), pinListRequestDTO.getAmount(), pinListRequestDTO.getKeyword());
         return pinService.pinListById(pinListRequestDTO, SecurityUtil.getCurrentUserId());
     }
 
     // 전체 pin 개수
     @GetMapping("/total")
     public int getTotalAmount(@RequestParam(required = false) String keyword) {
+
+        if(keyword != null) {
+            log.info("getTotalAmount Keyword = {}", keyword);
+        }
+
         return pinService.getTotalCount(keyword);
     }
 
-    // pin 수정
-    @PutMapping
-    public void updatePin(@Valid @RequestBody PinDTO pinDTO) {
-
-        log.info("updatePin = {}", pinDTO);
-        pinService.updatePin(pinDTO, SecurityUtil.getCurrentUserId());
+    // pid 로 pin 리스트 조회
+    @GetMapping("/{pid}")
+    public PinVO getPinByPId(@PathVariable int pid) {
+        log.info("getPin = {}", pid);
+        return pinService.getPinByPId(pid);
     }
 
     // pin 삭제

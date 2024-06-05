@@ -47,12 +47,11 @@
         LIMIT #{amount} OFFSET #{offset}
     </select>
 
-    <update id="updatePin">
-        update pins
-        set tag=#{tag},
-            img_path=#{imagePath}
-        where p_id = #{pId} and pins.m_id = #{mId}
-    </update>
+    <select id="getPinByPId" resultMap="pinList">
+        SELECT pins.p_id, pins.img_path, pins.tag, pins.n_tag, pins.width, pins.height, pins.seed
+        FROM pins
+        WHERE pins.p_id = #{pId}
+    </select>
 
     <delete id="deletePin">
         delete

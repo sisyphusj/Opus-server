@@ -22,7 +22,7 @@ public interface PinMapper {
 
     int getTotalCountByKeyword(String keyword);
 
-    void updatePin(Pin pin);
+    PinVO getPinByPId(int pid);
 
     void deletePin(int pid, int mid);
 }
