@@ -5,6 +5,7 @@ import com.opus.auth.JwtAuthenticationEntryPoint;
 import com.opus.auth.JwtFilter;
 import com.opus.auth.TokenProvider;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -18,6 +19,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
+import java.util.List;
+
 /**
  * SecurityConfig
  * - Spring Security 설정 클래스
@@ -29,7 +32,9 @@ public class SecurityConfig {
     private final TokenProvider tokenProvider;
     private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
     private final JwtAccessDeniedHandler jwtAccessDeniedHandler;
-    private final String[] PermittedUrls = {"/", "/pin/list", "/pin/total", "/pin/myPins", "/comment/list/**","/member/login", "/member/logout", "/member/signup/**", "/*.ico", "/error"};
+
+    @Value("${security.permitted-urls}")
+    private List<String> permittedUrls;
 
     @Bean
     public PasswordEncoder passwordEncoder() {
@@ -64,7 +69,7 @@ public class SecurityConfig {
 
                 .authorizeHttpRequests(
                         (authorizeRequests) -> authorizeRequests
-                                .requestMatchers(PermittedUrls).permitAll()
+                                .requestMatchers(permittedUrls.toArray(new String[0])).permitAll()
                                 .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                                 .anyRequest().authenticated()
                 )
