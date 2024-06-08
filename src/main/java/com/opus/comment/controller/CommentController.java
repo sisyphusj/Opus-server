@@ -4,7 +4,6 @@ import com.opus.auth.SecurityUtil;
 import com.opus.comment.domain.CommentDTO;
 import com.opus.comment.domain.CommentVO;
 import com.opus.comment.service.CommentService;
-import com.opus.common.ResponseCode;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -15,44 +14,43 @@ import java.util.List;
 
 @Slf4j
 @RestController
-@RequestMapping("/comment")
+@RequestMapping("api/pins/{pinId}/comments")
 @RequiredArgsConstructor
 public class CommentController {
 
     private final CommentService commentService;
 
-    @PostMapping("/add")
-    public ResponseEntity<ResponseCode> addComment(@Valid @RequestBody CommentDTO commentDTO){
-
-        commentService.addComment(commentDTO, SecurityUtil.getCurrentUserId());
-
-        return ResponseEntity.ok(ResponseCode.SUCCESS);
+    // 댓글 추가
+    @PostMapping
+    public ResponseEntity<Void> saveComment(@PathVariable int pinId, @Valid @RequestBody CommentDTO commentDTO) {
+        commentService.saveComment(pinId, commentDTO);
+        return ResponseEntity.ok().build();
     }
 
-    @GetMapping("/list/{pid}")
-    public List<CommentVO> getComments(@PathVariable int pid) {
-
-       return commentService.getComments(pid);
+    // 댓글 리스트
+    @GetMapping
+    public ResponseEntity<List<CommentVO>> getCommentsByPinId(@PathVariable int pinId) {
+        return ResponseEntity.ok(commentService.getCommentsByPinId(pinId));
     }
 
-    @GetMapping("/list/my-comments")
-    public List<CommentVO> getMyComments() {
-
-        return commentService.getMyComments(SecurityUtil.getCurrentUserId());
+    // 내 댓글 리스트
+    @GetMapping("/my-comments")
+    public ResponseEntity<List<CommentVO>> getMyComments() {
+        return ResponseEntity.ok(commentService.getMyComments());
     }
 
-    @PostMapping("/update")
-    public ResponseEntity<ResponseCode> updateComment(@Valid @RequestBody CommentDTO commentDTO) {
-
-        log.info("{} {} {}", commentDTO.getPId(), commentDTO.getCId(), commentDTO.getContent());
-
-        commentService.updateComment(commentDTO, SecurityUtil.getCurrentUserId());
-        return ResponseEntity.ok(ResponseCode.SUCCESS);
+    // 댓글 수정
+    @PutMapping("/{commentId}")
+    public ResponseEntity<Void> updateComment(@PathVariable int pinId, @PathVariable int commentId, @Valid @RequestBody CommentDTO commentDTO) {
+        commentService.updateComment(pinId, commentId, commentDTO);
+        return ResponseEntity.ok().build();
     }
 
-    @DeleteMapping("/delete/{cid}")
-    public ResponseEntity<ResponseCode> deleteComment(@PathVariable int cid) {
-        commentService.deleteComment(cid, SecurityUtil.getCurrentUserId());
-        return ResponseEntity.ok(ResponseCode.SUCCESS);
+    // 댓글 삭제
+    @DeleteMapping("/{commentId}")
+    public ResponseEntity<Void> deleteComment(@PathVariable int commentId) {
+        commentService.deleteComment(commentId);
+        return ResponseEntity.ok().build();
     }
+
 }

@@ -4,16 +4,16 @@
 
 <mapper namespace="com.opus.comment.mapper.CommentMapper">
 
-    <insert id="addComment">
+    <insert id="saveComment">
         INSERT INTO comment (p_id, m_id, top_level_comment_id, level, content, parent_nick)
-        values (#{pId}, #{mId}, #{topLevelCommentId}, #{level}, #{content}, #{parentNick})
+        values (#{pinId}, #{memberId}, #{topLevelCommentId}, #{level}, #{content}, #{parentNickname})
     </insert>
 
-    <select id="getComments" resultMap="commentList">
+    <select id="getCommentsByPinId" resultMap="commentList">
         SELECT c_id, comment.p_id, member.nick, top_level_comment_id, level, content, created_at, updated_at, parent_nick
         FROM comment
         INNER JOIN member ON comment.m_id = member.m_id
-        WHERE comment.p_id = #{pId}
+        WHERE comment.p_id = #{pinId}
         ORDER BY c_id ASC, level ASC
     </select>
     
@@ -21,31 +21,31 @@
         SELECT c_id, comment.p_id, member.nick, top_level_comment_id, level, content, created_at, updated_at, parent_nick
         FROM comment
         INNER JOIN member ON comment.m_id = member.m_id
-        WHERE comment.m_id = #{mId}
+        WHERE comment.m_id = #{memberId}
         ORDER BY c_id ASC, level ASC
     </select>
 
     <update id="updateComment">
         UPDATE comment
         SET content = #{content}, updated_at = now()
-        WHERE c_id = #{cId} AND comment.m_id = #{mId}
+        WHERE c_id = #{commentId} AND comment.m_id = #{memberId}
     </update>
 
     <delete id="deleteComment">
         DELETE
         FROM comment
-        WHERE c_id = #{cId} AND comment.m_id = #{mId}
+        WHERE c_id = #{commentId} AND comment.m_id = #{memberId}
     </delete>
 
     <resultMap id="commentList" type="com.opus.comment.domain.CommentVO">
-        <id property="cId" column="c_id"/>
-        <result property="pId" column="p_id"/>
+        <id property="commentId" column="c_id"/>
+        <result property="pinId" column="p_id"/>
         <result property="topLevelCommentId" column="top_level_comment_id"/>
         <result property="level" column="level"/>
         <result property="content" column="content"/>
         <result property="createdDate" column="created_at"/>
         <result property="updatedDate" column="updated_at"/>
-        <result property="parentNick" column="parent_nick"/>
+        <result property="parentNickname" column="parent_nick"/>
     </resultMap>
 
 </mapper>

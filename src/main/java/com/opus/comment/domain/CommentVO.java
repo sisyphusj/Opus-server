@@ -5,15 +5,15 @@ import lombok.Getter;
 @Getter
 public class CommentVO {
 
-    private Integer cId;
+    private Integer commentId;
 
-    private Integer pId;
+    private Integer pinId;
 
-    private String nick;
+    private String nickname;
 
     private Integer topLevelCommentId;
 
-    private String parentNick;
+    private String parentNickname;
 
     private int level;
 

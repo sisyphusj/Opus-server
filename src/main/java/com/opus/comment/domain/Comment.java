@@ -8,15 +8,15 @@ import lombok.*;
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class Comment {
 
-    private Integer cId;
+    private Integer commentId;
 
-    private Integer pId;
+    private Integer pinId;
 
-    private Integer mId;
+    private Integer memberId;
 
     private Integer topLevelCommentId;
 
-    private String parentNick;
+    private String parentNickname;
 
     private int level;
 

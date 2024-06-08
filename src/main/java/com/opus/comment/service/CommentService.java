@@ -1,5 +1,6 @@
 package com.opus.comment.service;
 
+import com.opus.auth.SecurityUtil;
 import com.opus.comment.domain.Comment;
 import com.opus.comment.domain.CommentDTO;
 import com.opus.comment.domain.CommentVO;
@@ -19,42 +20,40 @@ public class CommentService {
     private final CommentMapper commentMapper;
 
     @Transactional
-    public void addComment(CommentDTO commentDTO, int currentUserId) {
+    public void saveComment(int pinId, CommentDTO commentDTO) {
 
         Comment comment = Comment.builder()
-                .pId(commentDTO.getPId())
-                .mId(currentUserId)
+                .pinId(pinId)
+                .memberId(SecurityUtil.getCurrentUserId())
                 .topLevelCommentId(commentDTO.getTopLevelCommentId())
                 .level(commentDTO.getLevel())
                 .content(commentDTO.getContent())
-                .parentNick(commentDTO.getParentNick())
+                .parentNickname(commentDTO.getParentNickname())
                 .build();
 
-        log.info("{}", commentDTO.getPId());
-        commentMapper.addComment(comment);
+        commentMapper.saveComment(comment);
     }
 
     // 게시글에 달린 댓글 리스트
     @Transactional(readOnly = true)
-    public List<CommentVO> getComments(int pid) {
-        return commentMapper.getComments(pid);
+    public List<CommentVO> getCommentsByPinId(int pinId) {
+        return commentMapper.getCommentsByPinId(pinId);
     }
 
     // 내가 쓴 댓글 리스트
     @Transactional(readOnly = true)
-    public List<CommentVO> getMyComments(int currentUserId) {
-
-        return commentMapper.getMyComments(currentUserId);
+    public List<CommentVO> getMyComments() {
+        return commentMapper.getMyComments(SecurityUtil.getCurrentUserId());
     }
 
-    public void updateComment(CommentDTO commentDTO, int currentUserId) {
-
+    // 댓글 수정
+    public void updateComment(int pinId, int commentId, CommentDTO commentDTO) {
         Comment comment = Comment.builder()
-                .cId(commentDTO.getCId())
-                .pId(commentDTO.getPId())
-                .mId(currentUserId)
+                .commentId(commentId)
+                .pinId(pinId)
+                .memberId(SecurityUtil.getCurrentUserId())
                 .topLevelCommentId(commentDTO.getTopLevelCommentId())
-                .parentNick(commentDTO.getParentNick())
+                .parentNickname(commentDTO.getParentNickname())
                 .level(commentDTO.getLevel())
                 .content(commentDTO.getContent())
                 .build();
@@ -62,11 +61,13 @@ public class CommentService {
         commentMapper.updateComment(comment);
     }
 
-    public void deleteComment(int cid, int currentUserId) {
+    // 댓글 삭제
+    public void deleteComment(int commentId) {
         Comment comment = Comment.builder()
-                .cId(cid)
-                .mId(currentUserId)
+                .commentId(commentId)
+                .memberId(SecurityUtil.getCurrentUserId())
                 .build();
         commentMapper.deleteComment(comment);
     }
+
 }

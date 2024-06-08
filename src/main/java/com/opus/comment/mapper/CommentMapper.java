@@ -9,11 +9,11 @@ import java.util.List;
 @Mapper
 public interface CommentMapper {
 
-    void addComment(Comment comment);
+    void saveComment(Comment comment);
 
-    List<CommentVO> getComments(int pId);
+    List<CommentVO> getCommentsByPinId(int pinId);
 
-    List<CommentVO> getMyComments(int mId);
+    List<CommentVO> getMyComments(int memberId);
 
     void updateComment(Comment comment);
 
