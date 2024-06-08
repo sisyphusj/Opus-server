@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.*;
 
 @Slf4j
 @RestController
-@RequestMapping("/member")
+@RequestMapping("api/member")
 @RequiredArgsConstructor
 
 public class MemberController {
@@ -23,47 +23,32 @@ public class MemberController {
     private final PasswordEncoder passwordEncoder;
 
     // 회원가입
-    @PostMapping("/signup")
+    @PostMapping("/register")
     public ResponseEntity<ResponseCode> saveMember(@Valid @RequestBody MemberDTO memberDTO) {
-
         log.info("addMember = {} {} {} {}", memberDTO.getId(), memberDTO.getPw(), memberDTO.getNick(), memberDTO.getEmail());
-
-        String rawPw = memberDTO.getPw();
-        String encPw = passwordEncoder.encode(rawPw);
-        memberDTO.setPw(encPw);
-
         memberService.saveMember(memberDTO);
         return ResponseEntity.ok(ResponseCode.SUCCESS);
     }
 
     // 아이디 중복 체크
-    @GetMapping("/signup/check-id/{id}")
-    public ResponseEntity<ResponseCode> checkDuplicateId(@PathVariable @NotEmpty String id) {
-
+    @GetMapping("/check/id/{id}")
+    public ResponseEntity<Boolean> checkDuplicateId(@PathVariable @NotEmpty String id) {
         log.info("checkDuplicateId = {}", id);
-
-        memberService.checkDuplicateId(id);
-        return ResponseEntity.ok(ResponseCode.SUCCESS);
+        return ResponseEntity.ok(memberService.checkDuplicateId(id));
     }
 
     // 닉네임 중복 체크
-    @GetMapping("/signup/check-nick/{nick}")
-    public ResponseEntity<ResponseCode> checkDuplicateNick(@PathVariable @NotEmpty String nick) {
-
+    @GetMapping("/check/nick/{nick}")
+    public ResponseEntity<Boolean> checkDuplicateNick(@PathVariable @NotEmpty String nick) {
         log.info("checkDuplicateNick = {}", nick);
-
-        memberService.checkDuplicateNick(nick);
-        return ResponseEntity.ok(ResponseCode.SUCCESS);
+        return ResponseEntity.ok(memberService.checkDuplicateNick(nick));
     }
 
     // 이메일 중복 체크
-    @GetMapping("/signup/check-email/{email}")
-    public ResponseEntity<ResponseCode> checkDuplicateEmail(@PathVariable @NotEmpty String email) {
-
+    @GetMapping("/check/email/{email}")
+    public ResponseEntity<Boolean> checkDuplicateEmail(@PathVariable @NotEmpty String email) {
         log.info("checkDuplicateEmail = {}", email);
-
-        memberService.checkDuplicateEmail(email);
-        return ResponseEntity.ok(ResponseCode.SUCCESS);
+        return ResponseEntity.ok(memberService.checkDuplicateEmail(email));
     }
 
     // 로그인
@@ -87,30 +72,23 @@ public class MemberController {
 
     // 프로필 조회
     @GetMapping("/profile")
-    public ResponseEntity<MemberVO> findById() {
-        MemberVO memberVO = memberService.findById(SecurityUtil.getCurrentUserId());
+    public ResponseEntity<MemberVO> getMyProfile() {
+        MemberVO memberVO = memberService.getMyProfile(SecurityUtil.getCurrentUserId());
         return ResponseEntity.ok(memberVO);
     }
 
     // 프로필 수정
-    @PutMapping
+    @PutMapping("/update")
     public ResponseEntity<ResponseCode> updateMember(@Valid @RequestBody MemberDTO memberDTO) {
-
         log.info("updateMember = {} {} {} {}", memberDTO.getId(), memberDTO.getPw(), memberDTO.getNick(), memberDTO.getEmail());
-
-        String rawPw = memberDTO.getPw();
-        String encPw = passwordEncoder.encode(rawPw);
-        memberDTO.setPw(encPw);
-
         memberService.updateMember(memberDTO, SecurityUtil.getCurrentUserId());
         return ResponseEntity.ok(ResponseCode.SUCCESS);
     }
 
     // 회원 탈퇴
-    @DeleteMapping
+    @DeleteMapping("/resign")
     public ResponseEntity<ResponseCode> deleteMember() {
         memberService.deleteMember(SecurityUtil.getCurrentUserId());
         return ResponseEntity.ok(ResponseCode.SUCCESS);
     }
-
 }
