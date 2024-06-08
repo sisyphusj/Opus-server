@@ -1,12 +1,9 @@
 package com.opus.pin.controller;
 
-import com.opus.auth.SecurityUtil;
 import com.opus.common.ResponseCode;
 import com.opus.pin.domain.PinDTO;
-import com.opus.pin.domain.PinListRequestDTO;
 import com.opus.pin.domain.PinVO;
 import com.opus.pin.service.PinService;
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -16,7 +13,7 @@ import java.util.List;
 
 @Slf4j
 @RestController
-@RequestMapping("/pin")
+@RequestMapping("/api/pins")
 @RequiredArgsConstructor
 
 public class PinController {
@@ -26,50 +23,40 @@ public class PinController {
     // pin 추가
     @PostMapping
     public ResponseEntity<ResponseCode> savePin(@RequestBody PinDTO pinDTO) {
-
-        log.info("addPin = {} {} {} {}", pinDTO.getTag(), pinDTO.getImagePath(), pinDTO.getNTag(), pinDTO.getSeed());
-        return pinService.savePin(pinDTO, SecurityUtil.getCurrentUserId());
+        return pinService.savePin(pinDTO);
     }
 
     // pin 전체 리스트
-    @PostMapping("/list")
-    public List<PinVO> getPinList(@RequestBody PinListRequestDTO pinListRequestDTO) {
-
-        log.info( "getPinList = {} {} {} ", pinListRequestDTO.getOffset(), pinListRequestDTO.getAmount(), pinListRequestDTO.getKeyword());
-        return pinService.pinList(pinListRequestDTO);
+    @GetMapping
+    public ResponseEntity<List<PinVO>> getPinList(@RequestParam int offset,
+                                  @RequestParam int amount,
+                                  @RequestParam(required = false) String keyword) {
+        return ResponseEntity.ok(pinService.getPinList(offset, amount, keyword));
     }
 
     // 사용자 pin 리스트
-    @PostMapping("/myPins")
-    public List<PinVO> getPinListById(@RequestBody PinListRequestDTO pinListRequestDTO) {
+    @GetMapping("/my-pins")
+    public ResponseEntity<List<PinVO>> getMyPinList(@RequestParam int offset,
+                                    @RequestParam int amount) {
+        return ResponseEntity.ok(pinService.getMyPinList(offset, amount));
+    }
 
-        log.info( "getPinListById = {} {} {} ", pinListRequestDTO.getOffset(), pinListRequestDTO.getAmount(), pinListRequestDTO.getKeyword());
-        return pinService.pinListById(pinListRequestDTO, SecurityUtil.getCurrentUserId());
+    // pinId 로 pin 조회
+    @GetMapping("/{pinId}")
+    public ResponseEntity<PinVO> getPinByPinId(@PathVariable int pinId) {
+        return ResponseEntity.ok(pinService.getPinByPinId(pinId));
     }
 
     // 전체 pin 개수
     @GetMapping("/total")
-    public int getTotalAmount(@RequestParam(required = false) String keyword) {
-
-        if(keyword != null) {
-            log.info("getTotalAmount Keyword = {}", keyword);
-        }
-
-        return pinService.getTotalCount(keyword);
-    }
-
-    // pid 로 pin 리스트 조회
-    @GetMapping("/{pid}")
-    public PinVO getPinByPId(@PathVariable int pid) {
-        log.info("getPin = {}", pid);
-        return pinService.getPinByPId(pid);
+    public ResponseEntity<Integer> getTotalAmount(@RequestParam(required = false) String keyword) {
+        return ResponseEntity.ok(pinService.getTotalCount(keyword));
     }
 
     // pin 삭제
-    @DeleteMapping("/{pid}")
-    public void deletePin(@PathVariable int pid) {
-
-        log.info("deletePin = {}", pid);
-        pinService.deletePin(pid, SecurityUtil.getCurrentUserId());
+    @DeleteMapping("/{pinId}")
+    public ResponseEntity<Void> deletePin(@PathVariable int pinId) {
+        pinService.deletePin(pinId);
+        return ResponseEntity.ok().build();
     }
 }

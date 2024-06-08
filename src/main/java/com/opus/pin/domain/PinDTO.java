@@ -6,12 +6,13 @@ import lombok.Getter;
 @Getter
 public class PinDTO {
 
+    @JsonProperty("imagePath")
     private String imagePath;
 
-    private String tag;
+    private String prompt;
 
-    @JsonProperty("nTag")
-    private String nTag;
+    @JsonProperty("negativePrompt")
+    private String negativePrompt;
 
     private String width;
 

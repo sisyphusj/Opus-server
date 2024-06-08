@@ -4,11 +4,11 @@ import lombok.Getter;
 
 @Getter
 public class PinVO {
-    private Integer pId;
-    private String nick;
+    private Integer pinId;
+    private String nickname;
     private String imagePath;
-    private String tag;
-    private String nTag;
+    private String prompt;
+    private String negativePrompt;
 
     private String width;
     private String height;

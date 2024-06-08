@@ -1,5 +1,6 @@
 package com.opus.pin.service;
 
+import com.opus.auth.SecurityUtil;
 import com.opus.common.ResponseCode;
 import com.opus.pin.domain.*;
 import com.opus.pin.mapper.PinMapper;
@@ -13,6 +14,9 @@ import org.springframework.transaction.annotation.Transactional;
 import java.io.*;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.StandardCopyOption;
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 
@@ -22,94 +26,86 @@ import java.util.concurrent.ThreadLocalRandom;
 public class PinService {
 
     @Value("${local.url}")
-    private String localUrl;
+    private String imageStoragePath;
 
     @Value("${local.url1}")
-    private String localUrl1;
+    private String imageAccessPath;
 
     private final PinMapper pinMapper;
 
-    @Transactional
-    public ResponseEntity<ResponseCode> savePin(PinDTO pinDTO, int memberId) {
+    private String generateFileName() {
+        int random = ThreadLocalRandom.current().nextInt(1, 1001);
+        return String.format("image%d.jpg", random);
+    }
 
-        Pin pin = Pin.of(pinDTO, memberId);
+    @Transactional
+    public ResponseEntity<ResponseCode> savePin(PinDTO pinDTO) {
+        Pin pin = Pin.of(pinDTO, SecurityUtil.getCurrentUserId());
 
         try {
+            // URL에서 이미지를 다운로드
             URL url = new URL(pin.getImagePath());
+            String fileName = generateFileName();
+            Path tempFilePath = Files.createTempFile("tempfile", ".jpg");
+
+            // 이미지 다운로드 및 임시 파일에 저장
             try (InputStream inputStream = url.openStream()) {
-                File tempFile = File.createTempFile("tempfile", ".jpg");
-                try (OutputStream outputStream = new FileOutputStream(tempFile)) {
-                    byte[] buffer = new byte[2048];
-                    int bytesRead;
-                    while ((bytesRead = inputStream.read(buffer)) != -1) {
-                        outputStream.write(buffer, 0, bytesRead);
-                    }
-                }
-
-                String directoryPath = localUrl;
-                int random = ThreadLocalRandom.current().nextInt(1, 1001);
-
-                String fileName = String.format("%simage%d.jpg", directoryPath, random);
-                File destinationFile = new File(fileName);
-                String urlPath = String.format("%s/image%d.jpg", localUrl1, random);
-
-                if (!tempFile.renameTo(destinationFile)) {
-                    throw new IOException("Failed to move temporary file to destination file");
-                }
-
-                log.info("File name = {}", destinationFile.getName());
-
-                pin.setImagePath(urlPath);
-                pinMapper.savePin(pin);
-
-                return ResponseEntity.ok(ResponseCode.SUCCESS);
+                Files.copy(inputStream, tempFilePath, StandardCopyOption.REPLACE_EXISTING);
             }
+
+            // 임시 파일을 최종 디렉토리로 이동
+            Path destinationPath = Path.of(imageStoragePath, fileName);
+            Files.move(tempFilePath, destinationPath, StandardCopyOption.REPLACE_EXISTING);
+
+            // 이미지 경로 업데이트 및 저장
+            String urlPath = imageAccessPath + fileName;
+            pin.setImagePath(urlPath);
+            pinMapper.savePin(pin);
+
+            // 로깅 및 성공 응답 반환
+            log.info("File saved successfully with name = {}", fileName);
+            return ResponseEntity.ok(ResponseCode.SUCCESS);
+
         } catch (MalformedURLException e) {
-            log.info("URL is not valid", e);
+            log.error("Invalid URL: {}", pin.getImagePath(), e);
             return ResponseEntity.badRequest().body(ResponseCode.INVALID_INPUT_VALUE);
         } catch (IOException e) {
-            log.info("IO Exception", e);
+            log.error("IO Exception occurred while processing the image", e);
             return ResponseEntity.badRequest().body(ResponseCode.IO_EXCEPTION);
         }
     }
 
     @Transactional(readOnly = true)
-    public List<PinVO> pinList(PinListRequestDTO pinListRequestDTO) {
-
-        PinListRequest pinListRequest = PinListRequest.of(pinListRequestDTO);
-
-        if (pinListRequest.getKeyword() == null || pinListRequest.getKeyword().trim().isEmpty()) {
-            return pinMapper.pinList(pinListRequest);
-        } else {
-            return pinMapper.pinListByKeyword(pinListRequest);
+    public List<PinVO> getPinList(int offset, int amount, String keyword) {
+        PinListRequest pinListRequest = PinListRequest.of(offset, amount, keyword);
+        if (keyword == null || keyword.trim().isEmpty()) {
+            return pinMapper.getPinList(pinListRequest);
         }
+        return pinMapper.getPinListByKeyword(pinListRequest);
     }
 
     @Transactional(readOnly = true)
-    public List<PinVO> pinListById(PinListRequestDTO pinListRequestDTO, int currentUserId) {
+    public List<PinVO> getMyPinList(int offset, int amount) {
+        PinListRequest pinListRequest = PinListRequest.of(SecurityUtil.getCurrentUserId(), offset, amount);
+        return pinMapper.getMyPinList(pinListRequest);
+    }
 
-        PinListRequest pinListRequest = PinListRequest.of(pinListRequestDTO, currentUserId);
-        return pinMapper.pinListById(pinListRequest);
+    public PinVO getPinByPinId(int pinId) {
+        return pinMapper.getPinByPinId(pinId);
     }
 
     @Transactional(readOnly = true)
     public int getTotalCount(String keyword) {
-
         if (keyword == null || keyword.trim().isEmpty()) {
             return pinMapper.getTotalCount();
         }
-
         return pinMapper.getTotalCountByKeyword(keyword);
-
-    }
-
-    public PinVO getPinByPId(int pid) {
-        return pinMapper.getPinByPId(pid);
     }
 
     @Transactional
-    public void deletePin(int pid, int memberId) {
-        pinMapper.deletePin(pid, memberId);
+    public void deletePin(int pinId) {
+        pinMapper.deletePin(pinId, SecurityUtil.getCurrentUserId());
     }
 
 }
+

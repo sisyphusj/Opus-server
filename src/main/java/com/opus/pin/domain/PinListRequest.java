@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class PinListRequest {
 
-    private Integer mId;
+    private Integer memberId;
 
     private Integer amount;
 
@@ -17,11 +17,11 @@ public class PinListRequest {
 
     private String keyword;
 
-    public static PinListRequest of(PinListRequestDTO pinListRequestDTO, Integer mId) {
-        return new PinListRequest(mId, pinListRequestDTO.getAmount(), pinListRequestDTO.getOffset(), null);
+    public static PinListRequest of(Integer memberId, int offset, int amount) {
+        return new PinListRequest(memberId, offset, amount, null);
     }
 
-    public static PinListRequest of(PinListRequestDTO pinListRequestDTO) {
-        return new PinListRequest(null, pinListRequestDTO.getAmount(), pinListRequestDTO.getOffset(), pinListRequestDTO.getKeyword());
+    public static PinListRequest of(int offset, int amount, String keyword) {
+        return new PinListRequest(null, offset, amount, keyword);
     }
 }

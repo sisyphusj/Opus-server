@@ -12,17 +12,17 @@ public interface PinMapper {
 
     void savePin(Pin pin);
 
-    List<PinVO> pinList(PinListRequest pinListRequest);
+    List<PinVO> getPinList(PinListRequest pinListRequest);
 
-    List<PinVO> pinListByKeyword(PinListRequest pinListRequest);
+    List<PinVO> getPinListByKeyword(PinListRequest pinListRequest);
 
-    List<PinVO> pinListById(PinListRequest pinListRequest);
+    List<PinVO> getMyPinList(PinListRequest pinListRequest);
+
+    PinVO getPinByPinId(int pid);
 
     int getTotalCount();
 
     int getTotalCountByKeyword(String keyword);
-
-    PinVO getPinByPId(int pid);
 
     void deletePin(int pid, int mid);
 }

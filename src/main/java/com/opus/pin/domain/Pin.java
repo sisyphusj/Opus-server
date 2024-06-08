@@ -6,17 +6,17 @@ import lombok.*;
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class Pin {
-    private Integer mId;
-    private Integer pId;
+    private Integer memberId;
+    private Integer pinId;
     private String imagePath;
-    private String tag;
-    private String nTag;
+    private String prompt;
+    private String negativePrompt;
 
     private String width;
     private String height;
     private String seed;
 
-    public static Pin of(PinDTO pinDTO, Integer mId) {
-        return new Pin(mId, null, pinDTO.getImagePath(), pinDTO.getTag(), pinDTO.getNTag(), pinDTO.getWidth(), pinDTO.getHeight(), pinDTO.getSeed());
+    public static Pin of(PinDTO pinDTO, Integer memberId) {
+        return new Pin(memberId, null, pinDTO.getImagePath(), pinDTO.getPrompt(), pinDTO.getNegativePrompt(), pinDTO.getWidth(), pinDTO.getHeight(), pinDTO.getSeed());
     }
 }

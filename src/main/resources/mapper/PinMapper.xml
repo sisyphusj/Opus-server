@@ -6,10 +6,10 @@
 
     <insert id="savePin">
         insert into pins (pins.m_id, tag, img_path, width, height, seed, n_tag)
-        values (#{mId}, #{tag}, #{imagePath}, #{width}, #{height}, #{seed}, #{nTag})
+        values (#{memberId}, #{prompt}, #{imagePath}, #{width}, #{height}, #{seed}, #{negativePrompt})
     </insert>
 
-    <select id="pinList" resultMap="pinList">
+    <select id="getPinList" resultMap="pinList">
         SELECT pins.p_id, member.nick, pins.img_path, pins.tag, pins.n_tag, pins.width, pins.height, pins.seed
         FROM pins
         INNER JOIN member ON pins.m_id = member.m_id
@@ -17,13 +17,35 @@
         LIMIT #{amount} OFFSET #{offset}
     </select>
 
-    <select id="pinListById" resultMap ="pinList">
+    <select id="getPinListByKeyword" resultMap="pinList">
+        SELECT pins.p_id,
+               member.nick,
+               pins.img_path,
+               pins.tag,
+               pins.n_tag,
+               pins.width,
+               pins.height,
+               pins.seed
+        FROM pins
+                 INNER JOIN member ON pins.m_id = member.m_id
+        WHERE pins.tag LIKE CONCAT('%', #{keyword}, '%')
+        ORDER BY pins.p_id DESC
+        LIMIT #{amount} OFFSET #{offset}
+    </select>
+
+    <select id="getMyPinList" resultMap ="pinList">
         SELECT pins.p_id, member.nick, pins.img_path, pins.tag, pins.n_tag, pins.width, pins.height, pins.seed
         FROM pins
         INNER JOIN member ON pins.m_id = member.m_id
-        WHERE member.m_id = #{mId}
+        WHERE member.m_id = #{memberId}
         ORDER BY pins.p_id DESC
         LIMIT #{amount} OFFSET #{offset}
+    </select>
+
+    <select id="getPinByPinId" resultMap="pinList">
+        SELECT pins.p_id, pins.img_path, pins.tag, pins.n_tag, pins.width, pins.height, pins.seed
+        FROM pins
+        WHERE pins.p_id = #{pinId}
     </select>
 
     <select id="getTotalCount" resultType="int">
@@ -31,42 +53,26 @@
         from pins
     </select>
 
-
     <select id="getTotalCountByKeyword" resultType="int">
         select count(*)
         from pins
         where tag LIKE CONCAT('%', #{keyword}, '%')
     </select>
 
-    <select id="pinListByKeyword" resultMap="pinList">
-        SELECT pins.p_id, member.nick, pins.img_path, pins.tag, pins.n_tag, pins.width, pins.height, pins.seed
-        FROM pins
-        INNER JOIN member ON pins.m_id = member.m_id
-        WHERE pins.tag LIKE CONCAT('%', #{keyword}, '%')
-        ORDER BY pins.p_id DESC
-        LIMIT #{amount} OFFSET #{offset}
-    </select>
-
-    <select id="getPinByPId" resultMap="pinList">
-        SELECT pins.p_id, pins.img_path, pins.tag, pins.n_tag, pins.width, pins.height, pins.seed
-        FROM pins
-        WHERE pins.p_id = #{pId}
-    </select>
-
     <delete id="deletePin">
         delete
         from pins
-        where p_id = #{pid} and pins.m_id = #{mid}
+        where p_id = #{pinId} and pins.m_id = #{memberId}
     </delete>
 
     <resultMap id="pinList" type="com.opus.pin.domain.PinVO">
-        <id property="pId" column="p_id"/>
-        <result property="tag" column="tag"/>
+        <id property="pinId" column="p_id"/>
+        <result property="prompt" column="tag"/>
         <result property="imagePath" column="img_path"/>
         <result property="width" column="width"/>
         <result property="height" column="height"/>
         <result property="seed" column="seed"/>
-        <result property="nTag" column="n_tag"/>
+        <result property="negativePrompt" column="n_tag"/>
     </resultMap>
 
 </mapper>
