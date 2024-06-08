@@ -24,11 +24,11 @@ public class CustomUserDetailsService implements UserDetailsService {
 
     @Override
     @Transactional
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        log.info("call loadUserByUsername, username={}", username);
-        return memberMapper.findByUserId(username)
+    public UserDetails loadUserByUsername(String userId) throws UsernameNotFoundException {
+        log.info("call loadUserByUsername, username={}", userId);
+        return memberMapper.findByUserId(userId)
                 .map(this::createUserDetails)
-                .orElseThrow(() -> new UsernameNotFoundException(username + " -> 데이터베이스에서 찾을 수 없습니다."));
+                .orElseThrow(() -> new UsernameNotFoundException(userId + " -> 데이터베이스에서 찾을 수 없습니다."));
     }
 
     private UserDetails createUserDetails(Member member) {
@@ -38,7 +38,7 @@ public class CustomUserDetailsService implements UserDetailsService {
         GrantedAuthority grantedAuthority = new SimpleGrantedAuthority("USER");
 
         return new User(
-                String.valueOf(member.getMId()), // memberId (primary key)
+                String.valueOf(member.getMemberId()), // memberId (primary key)
                 member.getPw(),
                 Collections.singleton(grantedAuthority)
         );

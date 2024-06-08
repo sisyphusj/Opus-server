@@ -11,17 +11,18 @@ public interface MemberMapper {
 
     void saveMember(Member member);
 
-    int checkDuplicateId(String id);
+    int checkDuplicateId(String userId);
 
-    int checkDuplicateNick(String nick);
+    int checkDuplicateNickname(String nick);
 
     int checkDuplicateEmail(String email);
 
-    MemberVO findById(int mId);
+    MemberVO findByMemberId(int memberId);
 
+    // 사용자 id 로 회원 정보 조회
     Optional<Member> findByUserId(String userId);
 
     void updateMember(Member member);
 
-    void deleteMember(int mId);
+    void deleteMember(int memberId);
 }

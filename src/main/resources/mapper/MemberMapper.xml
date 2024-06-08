@@ -5,39 +5,53 @@
 <mapper namespace="com.opus.member.mapper.MemberMapper">
 
     <insert id="saveMember">
-        insert into member (id, pw, nick, email) values (#{id}, #{pw}, #{nick}, #{email})
+        insert into member (id, pw, nick, email) values (#{userId}, #{pw}, #{nickname}, #{email})
     </insert>
 
     <select id="checkDuplicateId" resultType="int">
-        select count(*) from member where id=#{id}
+        select count(*) from member where id=#{userId}
     </select>
 
-    <select id="checkDuplicateNick" resultType="int">
-        select count(*) from member where nick=#{nick}
+    <select id="checkDuplicateNickname" resultType="int">
+        select count(*) from member where nick=#{nickname}
     </select>
 
     <select id="checkDuplicateEmail" resultType="int">
         select count(*) from member where email=#{email}
     </select>
 
-    <select id="login" resultType="com.opus.member.domain.MemberVO">
-        select member.m_id, pw from member where id=#{id}
+    <select id="login" resultMap="myMemberVO">
+        select member.m_id, pw from member where id=#{uesrId}
     </select>
 
-    <select id="findById" resultType="com.opus.member.domain.MemberVO">
-        select id, pw, nick, email from member where member.m_id=#{mId}
+    <select id="findByMemberId"  resultMap="myMemberVO">
+        select id, pw, nick, email from member where member.m_id=#{memberId}
     </select>
 
-    <select id="findByUserId" resultType="com.opus.member.domain.Member">
-        select * from member where id=#{id}
+    <select id="findByUserId" resultMap="myMember">
+        select * from member where id=#{userId}
     </select>
 
     <update id="updateMember">
-        update member set id=#{id}, pw=#{pw}, nick=#{nick}, email=#{email} where member.m_id=#{mId}
+        update member set id=#{userId}, pw=#{pw}, nick=#{nickname}, email=#{email} where member.m_id=#{memberId}
     </update>
 
     <delete id="deleteMember">
-        delete from member where member.m_id=#{mId}
+        delete from member where member.m_id=#{memberId}
     </delete>
+
+    <resultMap id="myMember" type="com.opus.member.domain.Member">
+        <id property="memberId" column="m_id"/>
+        <result property="userId" column="id"/>
+        <result property="pw" column="pw"/>
+        <result property="nickname" column="nick"/>
+        <result property="email" column="email"/>
+    </resultMap>
+
+    <resultMap id="myMemberVO" type="com.opus.member.domain.MemberVO">
+        <result property="userId" column="id"/>
+        <result property="nickname" column="nick"/>
+        <result property="email" column="email"/>
+    </resultMap>
 
 </mapper>

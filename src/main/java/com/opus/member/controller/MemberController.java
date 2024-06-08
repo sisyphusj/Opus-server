@@ -1,7 +1,5 @@
 package com.opus.member.controller;
 
-import com.opus.auth.SecurityUtil;
-import com.opus.common.ResponseCode;
 import com.opus.member.domain.*;
 import com.opus.member.service.MemberService;
 import jakarta.validation.Valid;
@@ -24,71 +22,66 @@ public class MemberController {
 
     // 회원가입
     @PostMapping("/register")
-    public ResponseEntity<ResponseCode> saveMember(@Valid @RequestBody MemberDTO memberDTO) {
-        log.info("addMember = {} {} {} {}", memberDTO.getId(), memberDTO.getPw(), memberDTO.getNick(), memberDTO.getEmail());
+    public ResponseEntity<Void> saveMember(@Valid @RequestBody MemberDTO memberDTO) {
         memberService.saveMember(memberDTO);
-        return ResponseEntity.ok(ResponseCode.SUCCESS);
+        return ResponseEntity.ok().build();
     }
 
     // 아이디 중복 체크
-    @GetMapping("/check/id/{id}")
-    public ResponseEntity<Boolean> checkDuplicateId(@PathVariable @NotEmpty String id) {
-        log.info("checkDuplicateId = {}", id);
-        return ResponseEntity.ok(memberService.checkDuplicateId(id));
+    @GetMapping("/check/user-id/{userId}")
+    public ResponseEntity<Boolean> checkDuplicateId(@PathVariable @NotEmpty String userId) {
+        return ResponseEntity.ok(memberService.checkDuplicateId(userId));
     }
 
     // 닉네임 중복 체크
-    @GetMapping("/check/nick/{nick}")
-    public ResponseEntity<Boolean> checkDuplicateNick(@PathVariable @NotEmpty String nick) {
-        log.info("checkDuplicateNick = {}", nick);
-        return ResponseEntity.ok(memberService.checkDuplicateNick(nick));
+    @GetMapping("/check/nickname/{nickname}")
+    public ResponseEntity<Boolean> checkDuplicateNickname(@PathVariable @NotEmpty String nickname) {
+        return ResponseEntity.ok(memberService.checkDuplicateNickname(nickname));
     }
 
     // 이메일 중복 체크
     @GetMapping("/check/email/{email}")
     public ResponseEntity<Boolean> checkDuplicateEmail(@PathVariable @NotEmpty String email) {
-        log.info("checkDuplicateEmail = {}", email);
         return ResponseEntity.ok(memberService.checkDuplicateEmail(email));
     }
 
     // 로그인
     @PostMapping("/login")
-    public TokenDTO login(@Valid @RequestBody LoginDTO loginDTO) {
-        return memberService.login(loginDTO);
+    public ResponseEntity<TokenDTO> login(@Valid @RequestBody LoginDTO loginDTO) {
+        return ResponseEntity.ok(memberService.login(loginDTO));
     }
 
     // 엑세스 토큰 재발급
-    @PostMapping("/reissue")
-    public TokenDTO reissue(@Valid @RequestBody TokenDTO requestTokenDTO) {
-        return memberService.reissue(requestTokenDTO);
+    @PostMapping("/reissue-token")
+    public ResponseEntity<TokenDTO> reissueToken(@Valid @RequestBody TokenDTO requestTokenDTO) {
+        return ResponseEntity.ok(memberService.reissueToken(requestTokenDTO));
     }
 
     // 로그아웃
     @GetMapping("/logout")
-    public ResponseEntity<ResponseCode> logout() {
-        memberService.logout(String.valueOf(SecurityUtil.getCurrentUserId()));
-        return ResponseEntity.ok(ResponseCode.SUCCESS);
+    public ResponseEntity<Void> logout() {
+        memberService.logout();
+        return ResponseEntity.ok().build();
     }
 
     // 프로필 조회
     @GetMapping("/profile")
     public ResponseEntity<MemberVO> getMyProfile() {
-        MemberVO memberVO = memberService.getMyProfile(SecurityUtil.getCurrentUserId());
-        return ResponseEntity.ok(memberVO);
+        return ResponseEntity.ok(memberService.getMyProfile());
     }
 
     // 프로필 수정
-    @PutMapping("/update")
-    public ResponseEntity<ResponseCode> updateMember(@Valid @RequestBody MemberDTO memberDTO) {
-        log.info("updateMember = {} {} {} {}", memberDTO.getId(), memberDTO.getPw(), memberDTO.getNick(), memberDTO.getEmail());
-        memberService.updateMember(memberDTO, SecurityUtil.getCurrentUserId());
-        return ResponseEntity.ok(ResponseCode.SUCCESS);
+    @PutMapping
+    public ResponseEntity<Void> updateMember(@Valid @RequestBody MemberDTO memberDTO) {
+        memberService.updateMember(memberDTO);
+        return ResponseEntity.ok().build();
     }
 
     // 회원 탈퇴
-    @DeleteMapping("/resign")
-    public ResponseEntity<ResponseCode> deleteMember() {
-        memberService.deleteMember(SecurityUtil.getCurrentUserId());
-        return ResponseEntity.ok(ResponseCode.SUCCESS);
+    @DeleteMapping
+    public ResponseEntity<Void> deleteMember() {
+        memberService.deleteMember();
+        return ResponseEntity.ok().build();
     }
+
 }

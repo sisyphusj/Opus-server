@@ -1,5 +1,6 @@
 package com.opus.member.service;
 
+import com.opus.auth.SecurityUtil;
 import com.opus.auth.TokenProvider;
 import com.opus.common.ResponseCode;
 import com.opus.exception.BusinessExceptionHandler;
@@ -39,18 +40,18 @@ public class MemberService {
     }
 
     @Transactional(readOnly = true)
-    public Boolean checkDuplicateId(String id) {
-        return memberMapper.checkDuplicateId(id) <= 0;
+    public Boolean checkDuplicateId(String userId) {
+        return memberMapper.checkDuplicateId(userId) > 0;
     }
 
     @Transactional(readOnly = true)
-    public Boolean checkDuplicateNick(String nick) {
-        return memberMapper.checkDuplicateNick(nick) <= 0;
+    public Boolean checkDuplicateNickname(String nick) {
+        return memberMapper.checkDuplicateNickname(nick) > 0;
     }
 
     @Transactional(readOnly = true)
     public Boolean checkDuplicateEmail(String email) {
-        return memberMapper.checkDuplicateEmail(email) <= 0;
+        return memberMapper.checkDuplicateEmail(email) > 0;
     }
 
     @Transactional
@@ -67,13 +68,16 @@ public class MemberService {
     }
 
     @Transactional
-    public TokenDTO reissue(TokenDTO requestTokenDTO) {
+    public TokenDTO reissueToken(TokenDTO requestTokenDTO) {
+        // Refresh Token 유효성 검증
         if (!tokenProvider.validateToken(requestTokenDTO.getRefreshToken())) {
             throw new BusinessExceptionHandler(ResponseCode.USER_UNAUTHORIZED, "Refresh Token이 유효하지 않습니다.");
         }
 
+        // Access Token으로부터 인증 정보 가져오기
         Authentication authentication = tokenProvider.getAuthentication(requestTokenDTO.getAccessToken());
 
+        // 기존 Refresh Token 조회 및 검증
         RefreshToken refreshToken = refreshTokenMapper.findByKey(authentication.getName())
                 .orElseThrow(() -> new BusinessExceptionHandler(ResponseCode.USER_UNAUTHORIZED, "로그아웃된 사용자입니다. Refresh Token이 존재하지 않습니다."));
 
@@ -81,40 +85,41 @@ public class MemberService {
             throw new BusinessExceptionHandler(ResponseCode.USER_UNAUTHORIZED, "토큰 정보가 일치하지 않습니다.");
         }
 
+        // 새로운 토큰 생성
         TokenDTO tokenDTO = tokenProvider.createToken(authentication);
+        refreshTokenMapper.update(refreshToken.updateValue(tokenDTO.getRefreshToken()));
 
-        RefreshToken newRefreshToken = RefreshToken.of(authentication.getName(), tokenDTO.getRefreshToken());
-        refreshTokenMapper.delete(newRefreshToken.getKey());
-
+        // 새 토큰 반환
         return tokenDTO;
     }
 
     @Transactional
-    public void logout(String mId) {
-        refreshTokenMapper.findByKey(mId)
+    public void logout() {
+        String memberId = String.valueOf(SecurityUtil.getCurrentUserId());
+        refreshTokenMapper.findByKey(memberId)
                 .orElseThrow(() -> new BusinessExceptionHandler(ResponseCode.USER_UNAUTHORIZED, "로그아웃된 사용자입니다. Refresh Token이 존재하지 않습니다."));
-        refreshTokenMapper.delete(mId);
+        refreshTokenMapper.delete(memberId);
     }
 
     @Transactional(readOnly = true)
-    public MemberVO getMyProfile(int mId) {
-        Optional<MemberVO> member = Optional.of(memberMapper.findById(mId));
+    public MemberVO getMyProfile() {
+        Optional<MemberVO> member = Optional.of(memberMapper.findByMemberId(SecurityUtil.getCurrentUserId()));
         return member.orElseThrow(() -> new BusinessExceptionHandler(ResponseCode.NOT_FOUND_ERROR, "해당 회원을 찾을 수 없습니다."));
     }
 
     @Transactional
-    public void updateMember(MemberDTO memberDTO, int mId) {
+    public void updateMember(MemberDTO memberDTO) {
         String rawPw = memberDTO.getPw();
         String encPw = passwordEncoder.encode(rawPw);
         memberDTO.setPw(encPw);
 
-        Member member = Member.of(memberDTO, mId);
+        Member member = Member.of(memberDTO, SecurityUtil.getCurrentUserId());
         memberMapper.updateMember(member);
     }
 
     @Transactional
-    public void deleteMember(int mId) {
-        memberMapper.deleteMember(mId);
+    public void deleteMember() {
+        memberMapper.deleteMember(SecurityUtil.getCurrentUserId());
     }
 
 }

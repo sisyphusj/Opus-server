@@ -5,9 +5,9 @@ import lombok.Getter;
 @Getter
 public class MemberVO {
 
-    private String id;
+    private String userId;
 
-    private String nick;
+    private String nickname;
 
     private String email;
 }

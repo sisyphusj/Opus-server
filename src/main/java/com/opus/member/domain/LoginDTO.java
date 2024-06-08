@@ -9,13 +9,13 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 public class LoginDTO {
 
     @NotBlank
-    private String id;
+    private String userId;
 
     @NotBlank
     @Setter
     private String pw;
 
     public UsernamePasswordAuthenticationToken toAuthentication() {
-        return new UsernamePasswordAuthenticationToken(id, pw);
+        return new UsernamePasswordAuthenticationToken(userId, pw);
     }
 }

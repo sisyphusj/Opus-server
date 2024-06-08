@@ -8,14 +8,14 @@ import lombok.Setter;
 public class MemberDTO {
 
     @NotBlank
-    private String id;
+    private String userId;
 
     @NotBlank
     @Setter
     private String pw;
 
     @NotBlank
-    private String nick;
+    private String nickname;
 
     @NotBlank
     private String email;
