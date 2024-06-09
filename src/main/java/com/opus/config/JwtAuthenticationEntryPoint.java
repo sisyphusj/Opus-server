@@ -1,4 +1,4 @@
-package com.opus.auth;
+package com.opus.config;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
