@@ -1,5 +1,4 @@
 package com.opus.comment.domain;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
@@ -7,12 +6,13 @@ import lombok.Getter;
 @Getter
 public class CommentDTO {
 
-    private Integer memberId;
+    private Integer commentId;
 
-    @JsonProperty("topLevelCommentId")
+    @NotBlank
+    private Integer pinId;
+
     private Integer topLevelCommentId;
 
-    @JsonProperty("parentNickname")
     private String parentNickname;
 
     @Max(1)

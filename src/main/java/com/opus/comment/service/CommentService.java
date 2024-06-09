@@ -1,7 +1,7 @@
 package com.opus.comment.service;
 
-import com.opus.auth.SecurityUtil;
-import com.opus.comment.domain.Comment;
+import com.opus.comment.domain.CommentResponseDTO;
+import com.opus.utils.SecurityUtil;
 import com.opus.comment.domain.CommentDTO;
 import com.opus.comment.domain.CommentVO;
 import com.opus.comment.mapper.CommentMapper;
@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -20,10 +21,10 @@ public class CommentService {
     private final CommentMapper commentMapper;
 
     @Transactional
-    public void saveComment(int pinId, CommentDTO commentDTO) {
+    public void saveComment(CommentDTO commentDTO) {
 
-        Comment comment = Comment.builder()
-                .pinId(pinId)
+        CommentVO comment = CommentVO.builder()
+                .pinId(commentDTO.getPinId())
                 .memberId(SecurityUtil.getCurrentUserId())
                 .topLevelCommentId(commentDTO.getTopLevelCommentId())
                 .level(commentDTO.getLevel())
@@ -36,21 +37,27 @@ public class CommentService {
 
     // 게시글에 달린 댓글 리스트
     @Transactional(readOnly = true)
-    public List<CommentVO> getCommentsByPinId(int pinId) {
-        return commentMapper.getCommentsByPinId(pinId);
+    public List<CommentResponseDTO> getCommentsByPinId(int pinId) {
+         List<CommentVO> comments = commentMapper.getCommentsByPinId(pinId);
+         return comments.stream()
+                 .map(CommentResponseDTO::of)
+                 .collect(Collectors.toList());
     }
 
     // 내가 쓴 댓글 리스트
     @Transactional(readOnly = true)
-    public List<CommentVO> getMyComments() {
-        return commentMapper.getMyComments(SecurityUtil.getCurrentUserId());
+    public List<CommentResponseDTO> getMyComments() {
+        List<CommentVO> comments = commentMapper.getMyComments(SecurityUtil.getCurrentUserId());
+        return comments.stream()
+                .map(CommentResponseDTO::of)
+                .collect(Collectors.toList());
     }
 
     // 댓글 수정
-    public void updateComment(int pinId, int commentId, CommentDTO commentDTO) {
-        Comment comment = Comment.builder()
-                .commentId(commentId)
-                .pinId(pinId)
+    public void updateComment(CommentDTO commentDTO) {
+        CommentVO comment = CommentVO.builder()
+                .commentId(commentDTO.getCommentId())
+                .pinId(commentDTO.getPinId())
                 .memberId(SecurityUtil.getCurrentUserId())
                 .topLevelCommentId(commentDTO.getTopLevelCommentId())
                 .parentNickname(commentDTO.getParentNickname())
@@ -63,7 +70,7 @@ public class CommentService {
 
     // 댓글 삭제
     public void deleteComment(int commentId) {
-        Comment comment = Comment.builder()
+        CommentVO comment = CommentVO.builder()
                 .commentId(commentId)
                 .memberId(SecurityUtil.getCurrentUserId())
                 .build();

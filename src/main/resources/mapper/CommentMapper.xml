@@ -40,6 +40,7 @@
     <resultMap id="commentList" type="com.opus.comment.domain.CommentVO">
         <id property="commentId" column="c_id"/>
         <result property="pinId" column="p_id"/>
+        <result property="memberNickname" column="nick"/>
         <result property="topLevelCommentId" column="top_level_comment_id"/>
         <result property="level" column="level"/>
         <result property="content" column="content"/>

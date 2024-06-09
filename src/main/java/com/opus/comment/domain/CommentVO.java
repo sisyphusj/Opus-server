@@ -1,13 +1,17 @@
 package com.opus.comment.domain;
 
+import lombok.Builder;
 import lombok.Getter;
 
 @Getter
+@Builder
 public class CommentVO {
 
     private Integer commentId;
 
-    private Integer pinId;
+    private int pinId;
+
+    private int memberId;
 
     private String nickname;
 
