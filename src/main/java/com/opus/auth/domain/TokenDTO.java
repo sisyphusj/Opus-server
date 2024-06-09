@@ -1,4 +1,4 @@
-package com.opus.member.domain;
+package com.opus.auth.domain;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;

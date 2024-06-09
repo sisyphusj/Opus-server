@@ -1,7 +1,7 @@
-package com.opus.member.service;
+package com.opus.auth.service;
 
-import com.opus.member.domain.Member;
-import com.opus.member.mapper.MemberMapper;
+import com.opus.auth.domain.AuthVO;
+import com.opus.auth.mapper.AuthMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.GrantedAuthority;
@@ -20,26 +20,26 @@ import java.util.Collections;
 @Slf4j
 public class CustomUserDetailsService implements UserDetailsService {
 
-    private final MemberMapper memberMapper;
+    private final AuthMapper authMapper;
 
     @Override
-    @Transactional
-    public UserDetails loadUserByUsername(String userId) throws UsernameNotFoundException {
-        log.info("call loadUserByUsername, username={}", userId);
-        return memberMapper.findByUserId(userId)
+    @Transactional(readOnly = true)
+    public UserDetails loadUserByUsername(String userName) throws UsernameNotFoundException {
+        log.info("call loadUserByUsername, username={}", userName);
+        return authMapper.findByUserName(userName)
                 .map(this::createUserDetails)
-                .orElseThrow(() -> new UsernameNotFoundException(userId + " -> 데이터베이스에서 찾을 수 없습니다."));
+                .orElseThrow(() -> new UsernameNotFoundException(userName + " -> 데이터베이스에서 찾을 수 없습니다."));
     }
 
-    private UserDetails createUserDetails(Member member) {
-        log.info("call createUserDetails, member={}", member);
+    private UserDetails createUserDetails(AuthVO auth) {
+        log.info("call createUserDetails, member={}", auth);
 
         // 사용자 권한 설정 필요. 현재는 USER 권한만 부여
         GrantedAuthority grantedAuthority = new SimpleGrantedAuthority("USER");
 
         return new User(
-                String.valueOf(member.getMemberId()), // memberId (primary key)
-                member.getPw(),
+                String.valueOf(auth.getMemberId()), // memberId (primary key)
+                auth.getPassword(),
                 Collections.singleton(grantedAuthority)
         );
     }

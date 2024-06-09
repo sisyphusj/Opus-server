@@ -1,4 +1,4 @@
-package com.opus.member.domain;
+package com.opus.auth.domain;
 
 import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
@@ -9,13 +9,13 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 public class LoginDTO {
 
     @NotBlank
-    private String userId;
+    private String userName;
 
     @NotBlank
     @Setter
-    private String pw;
+    private String password;
 
     public UsernamePasswordAuthenticationToken toAuthentication() {
-        return new UsernamePasswordAuthenticationToken(userId, pw);
+        return new UsernamePasswordAuthenticationToken(userName, password);
     }
 }
