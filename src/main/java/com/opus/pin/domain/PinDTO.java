@@ -1,22 +1,24 @@
 package com.opus.pin.domain;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
+import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
 
 @Getter
 public class PinDTO {
 
-    @JsonProperty("imagePath")
+    @NotBlank
     private String imagePath;
 
     private String prompt;
 
-    @JsonProperty("negativePrompt")
     private String negativePrompt;
 
+    @NotBlank
     private String width;
 
+    @NotBlank
     private String height;
 
+    @NotBlank
     private String seed;
 }

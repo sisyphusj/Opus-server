@@ -65,7 +65,7 @@
         where p_id = #{pinId} and pins.m_id = #{memberId}
     </delete>
 
-    <resultMap id="pinList" type="com.opus.pin.domain.PinVO">
+    <resultMap id="pinList" type="com.opus.pin.domain.PinListResponseDTO">
         <id property="pinId" column="p_id"/>
         <result property="prompt" column="tag"/>
         <result property="imagePath" column="img_path"/>

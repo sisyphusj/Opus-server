@@ -1,7 +1,6 @@
 package com.opus.pin.mapper;
 
-import com.opus.pin.domain.Pin;
-import com.opus.pin.domain.PinListRequest;
+import com.opus.pin.domain.PinListRequestVO;
 import com.opus.pin.domain.PinVO;
 import org.apache.ibatis.annotations.Mapper;
 
@@ -10,13 +9,13 @@ import java.util.List;
 @Mapper
 public interface PinMapper {
 
-    void savePin(Pin pin);
+    void savePin(PinVO pin);
 
-    List<PinVO> getPinList(PinListRequest pinListRequest);
+    List<PinVO> getPinList(PinListRequestVO pinListRequestVO);
 
-    List<PinVO> getPinListByKeyword(PinListRequest pinListRequest);
+    List<PinVO> getPinListByKeyword(PinListRequestVO pinListRequestVO);
 
-    List<PinVO> getMyPinList(PinListRequest pinListRequest);
+    List<PinVO> getMyPinList(PinListRequestVO pinListRequestVO);
 
     PinVO getPinByPinId(int pid);
 
@@ -24,5 +23,5 @@ public interface PinMapper {
 
     int getTotalCountByKeyword(String keyword);
 
-    void deletePin(int pid, int mid);
+    void deletePin(int pinId, int memberId);
 }
