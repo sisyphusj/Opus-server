@@ -1,11 +1,8 @@
 package com.opus.config;
 
-import com.opus.auth.JwtAccessDeniedHandler;
-import com.opus.auth.JwtAuthenticationEntryPoint;
-import com.opus.auth.JwtFilter;
+import com.opus.filter.JwtFilter;
 import com.opus.auth.TokenProvider;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -18,7 +15,11 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -33,8 +34,8 @@ public class SecurityConfig {
     private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
     private final JwtAccessDeniedHandler jwtAccessDeniedHandler;
 
-    @Value("${security.permitted-urls}")
-    private List<String> permittedUrls;
+    private final String[] permittedUrls = {"api/auth/**", "api/member/register", "api/member/check/**", "api/pins", "api/pins/total" ,"/error"};
+
 
     @Bean
     public PasswordEncoder passwordEncoder() {
@@ -42,17 +43,29 @@ public class SecurityConfig {
         return new BCryptPasswordEncoder();
     }
 
+    // CORS 설정 추가
+    @Bean
+    public CorsConfigurationSource corsConfigurationSource() {
+        CorsConfiguration configuration = new CorsConfiguration();
+        configuration.setAllowedOrigins(List.of("http://localhost:3000/"));
+        configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"));
+        configuration.setAllowedHeaders(Arrays.asList("Origin", "Content-Type", "Accept", "Authorization"));
+        configuration.setAllowCredentials(true);
+        configuration.setExposedHeaders(List.of("Authorization"));
+
+        // 모든 요청에 대해 CORS 설정을 적용
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", configuration);
+
+        return source;
+    }
+
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
-        // 모든 요청에 대해 CSRF 보호 기능을 비활성화
         httpSecurity
 
-                .csrf(AbstractHttpConfigurer::disable
-                )
-
-                .cors(
-                        AbstractHttpConfigurer::disable
-                )
+                .csrf(AbstractHttpConfigurer::disable)
+                .cors(cors -> cors.configurationSource(corsConfigurationSource()))
 
                 .exceptionHandling((exceptionHandling) -> exceptionHandling
                         .authenticationEntryPoint(jwtAuthenticationEntryPoint)
@@ -69,7 +82,9 @@ public class SecurityConfig {
 
                 .authorizeHttpRequests(
                         (authorizeRequests) -> authorizeRequests
-                                .requestMatchers(permittedUrls.toArray(new String[0])).permitAll()
+                                .requestMatchers(HttpMethod.GET, "/api/pins/comments").permitAll()
+                                .requestMatchers(HttpMethod.PUT, "/api/pins/comments").authenticated()
+                                .requestMatchers(permittedUrls).permitAll()
                                 .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                                 .anyRequest().authenticated()
                 )
