@@ -7,6 +7,7 @@ import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotEmpty;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
@@ -22,45 +23,45 @@ public class MemberController {
 
     // 회원가입
     @PostMapping("/register")
-    public ApiResponse<String> registerMember(@Valid @RequestBody MemberDTO memberDTO) {
+    public ResponseEntity<String> registerMember(@Valid @RequestBody MemberDTO memberDTO) {
         memberService.registerMember(memberDTO);
         return ApiResponse.of("OK");
     }
 
     // 아이디 중복 체크
-    @GetMapping("/check/username/{userName}")
-    public ApiResponse<Boolean> isUsernameDuplicated(@PathVariable @NotEmpty String userName) {
-        return ApiResponse.of(memberService.isUsernameDuplicated(userName));
+    @GetMapping("/check/username/{username}")
+    public ResponseEntity<Boolean> isUsernameDuplicated(@PathVariable @NotEmpty String username) {
+        return ApiResponse.of(memberService.isUsernameDuplicated(username));
     }
 
     // 닉네임 중복 체크
     @GetMapping("/check/nickname/{nickname}")
-    public ApiResponse<Boolean> isNicknameDuplicated(@PathVariable @NotEmpty String nickname) {
+    public ResponseEntity<Boolean> isNicknameDuplicated(@PathVariable @NotEmpty String nickname) {
         return ApiResponse.of(memberService.isNicknameDuplicated(nickname));
     }
 
     // 이메일 중복 체크
     @GetMapping("/check/email/{email}")
-    public ApiResponse<Boolean> isEmailDuplicated(@PathVariable @NotEmpty String email) {
+    public ResponseEntity<Boolean> isEmailDuplicated(@PathVariable @NotEmpty String email) {
         return ApiResponse.of(memberService.isEmailDuplicated(email));
     }
 
     // 프로필 조회
     @GetMapping("/profile")
-    public ApiResponse<MemberResponseDTO> getMyProfile() {
+    public ResponseEntity<MemberResponseDTO> getMyProfile() {
         return ApiResponse.of(memberService.getMyProfile());
     }
 
     // 프로필 수정
     @PutMapping
-    public ApiResponse<String> editMyProfile(@Valid @RequestBody MemberDTO memberDTO) {
+    public ResponseEntity<String> editMyProfile(@Valid @RequestBody MemberDTO memberDTO) {
         memberService.editMyProfile(memberDTO);
         return ApiResponse.of("OK");
     }
 
     // 회원 탈퇴
     @DeleteMapping
-    public ApiResponse<String> removeMyProfile() {
+    public ResponseEntity<String> removeMyProfile() {
         memberService.removeMyProfile();
         return ApiResponse.of("OK");
     }

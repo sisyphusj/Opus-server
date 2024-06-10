@@ -7,6 +7,7 @@ import com.opus.common.ApiResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -21,33 +22,33 @@ public class CommentController {
 
     // 댓글 추가
     @PostMapping
-    public ApiResponse<String> addComment(@Valid @RequestBody CommentDTO commentDTO) {
+    public ResponseEntity<String> addComment(@Valid @RequestBody CommentDTO commentDTO) {
         commentService.addComment(commentDTO);
         return ApiResponse.of("OK");
     }
 
     // 댓글 리스트
     @GetMapping
-    public ApiResponse<List<CommentResponseDTO>> getCommentListByPinId(@RequestParam int pinId) {
+    public ResponseEntity<List<CommentResponseDTO>> getCommentListByPinId(@RequestParam int pinId) {
         return ApiResponse.of(commentService.getCommentListByPinId(pinId));
     }
 
     // 내 댓글 리스트
     @GetMapping("/my-comments")
-    public ApiResponse<List<CommentResponseDTO>> getMyCommentList() {
+    public ResponseEntity<List<CommentResponseDTO>> getMyCommentList() {
         return ApiResponse.of(commentService.getMyCommentList());
     }
 
     // 댓글 수정
     @PutMapping
-    public ApiResponse<String> editComment(@Valid @RequestBody CommentDTO commentDTO) {
+    public ResponseEntity<String> editComment(@Valid @RequestBody CommentDTO commentDTO) {
         commentService.editComment(commentDTO);
         return ApiResponse.of("OK");
     }
 
     // 댓글 삭제
     @DeleteMapping("/{commentId}")
-    public ApiResponse<String> removeComment(@PathVariable int commentId) {
+    public ResponseEntity<String> removeComment(@PathVariable int commentId) {
         commentService.removeComment(commentId);
         return ApiResponse.of("OK");
     }
