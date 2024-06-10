@@ -22,30 +22,6 @@ public class PinListResponseDTO {
     private String height;
     private String seed;
 
-    public static List<PinListResponseDTO> of(List<PinVO> pinVOList) {
-
-        if (pinVOList == null) {
-            return Collections.emptyList();
-        }
-
-        try {
-            return pinVOList.stream()
-                    .map(pinVO -> PinListResponseDTO.builder()
-                            .pinId(pinVO.getPinId())
-                            .nickname(pinVO.getNickname())
-                            .imagePath(pinVO.getImagePath())
-                            .prompt(pinVO.getPrompt())
-                            .negativePrompt(pinVO.getNegativePrompt())
-                            .width(pinVO.getWidth())
-                            .height(pinVO.getHeight())
-                            .seed(pinVO.getSeed())
-                            .build())
-                    .collect(Collectors.toList());
-        } catch (Exception e) {
-           throw new BusinessExceptionHandler(ResponseCode.BUSINESS_ERROR ,"PinResponseDTO 변환 중 오류가 발생했습니다.");
-        }
-    }
-
     public static PinListResponseDTO of(PinVO pinVO) {
         return PinListResponseDTO.builder()
                 .pinId(pinVO.getPinId())
@@ -57,5 +33,21 @@ public class PinListResponseDTO {
                 .height(pinVO.getHeight())
                 .seed(pinVO.getSeed())
                 .build();
+    }
+
+    public static List<PinListResponseDTO> of(List<PinVO> pinVOList) {
+
+        if (pinVOList == null) {
+            return Collections.emptyList();
+        }
+
+        try {
+            return pinVOList.stream()
+                    .map(PinListResponseDTO::of)
+                    // steram().toList는 Java 16부터 사용 가능
+                    .collect(Collectors.toList());
+        } catch (Exception e) {
+            throw new BusinessExceptionHandler(ResponseCode.BUSINESS_ERROR, "PinResponseDTO 변환 중 오류가 발생했습니다.");
+        }
     }
 }
