@@ -22,41 +22,41 @@ public class MemberService {
     private final PasswordEncoder passwordEncoder;
 
     @Transactional
-    public void saveMember(MemberDTO memberDTO) {
+    public void registerMember(MemberDTO memberDTO) {
         MemberVO member = MemberVO.of(memberDTO, passwordEncoder);
-        memberMapper.saveMember(member);
+        memberMapper.insertMember(member);
     }
 
     @Transactional(readOnly = true)
-    public Boolean checkDuplicateUserName(String userName) {
-        return memberMapper.checkDuplicateUserName(userName) > 0;
+    public Boolean isUsernameDuplicated(String userName) {
+        return memberMapper.selectCountByUserName(userName) > 0;
     }
 
     @Transactional(readOnly = true)
-    public Boolean checkDuplicateNickname(String nickname) {
-        return memberMapper.checkDuplicateNickname(nickname) > 0;
+    public Boolean isNicknameDuplicated(String nickname) {
+        return memberMapper.selectCountByNickname(nickname) > 0;
     }
 
     @Transactional(readOnly = true)
-    public Boolean checkDuplicateEmail(String email) {
-        return memberMapper.checkDuplicateEmail(email) > 0;
+    public Boolean isEmailDuplicated(String email) {
+        return memberMapper.selectCountByEmail(email) > 0;
     }
 
     @Transactional(readOnly = true)
     public MemberResponseDTO getMyProfile() {
-        MemberVO memberVO = memberMapper.findByMemberId(SecurityUtil.getCurrentUserId());
+        MemberVO memberVO = memberMapper.selectMemberByMemberId(SecurityUtil.getCurrentUserId());
         Optional<MemberResponseDTO> member = Optional.of(MemberResponseDTO.of(memberVO));
         return member.orElseThrow(() -> new BusinessExceptionHandler(ResponseCode.NOT_FOUND_ERROR, "해당 회원을 찾을 수 없습니다."));
     }
 
     @Transactional
-    public void updateMember(MemberDTO memberDTO) {
+    public void editMyProfile(MemberDTO memberDTO) {
         MemberVO member = MemberVO.of(memberDTO, SecurityUtil.getCurrentUserId(), passwordEncoder);
         memberMapper.updateMember(member);
     }
 
     @Transactional
-    public void deleteMember() {
+    public void removeMyProfile() {
         memberMapper.deleteMember(SecurityUtil.getCurrentUserId());
     }
 

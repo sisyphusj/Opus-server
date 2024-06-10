@@ -4,12 +4,12 @@
 
 <mapper namespace="com.opus.pin.mapper.PinMapper">
 
-    <insert id="savePin">
+    <insert id="insertPin">
         insert into pins (pins.m_id, tag, img_path, width, height, seed, n_tag)
         values (#{memberId}, #{prompt}, #{imagePath}, #{width}, #{height}, #{seed}, #{negativePrompt})
     </insert>
 
-    <select id="getPinList" resultMap="pinList">
+    <select id="selectPins" resultMap="pinList">
         SELECT pins.p_id, member.nick, pins.img_path, pins.tag, pins.n_tag, pins.width, pins.height, pins.seed
         FROM pins
         INNER JOIN member ON pins.m_id = member.m_id
@@ -17,7 +17,7 @@
         LIMIT #{amount} OFFSET #{offset}
     </select>
 
-    <select id="getPinListByKeyword" resultMap="pinList">
+    <select id="selectPinsByKeyword" resultMap="pinList">
         SELECT pins.p_id,
                member.nick,
                pins.img_path,
@@ -33,7 +33,7 @@
         LIMIT #{amount} OFFSET #{offset}
     </select>
 
-    <select id="getMyPinList" resultMap ="pinList">
+    <select id="selectPinsByMemberId" resultMap ="pinList">
         SELECT pins.p_id, member.nick, pins.img_path, pins.tag, pins.n_tag, pins.width, pins.height, pins.seed
         FROM pins
         INNER JOIN member ON pins.m_id = member.m_id
@@ -42,18 +42,18 @@
         LIMIT #{amount} OFFSET #{offset}
     </select>
 
-    <select id="getPinByPinId" resultMap="pinList">
+    <select id="selectPinByPinId" resultMap="pinList">
         SELECT pins.p_id, pins.img_path, pins.tag, pins.n_tag, pins.width, pins.height, pins.seed
         FROM pins
         WHERE pins.p_id = #{pinId}
     </select>
 
-    <select id="getTotalCount" resultType="int">
+    <select id="countAllPins" resultType="int">
         select count(*)
         from pins
     </select>
 
-    <select id="getTotalCountByKeyword" resultType="int">
+    <select id="countPinsByKeyword" resultType="int">
         select count(*)
         from pins
         where tag LIKE CONCAT('%', #{keyword}, '%')

@@ -8,11 +8,11 @@ import java.util.List;
 @Mapper
 public interface CommentMapper {
 
-    void saveComment(CommentVO comment);
+    void insertComment(CommentVO comment);
 
-    List<CommentVO> getCommentsByPinId(int pinId);
+    List<CommentVO> selectCommentsByPinId(int pinId);
 
-    List<CommentVO> getMyComments(int memberId);
+    List<CommentVO> selectCommentsByMemberId(int memberId);
 
     void updateComment(CommentVO comment);
 

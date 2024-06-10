@@ -21,34 +21,34 @@ public class CommentController {
 
     // 댓글 추가
     @PostMapping
-    public ApiResponse<String> saveComment(@Valid @RequestBody CommentDTO commentDTO) {
-        commentService.saveComment(commentDTO);
+    public ApiResponse<String> addComment(@Valid @RequestBody CommentDTO commentDTO) {
+        commentService.addComment(commentDTO);
         return ApiResponse.of("OK");
     }
 
     // 댓글 리스트
     @GetMapping
-    public ApiResponse<List<CommentResponseDTO>> getCommentsByPinId(@RequestParam int pinId) {
-        return ApiResponse.of(commentService.getCommentsByPinId(pinId));
+    public ApiResponse<List<CommentResponseDTO>> getCommentListByPinId(@RequestParam int pinId) {
+        return ApiResponse.of(commentService.getCommentListByPinId(pinId));
     }
 
     // 내 댓글 리스트
     @GetMapping("/my-comments")
-    public ApiResponse<List<CommentResponseDTO>> getMyComments() {
-        return ApiResponse.of(commentService.getMyComments());
+    public ApiResponse<List<CommentResponseDTO>> getMyCommentList() {
+        return ApiResponse.of(commentService.getMyCommentList());
     }
 
     // 댓글 수정
     @PutMapping
-    public ApiResponse<String> updateComment(@Valid @RequestBody CommentDTO commentDTO) {
-        commentService.updateComment(commentDTO);
+    public ApiResponse<String> editComment(@Valid @RequestBody CommentDTO commentDTO) {
+        commentService.editComment(commentDTO);
         return ApiResponse.of("OK");
     }
 
     // 댓글 삭제
     @DeleteMapping("/{commentId}")
-    public ApiResponse<String> deleteComment(@PathVariable int commentId) {
-        commentService.deleteComment(commentId);
+    public ApiResponse<String> removeComment(@PathVariable int commentId) {
+        commentService.removeComment(commentId);
         return ApiResponse.of("OK");
     }
 

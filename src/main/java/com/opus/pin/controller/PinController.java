@@ -22,8 +22,8 @@ public class PinController {
 
     // pin 추가
     @PostMapping
-    public ApiResponse<String> savePin(@Valid @RequestBody PinDTO pinDTO) {
-        pinService.savePin(pinDTO);
+    public ApiResponse<String> addPin(@Valid @RequestBody PinDTO pinDTO) {
+        pinService.addPin(pinDTO);
         return ApiResponse.of("OK");
     }
 
@@ -38,7 +38,7 @@ public class PinController {
     // 사용자 pin 리스트
     @GetMapping("/my-pins")
     public ApiResponse<List<PinListResponseDTO>> getMyPinList(@RequestParam int offset,
-                                                              @RequestParam int amount) {
+                                                            @RequestParam int amount) {
         return ApiResponse.of(pinService.getMyPinList(offset, amount));
     }
 
@@ -50,14 +50,14 @@ public class PinController {
 
     // 전체 pin 개수
     @GetMapping("/total")
-    public ApiResponse<Integer> getTotalAmount(@RequestParam(required = false) String keyword) {
-        return ApiResponse.of(pinService.getTotalCount(keyword));
+    public ApiResponse<Integer> countPins(@RequestParam(required = false) String keyword) {
+        return ApiResponse.of(pinService.countPins(keyword));
     }
 
     // pin 삭제
     @DeleteMapping("/{pinId}")
-    public ApiResponse<String> deletePin(@PathVariable int pinId) {
-        pinService.deletePin(pinId);
+    public ApiResponse<String> removePin(@PathVariable int pinId) {
+        pinService.removePin(pinId);
         return ApiResponse.of("OK");
     }
 }

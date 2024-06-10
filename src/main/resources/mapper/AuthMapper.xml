@@ -4,7 +4,7 @@
 
 <mapper namespace="com.opus.auth.mapper.AuthMapper">
 
-    <select id="findByUserId" resultMap="myAuth">
+    <select id="selectAuthByUserName" resultMap="myAuth">
         select m_id, pw from member where id=#{userName}
     </select>
 

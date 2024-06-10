@@ -39,7 +39,7 @@ public class PinService {
     }
 
     @Transactional
-    public void savePin(PinDTO pinDTO) {
+    public void addPin(PinDTO pinDTO) {
         PinVO pin = PinVO.of(pinDTO, SecurityUtil.getCurrentUserId());
 
         try {
@@ -60,7 +60,7 @@ public class PinService {
             // 이미지 경로 업데이트 및 저장
             String urlPath = imageAccessPath + fileName;
             pin.setImagePath(urlPath);
-            pinMapper.savePin(pin);
+            pinMapper.insertPin(pin);
 
             // 로깅 및 성공 응답 반환
             log.info("File saved successfully with name = {}", fileName);
@@ -79,31 +79,31 @@ public class PinService {
     public List<PinListResponseDTO> getPinList(int offset, int amount, String keyword) {
         PinListRequestVO pinListRequestVO = PinListRequestVO.of(offset, amount, keyword);
         if (keyword == null || keyword.trim().isEmpty()) {
-            return PinListResponseDTO.of(pinMapper.getPinList(pinListRequestVO));
+            return PinListResponseDTO.of(pinMapper.selectPins(pinListRequestVO));
         }
-        return PinListResponseDTO.of(pinMapper.getPinListByKeyword(pinListRequestVO));
+        return PinListResponseDTO.of(pinMapper.selectPinsByKeyword(pinListRequestVO));
     }
 
     @Transactional(readOnly = true)
     public List<PinListResponseDTO> getMyPinList(int offset, int amount) {
         PinListRequestVO pinListRequestVO = PinListRequestVO.of(SecurityUtil.getCurrentUserId(), offset, amount);
-        return PinListResponseDTO.of(pinMapper.getMyPinList(pinListRequestVO));
+        return PinListResponseDTO.of(pinMapper.selectPinsByMemberId(pinListRequestVO));
     }
 
     public PinListResponseDTO getPinByPinId(int pinId) {
-        return PinListResponseDTO.of(pinMapper.getPinByPinId(pinId));
+        return PinListResponseDTO.of(pinMapper.selectPinByPinId(pinId));
     }
 
     @Transactional(readOnly = true)
-    public int getTotalCount(String keyword) {
+    public int countPins(String keyword) {
         if (keyword == null || keyword.trim().isEmpty()) {
-            return pinMapper.getTotalCount();
+            return pinMapper.countAllPins();
         }
-        return pinMapper.getTotalCountByKeyword(keyword);
+        return pinMapper.countPinsByKeyword(keyword);
     }
 
     @Transactional
-    public void deletePin(int pinId) {
+    public void removePin(int pinId) {
         pinMapper.deletePin(pinId, SecurityUtil.getCurrentUserId());
     }
 

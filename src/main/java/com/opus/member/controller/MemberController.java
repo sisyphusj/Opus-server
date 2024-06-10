@@ -22,27 +22,27 @@ public class MemberController {
 
     // 회원가입
     @PostMapping("/register")
-    public ApiResponse<String> saveMember(@Valid @RequestBody MemberDTO memberDTO) {
-        memberService.saveMember(memberDTO);
+    public ApiResponse<String> registerMember(@Valid @RequestBody MemberDTO memberDTO) {
+        memberService.registerMember(memberDTO);
         return ApiResponse.of("OK");
     }
 
     // 아이디 중복 체크
     @GetMapping("/check/username/{userName}")
-    public ApiResponse<Boolean> checkDuplicateId(@PathVariable @NotEmpty String userName) {
-        return ApiResponse.of(memberService.checkDuplicateUserName(userName));
+    public ApiResponse<Boolean> isUsernameDuplicated(@PathVariable @NotEmpty String userName) {
+        return ApiResponse.of(memberService.isUsernameDuplicated(userName));
     }
 
     // 닉네임 중복 체크
     @GetMapping("/check/nickname/{nickname}")
-    public ApiResponse<Boolean> checkDuplicateNickname(@PathVariable @NotEmpty String nickname) {
-        return ApiResponse.of(memberService.checkDuplicateNickname(nickname));
+    public ApiResponse<Boolean> isNicknameDuplicated(@PathVariable @NotEmpty String nickname) {
+        return ApiResponse.of(memberService.isNicknameDuplicated(nickname));
     }
 
     // 이메일 중복 체크
     @GetMapping("/check/email/{email}")
-    public ApiResponse<Boolean> checkDuplicateEmail(@PathVariable @NotEmpty String email) {
-        return ApiResponse.of(memberService.checkDuplicateEmail(email));
+    public ApiResponse<Boolean> isEmailDuplicated(@PathVariable @NotEmpty String email) {
+        return ApiResponse.of(memberService.isEmailDuplicated(email));
     }
 
     // 프로필 조회
@@ -53,15 +53,15 @@ public class MemberController {
 
     // 프로필 수정
     @PutMapping
-    public ApiResponse<String> updateMember(@Valid @RequestBody MemberDTO memberDTO) {
-        memberService.updateMember(memberDTO);
+    public ApiResponse<String> editMyProfile(@Valid @RequestBody MemberDTO memberDTO) {
+        memberService.editMyProfile(memberDTO);
         return ApiResponse.of("OK");
     }
 
     // 회원 탈퇴
     @DeleteMapping
-    public ApiResponse<String> deleteMember() {
-        memberService.deleteMember();
+    public ApiResponse<String> removeMyProfile() {
+        memberService.removeMyProfile();
         return ApiResponse.of("OK");
     }
 

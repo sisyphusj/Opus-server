@@ -4,12 +4,12 @@
 
 <mapper namespace="com.opus.comment.mapper.CommentMapper">
 
-    <insert id="saveComment">
+    <insert id="insertComment">
         INSERT INTO comment (p_id, m_id, top_level_comment_id, level, content, parent_nick)
         values (#{pinId}, #{memberId}, #{topLevelCommentId}, #{level}, #{content}, #{parentNickname})
     </insert>
 
-    <select id="getCommentsByPinId" resultMap="commentList">
+    <select id="selectCommentsByPinId" resultMap="commentList">
         SELECT c_id, comment.p_id, member.nick, top_level_comment_id, level, content, created_at, updated_at, parent_nick
         FROM comment
         INNER JOIN member ON comment.m_id = member.m_id
@@ -17,7 +17,7 @@
         ORDER BY c_id ASC, level ASC
     </select>
     
-    <select id="getMyComments" resultMap="commentList">
+    <select id="selectCommentsByMemberId" resultMap="commentList">
         SELECT c_id, comment.p_id, member.nick, top_level_comment_id, level, content, created_at, updated_at, parent_nick
         FROM comment
         INNER JOIN member ON comment.m_id = member.m_id

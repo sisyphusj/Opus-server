@@ -1,21 +1,23 @@
 package com.opus.member.mapper;
 
-import com.opus.member.domain.MemberResponseDTO;
 import com.opus.member.domain.MemberVO;
 import org.apache.ibatis.annotations.Mapper;
 
 @Mapper
 public interface MemberMapper {
 
-    void saveMember(MemberVO member);
+    void insertMember(MemberVO member);
 
-    int checkDuplicateUserName(String userName);
+    // 같은 username인 회원 수 조회
+    int selectCountByUserName(String userName);
 
-    int checkDuplicateNickname(String nickname);
+    // 같은 nickname인 회원 수 조회
+    int selectCountByNickname(String nickname);
 
-    int checkDuplicateEmail(String email);
+    // 같은 email인 회원 수 조회
+    int selectCountByEmail(String email);
 
-    MemberVO findByMemberId(int memberId);
+    MemberVO selectMemberByMemberId(int memberId);
 
     void updateMember(MemberVO member);
 

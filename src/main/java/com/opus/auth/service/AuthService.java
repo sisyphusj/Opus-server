@@ -34,8 +34,8 @@ public class AuthService {
         TokenDTO tokenDTO = tokenProvider.createToken(authentication);
         RefreshTokenVO refreshTokenVO = RefreshTokenVO.of(authentication.getName(), tokenDTO.getRefreshToken());
 
-        refreshTokenMapper.delete(refreshTokenVO.getKey());
-        refreshTokenMapper.save(refreshTokenVO);
+        refreshTokenMapper.deleteRefreshToken(refreshTokenVO.getKey());
+        refreshTokenMapper.insertRefreshToken(refreshTokenVO);
 
         return tokenDTO;
     }
@@ -51,7 +51,7 @@ public class AuthService {
         Authentication authentication = tokenProvider.getAuthentication(requestTokenDTO.getAccessToken());
 
         // 기존 Refresh Token 조회 및 검증
-        RefreshTokenVO refreshTokenVO = refreshTokenMapper.findByKey(authentication.getName())
+        RefreshTokenVO refreshTokenVO = refreshTokenMapper.selectRefreshToken(authentication.getName())
                 .orElseThrow(() -> new BusinessExceptionHandler(ResponseCode.USER_UNAUTHORIZED, "로그아웃된 사용자입니다. Refresh Token이 존재하지 않습니다."));
 
         if (!refreshTokenVO.getValue().equals(requestTokenDTO.getRefreshToken())) {
@@ -60,7 +60,7 @@ public class AuthService {
 
         // 새로운 토큰 생성
         TokenDTO tokenDTO = tokenProvider.createToken(authentication);
-        refreshTokenMapper.update(refreshTokenVO.updateValue(tokenDTO.getRefreshToken()));
+        refreshTokenMapper.updateRefreshToken(refreshTokenVO.updateValue(tokenDTO.getRefreshToken()));
 
         // 새 토큰 반환
         return tokenDTO;
@@ -69,8 +69,8 @@ public class AuthService {
     @Transactional
     public void logout() {
         String memberId = String.valueOf(SecurityUtil.getCurrentUserId());
-        refreshTokenMapper.findByKey(memberId)
+        refreshTokenMapper.selectRefreshToken(memberId)
                 .orElseThrow(() -> new BusinessExceptionHandler(ResponseCode.USER_UNAUTHORIZED, "로그아웃된 사용자입니다. Refresh Token이 존재하지 않습니다."));
-        refreshTokenMapper.delete(memberId);
+        refreshTokenMapper.deleteRefreshToken(memberId);
     }
 }

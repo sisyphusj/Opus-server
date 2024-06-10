@@ -4,24 +4,24 @@
 
 <mapper namespace="com.opus.member.mapper.MemberMapper">
 
-    <insert id="saveMember">
+    <insert id="insertMember">
         insert into member (id, pw, nick, email) values (#{userName}, #{password}, #{nickname}, #{email})
     </insert>
 
-    <select id="checkDuplicateUserName" resultType="int">
+    <select id="selectCountByUserName" resultType="int">
         select count(*) from member where id=#{userName}
     </select>
 
-    <select id="checkDuplicateNickname" resultType="int">
+    <select id="selectCountByNickname" resultType="int">
         select count(*) from member where nick=#{nickname}
     </select>
 
-    <select id="checkDuplicateEmail" resultType="int">
+    <select id="selectCountByEmail" resultType="int">
         select count(*) from member where email=#{email}
     </select>
 
-    <select id="findByMemberId"  resultMap="myMemberVO">
-        select id, pw, nick, email from member where member.m_id=#{memberId}
+    <select id="selectMemberByMemberId"  resultMap="myMemberVO">
+        select id, nick, email from member where member.m_id=#{memberId}
     </select>
 
     <update id="updateMember">

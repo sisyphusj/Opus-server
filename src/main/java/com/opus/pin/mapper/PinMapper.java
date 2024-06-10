@@ -9,19 +9,19 @@ import java.util.List;
 @Mapper
 public interface PinMapper {
 
-    void savePin(PinVO pin);
+    void insertPin(PinVO pin);
 
-    List<PinVO> getPinList(PinListRequestVO pinListRequestVO);
+    List<PinVO> selectPins(PinListRequestVO pinListRequestVO);
 
-    List<PinVO> getPinListByKeyword(PinListRequestVO pinListRequestVO);
+    List<PinVO> selectPinsByKeyword(PinListRequestVO pinListRequestVO);
 
-    List<PinVO> getMyPinList(PinListRequestVO pinListRequestVO);
+    List<PinVO> selectPinsByMemberId(PinListRequestVO pinListRequestVO);
 
-    PinVO getPinByPinId(int pid);
+    PinVO selectPinByPinId(int pid);
 
-    int getTotalCount();
+    int countAllPins();
 
-    int getTotalCountByKeyword(String keyword);
+    int countPinsByKeyword(String keyword);
 
     void deletePin(int pinId, int memberId);
 }

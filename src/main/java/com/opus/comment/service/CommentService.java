@@ -21,7 +21,7 @@ public class CommentService {
     private final CommentMapper commentMapper;
 
     @Transactional
-    public void saveComment(CommentDTO commentDTO) {
+    public void addComment(CommentDTO commentDTO) {
 
         CommentVO comment = CommentVO.builder()
                 .pinId(commentDTO.getPinId())
@@ -32,13 +32,13 @@ public class CommentService {
                 .parentNickname(commentDTO.getParentNickname())
                 .build();
 
-        commentMapper.saveComment(comment);
+        commentMapper.insertComment(comment);
     }
 
     // 게시글에 달린 댓글 리스트
     @Transactional(readOnly = true)
-    public List<CommentResponseDTO> getCommentsByPinId(int pinId) {
-         List<CommentVO> comments = commentMapper.getCommentsByPinId(pinId);
+    public List<CommentResponseDTO> getCommentListByPinId(int pinId) {
+         List<CommentVO> comments = commentMapper.selectCommentsByPinId(pinId);
          return comments.stream()
                  .map(CommentResponseDTO::of)
                  .collect(Collectors.toList());
@@ -46,15 +46,15 @@ public class CommentService {
 
     // 내가 쓴 댓글 리스트
     @Transactional(readOnly = true)
-    public List<CommentResponseDTO> getMyComments() {
-        List<CommentVO> comments = commentMapper.getMyComments(SecurityUtil.getCurrentUserId());
+    public List<CommentResponseDTO> getMyCommentList() {
+        List<CommentVO> comments = commentMapper.selectCommentsByMemberId(SecurityUtil.getCurrentUserId());
         return comments.stream()
                 .map(CommentResponseDTO::of)
                 .collect(Collectors.toList());
     }
 
     // 댓글 수정
-    public void updateComment(CommentDTO commentDTO) {
+    public void editComment(CommentDTO commentDTO) {
         CommentVO comment = CommentVO.builder()
                 .commentId(commentDTO.getCommentId())
                 .pinId(commentDTO.getPinId())
@@ -69,7 +69,7 @@ public class CommentService {
     }
 
     // 댓글 삭제
-    public void deleteComment(int commentId) {
+    public void removeComment(int commentId) {
         CommentVO comment = CommentVO.builder()
                 .commentId(commentId)
                 .memberId(SecurityUtil.getCurrentUserId())

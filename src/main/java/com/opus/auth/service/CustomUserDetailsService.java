@@ -26,7 +26,7 @@ public class CustomUserDetailsService implements UserDetailsService {
     @Transactional(readOnly = true)
     public UserDetails loadUserByUsername(String userName) throws UsernameNotFoundException {
         log.info("call loadUserByUsername, username={}", userName);
-        return authMapper.findByUserName(userName)
+        return authMapper.selectAuthByUserName(userName)
                 .map(this::createUserDetails)
                 .orElseThrow(() -> new UsernameNotFoundException(userName + " -> 데이터베이스에서 찾을 수 없습니다."));
     }

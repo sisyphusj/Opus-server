@@ -8,11 +8,11 @@ import java.util.Optional;
 @Mapper
 public interface RefreshTokenMapper {
 
-    Optional<RefreshTokenVO> findByKey(String key);
+    void insertRefreshToken(RefreshTokenVO refreshTokenVO);
 
-    void save(RefreshTokenVO refreshTokenVO);
+    Optional<RefreshTokenVO> selectRefreshToken(String key);
 
-    void update(RefreshTokenVO refreshTokenVO);
+    void updateRefreshToken(RefreshTokenVO refreshTokenVO);
 
-    void delete(String key);
+    void deleteRefreshToken(String key);
 }
