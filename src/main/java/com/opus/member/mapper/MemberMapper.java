@@ -9,7 +9,7 @@ public interface MemberMapper {
     void insertMember(MemberVO member);
 
     // 같은 username인 회원 수 조회
-    int selectCountByUserName(String userName);
+    int selectCountByUsername(String userName);
 
     // 같은 nickname인 회원 수 조회
     int selectCountByNickname(String nickname);

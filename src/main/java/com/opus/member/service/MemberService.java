@@ -29,7 +29,7 @@ public class MemberService {
 
     @Transactional(readOnly = true)
     public Boolean isUsernameDuplicated(String userName) {
-        return memberMapper.selectCountByUserName(userName) > 0;
+        return memberMapper.selectCountByUsername(userName) > 0;
     }
 
     @Transactional(readOnly = true)
@@ -57,6 +57,10 @@ public class MemberService {
 
     @Transactional
     public void removeMyProfile() {
+        MemberVO memberVO = memberMapper.selectMemberByMemberId(SecurityUtil.getCurrentUserId());
+        if (memberVO == null) {
+            throw new BusinessExceptionHandler(ResponseCode.BUSINESS_ERROR, "해당 회원을 찾을 수 없습니다.");
+        }
         memberMapper.deleteMember(SecurityUtil.getCurrentUserId());
     }
 

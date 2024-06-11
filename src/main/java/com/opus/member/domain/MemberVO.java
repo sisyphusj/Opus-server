@@ -12,7 +12,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 public class MemberVO {
     private Integer memberId;
 
-    private String userName;
+    private String username;
 
     private String password;
 
@@ -25,13 +25,13 @@ public class MemberVO {
         String rawPassword = memberDTO.getPassword();
         String encPassword = passwordEncoder.encode(rawPassword);
 
-        return new MemberVO(memberId, memberDTO.getUserName(), encPassword, memberDTO.getNickname(), memberDTO.getEmail());
+        return new MemberVO(memberId, memberDTO.getUsername(), encPassword, memberDTO.getNickname(), memberDTO.getEmail());
     }
 
     public static MemberVO of(MemberDTO memberDTO, PasswordEncoder passwordEncoder) {
         String rawPassword = memberDTO.getPassword();
         String encPassword = passwordEncoder.encode(rawPassword);
 
-        return new MemberVO(null, memberDTO.getUserName(), encPassword, memberDTO.getNickname(), memberDTO.getEmail());
+        return new MemberVO(null, memberDTO.getUsername(), encPassword, memberDTO.getNickname(), memberDTO.getEmail());
     }
 }

@@ -10,7 +10,7 @@ public class AuthVO {
 
         private Integer memberId;
 
-        private String userName;
+        private String username;
 
         private String password;
 
@@ -19,6 +19,6 @@ public class AuthVO {
         private String email;
 
         public static AuthVO of(LoginDTO loginDTO) {
-                return new AuthVO(null, loginDTO.getUserName(), loginDTO.getPassword(), null, null);
+                return new AuthVO(null, loginDTO.getUsername(), loginDTO.getPassword(), null, null);
         }
 }
