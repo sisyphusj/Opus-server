@@ -5,15 +5,15 @@
 <mapper namespace="com.opus.member.mapper.MemberMapper">
 
     <insert id="insertMember">
-        insert into member (id, pw, nick, email) values (#{userName}, #{password}, #{nickname}, #{email})
+        insert into member (username, password, nickname, email) values (#{username}, #{password}, #{nickname}, #{email})
     </insert>
 
-    <select id="selectCountByUserName" resultType="int">
-        select count(*) from member where id=#{userName}
+    <select id="selectCountByUsername" resultType="int">
+        select count(*) from member where username=#{username}
     </select>
 
     <select id="selectCountByNickname" resultType="int">
-        select count(*) from member where nick=#{nickname}
+        select count(*) from member where nickname=#{nickname}
     </select>
 
     <select id="selectCountByEmail" resultType="int">
@@ -21,20 +21,20 @@
     </select>
 
     <select id="selectMemberByMemberId"  resultMap="myMemberVO">
-        select id, nick, email from member where member.m_id=#{memberId}
+        select username, nickname, email from member where member.member_id=#{memberId}
     </select>
 
     <update id="updateMember">
-        update member set id=#{userName}, pw=#{password}, nick=#{nickname}, email=#{email} where member.m_id=#{memberId}
+        update member set username=#{username}, password=#{password}, nickname=#{nickname}, email=#{email} where member.member_id=#{memberId}
     </update>
 
     <delete id="deleteMember">
-        delete from member where member.m_id=#{memberId}
+        delete from member where member.member_id=#{memberId}
     </delete>
 
     <resultMap id="myMemberVO" type="com.opus.member.domain.MemberVO">
-        <result property="userName" column="id"/>
-        <result property="nickname" column="nick"/>
+        <result property="username" column="username"/>
+        <result property="nickname" column="nickname"/>
         <result property="email" column="email"/>
     </resultMap>
 

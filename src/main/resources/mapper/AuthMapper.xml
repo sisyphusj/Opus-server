@@ -4,16 +4,13 @@
 
 <mapper namespace="com.opus.auth.mapper.AuthMapper">
 
-    <select id="selectAuthByUserName" resultMap="myAuth">
-        select m_id, pw from member where id=#{userName}
+    <select id="selectAuthByUsername" resultMap="myAuth">
+        select member_id, password from member where username = #{username}
     </select>
 
     <resultMap id="myAuth" type="com.opus.auth.domain.AuthVO">
-        <id property="memberId" column="m_id"/>
-        <result property="userName" column="id"/>
-        <result property="password" column="pw"/>
-        <result property="nickname" column="nick"/>
-        <result property="email" column="email"/>
+        <id property="memberId" column="member_id"/>
+        <result property="password" column="password"/>
     </resultMap>
 
 </mapper>
