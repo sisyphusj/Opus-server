@@ -21,6 +21,7 @@ import org.springframework.web.servlet.NoHandlerFoundException;
 
 import javax.security.sasl.AuthenticationException;
 import java.io.IOException;
+import java.util.NoSuchElementException;
 
 @RestControllerAdvice
 @Slf4j
@@ -203,6 +204,19 @@ public class GlobalExceptionHandler {
         log.error("handleBadCredentialsException", e);
         final ErrorResponse response = ErrorResponse.of(ResponseCode.ID_OR_PASSWORD_NOT_VALID, e.getMessage());
         return new ResponseEntity<>(response, HttpStatus.UNAUTHORIZED);
+    }
+
+    /**
+     * NoSuchElementException 처리
+     *
+     * @param e NoSuchElementException
+     * @return ResponseEntity<ErrorResponse>
+     */
+    @ExceptionHandler(NoSuchElementException.class)
+    protected ResponseEntity<ErrorResponse> handleNoSuchElementException(NoSuchElementException e) {
+        log.error("handleNoSuchElementException", e);
+        final ErrorResponse response = ErrorResponse.of(ResponseCode.NOT_FOUND_ERROR, e.getMessage());
+        return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
     }
 
     /**
