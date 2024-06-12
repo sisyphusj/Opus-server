@@ -63,7 +63,11 @@ public class TokenProvider implements InitializingBean {
             .signWith(key, SignatureAlgorithm.HS512)
             .compact();
 
-        return TokenDTO.of("Bearer", accessToken,refreshToken, validity.getTime());
+        return TokenDTO.builder()
+            .accessToken(accessToken)
+            .refreshToken(refreshToken)
+            .accessTokenExpiresIn(validity.getTime())
+            .build();
     }
 
     public Authentication getAuthentication(String token) {
@@ -76,7 +80,7 @@ public class TokenProvider implements InitializingBean {
         Collection<? extends GrantedAuthority> authorities =
             Arrays.stream(claims.get(AUTHORITIES_KEY).toString().split(","))
                 .map(SimpleGrantedAuthority::new)
-                .collect(Collectors.toList());
+                .toList();
 
         User principal = new User(claims.getSubject(), "", authorities);
 
