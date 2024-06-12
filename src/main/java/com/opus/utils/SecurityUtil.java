@@ -1,6 +1,7 @@
 package com.opus.utils;
 
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.authentication.AuthenticationCredentialsNotFoundException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 
@@ -15,17 +16,12 @@ public class SecurityUtil {
         log.info("call getCurrentUserId, authentication={}", authentication);
 
         if(authentication == null || authentication.getName() == null) {
-            throw new RuntimeException("Security Context 에 인증 정보가 없습니다.");
+            throw new AuthenticationCredentialsNotFoundException("Security Context 에 인증 정보가 없습니다.");
         }
-        
-//        String username = null;
-//        if(authentication.getPrincipal() instanceof UserDetails springSecurityUser) {
-//            username = springSecurityUser.getUsername();
-//        } else if(authentication.getPrincipal() instanceof String string) {
-//            username = string;
-//        }
+
         if (authentication.getName().equals("anonymousUser")) {
             return 0;
+            // TODO : 권한 관련 기능을 추가한 후 익명 사용자의 ID를 0으로 처리할지 예외를 던질지 결정
         }
 
         return Integer.parseInt(authentication.getName());
