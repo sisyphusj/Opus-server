@@ -24,11 +24,12 @@ public class CustomUserDetailsService implements UserDetailsService {
 
     @Override
     @Transactional(readOnly = true)
-    public UserDetails loadUserByUsername(String userName) throws UsernameNotFoundException {
-        log.info("call loadUserByUsername, username={}", userName);
-        return authMapper.selectAuthByUserName(userName)
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        log.info("call loadUserByUsername, username={}", username);
+
+        return authMapper.selectAuthByUsername(username)
                 .map(this::createUserDetails)
-                .orElseThrow(() -> new UsernameNotFoundException(userName + " -> 데이터베이스에서 찾을 수 없습니다."));
+                .orElseThrow(() -> new UsernameNotFoundException(username + " -> 데이터베이스에서 찾을 수 없습니다."));
     }
 
     private UserDetails createUserDetails(AuthVO auth) {
@@ -43,5 +44,4 @@ public class CustomUserDetailsService implements UserDetailsService {
                 Collections.singleton(grantedAuthority)
         );
     }
-
 }
