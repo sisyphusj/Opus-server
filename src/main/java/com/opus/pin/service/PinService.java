@@ -7,6 +7,7 @@ import com.opus.pin.domain.*;
 import com.opus.pin.mapper.PinMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,6 +19,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.concurrent.ThreadLocalRandom;
 
 @Service
@@ -71,14 +73,19 @@ public class PinService {
 
         } catch (IOException e) {
             log.error("IO Exception occurred while processing the image", e);
-            throw new BusinessExceptionHandler(ResponseCode.IO_EXCEPTION,"IO Exception occurred while processing the image");
+            throw new BusinessExceptionHandler(ResponseCode.IO_EXCEPTION, "IO Exception occurred while processing the image");
         }
     }
 
     @Transactional(readOnly = true)
     public List<PinListResponseDTO> getPinList(int offset, int amount, String keyword) {
-        PinListRequestVO pinListRequestVO = PinListRequestVO.of(offset, amount, keyword);
-        if (keyword == null || keyword.trim().isEmpty()) {
+        PinListRequestVO pinListRequestVO = PinListRequestVO.builder()
+                .offset(offset)
+                .amount(amount)
+                .keyword(keyword)
+                .build();
+
+        if (StringUtils.isBlank(keyword)) {
             return PinListResponseDTO.of(pinMapper.selectPins(pinListRequestVO));
         }
         return PinListResponseDTO.of(pinMapper.selectPinsByKeyword(pinListRequestVO));
@@ -86,26 +93,38 @@ public class PinService {
 
     @Transactional(readOnly = true)
     public List<PinListResponseDTO> getMyPinList(int offset, int amount) {
-        PinListRequestVO pinListRequestVO = PinListRequestVO.of(SecurityUtil.getCurrentUserId(), offset, amount);
+        PinListRequestVO pinListRequestVO = PinListRequestVO.builder()
+                .memberId(SecurityUtil.getCurrentUserId())
+                .offset(offset)
+                .amount(amount)
+                .build();
+
         return PinListResponseDTO.of(pinMapper.selectPinsByMemberId(pinListRequestVO));
     }
 
+    @Transactional
     public PinListResponseDTO getPinByPinId(int pinId) {
-        return PinListResponseDTO.of(pinMapper.selectPinByPinId(pinId));
+        PinVO pin = pinMapper.selectPinByPinId(pinId)
+                .orElseThrow(() -> new NoSuchElementException("해당 핀을 찾을 수 없습니다."));
+
+        return PinListResponseDTO.of(pin);
     }
 
     @Transactional(readOnly = true)
     public int countPins(String keyword) {
-        if (keyword == null || keyword.trim().isEmpty()) {
+        if (StringUtils.isBlank(keyword)) {
             return pinMapper.countAllPins();
         }
+
         return pinMapper.countPinsByKeyword(keyword);
     }
 
     @Transactional
     public void removePin(int pinId) {
+        pinMapper.selectPinByPinId(pinId)
+                .orElseThrow(() -> new NoSuchElementException("해당 핀을 찾을 수 없습니다."));
+
         pinMapper.deletePin(pinId, SecurityUtil.getCurrentUserId());
     }
-
 }
 

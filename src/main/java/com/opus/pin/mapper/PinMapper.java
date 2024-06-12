@@ -5,6 +5,7 @@ import com.opus.pin.domain.PinVO;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;
+import java.util.Optional;
 
 @Mapper
 public interface PinMapper {
@@ -17,7 +18,7 @@ public interface PinMapper {
 
     List<PinVO> selectPinsByMemberId(PinListRequestVO pinListRequestVO);
 
-    PinVO selectPinByPinId(int pid);
+    Optional<PinVO> selectPinByPinId(int pid);
 
     int countAllPins();
 
