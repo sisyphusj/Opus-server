@@ -1,24 +1,22 @@
 package com.opus.auth.domain;
 
-import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 
 @Getter
-@AllArgsConstructor(access = AccessLevel.PRIVATE)
+@Builder
+@AllArgsConstructor
 public class AuthVO {
 
-        private Integer memberId;
+    private Integer memberId;
 
-        private String username;
+    private String username;
 
-        private String password;
+    private String password;
 
-        private String nickname;
+    private String nickname;
 
-        private String email;
+    private String email;
 
-        public static AuthVO of(LoginDTO loginDTO) {
-                return new AuthVO(null, loginDTO.getUsername(), loginDTO.getPassword(), null, null);
-        }
 }
