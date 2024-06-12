@@ -60,6 +60,13 @@ public class ErrorResponse {
         this.errors = errors;
     }
 
+    @Builder
+    protected ErrorResponse(int status, String msg, String reason) {
+        this.status = status;
+        this.msg = msg;
+        this.reason = reason;
+    }
+
     /**
      * Global Exception - 1
      *
@@ -93,6 +100,18 @@ public class ErrorResponse {
         return new ErrorResponse(responseCode, reason);
     }
 
+    /**
+     * Global Exception - 4
+     *
+     * @param status int
+     * @param msg    String
+     * @return ErrorResponse
+     */
+
+    public static ErrorResponse of(int status, String msg, String reason) {
+        return new ErrorResponse(status, msg, reason);
+    }
+
     @Getter
     public static class FieldError {
         private final String field;
@@ -110,8 +129,6 @@ public class ErrorResponse {
             return errors.stream()
                     .map(error -> new FieldError(error.getField(),
                             error.getRejectedValue() == null ? "" : error.getRejectedValue().toString(),
-            //                error.getDefaultMessage())).collect(Collectors.toList());
-                            // 수정불가능
                             error.getDefaultMessage())).toList();
         }
 

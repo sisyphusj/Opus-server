@@ -6,6 +6,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.client.HttpClientErrorException;
+import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.servlet.NoHandlerFoundException;
 
 import javax.security.sasl.AuthenticationException;
@@ -46,6 +48,7 @@ public class GlobalExceptionHandler {
 
     /**
      * 인수가 잘못된 경우
+     *
      * @param e IllegalArgumentException
      * @return ResponseEntity<ErrorResponse>
      */
@@ -151,19 +154,6 @@ public class GlobalExceptionHandler {
     }
 
     /**
-     * Null Point Exception
-     *
-     * @param e NullPointerException
-     * @return ResponseEntity<ErrorResponse>
-     */
-    @ExceptionHandler(NullPointerException.class)
-    protected ResponseEntity<ErrorResponse> handleNullPointerException(NullPointerException e) {
-        log.error("handleNullPointerException", e);
-        final ErrorResponse response = ErrorResponse.of(ResponseCode.NULL_POINT_ERROR, e.getMessage());
-        return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
-    }
-
-    /**
      * 잘못된 HTTP 메소드로 요청한 경우
      *
      * @param e HttpRequestMethodNotSupportedException
@@ -190,6 +180,32 @@ public class GlobalExceptionHandler {
     }
 
     /**
+     * ResponseStatusException 처리
+     *
+     * @param e ResponseStatusException
+     * @return ResponseEntity<ErrorResponse>
+     */
+    @ExceptionHandler(ResponseStatusException.class)
+    protected ResponseEntity<ErrorResponse> handleResponseStatusException(ResponseStatusException e) {
+        log.error("handleResponseStatusException", e);
+        final ErrorResponse response = ErrorResponse.of(e.getStatusCode().value(), e.getMessage(), e.getReason());
+        return new ResponseEntity<>(response, e.getStatusCode());
+    }
+
+    /**
+     * BadCredentialsException 처리
+     *
+     * @param e
+     * @return
+     */
+    @ExceptionHandler(BadCredentialsException.class)
+    protected ResponseEntity<ErrorResponse> handleBadCredentialsException(BadCredentialsException e) {
+        log.error("handleBadCredentialsException", e);
+        final ErrorResponse response = ErrorResponse.of(ResponseCode.ID_OR_PASSWORD_NOT_VALID, e.getMessage());
+        return new ResponseEntity<>(response, HttpStatus.UNAUTHORIZED);
+    }
+
+    /**
      * 모든 예외 처리
      *
      * @param e Exception
@@ -198,6 +214,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(Exception.class)
     protected final ResponseEntity<ErrorResponse> handleAllExceptions(Exception e) {
         log.error("handleException {} , {}", e, e.toString());
+        log.error("stack trace", e);
         final ErrorResponse response = ErrorResponse.of(ResponseCode.INTERNAL_SERVER_ERROR, e.getMessage());
         return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
     }
