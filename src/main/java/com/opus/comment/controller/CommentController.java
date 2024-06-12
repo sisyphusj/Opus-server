@@ -2,6 +2,7 @@ package com.opus.comment.controller;
 
 import com.opus.comment.domain.CommentDTO;
 import com.opus.comment.domain.CommentResponseDTO;
+import com.opus.comment.domain.CommentUpdateDTO;
 import com.opus.comment.service.CommentService;
 import com.opus.common.ApiResponse;
 import jakarta.validation.Valid;
@@ -41,7 +42,7 @@ public class CommentController {
 
     // 댓글 수정
     @PutMapping
-    public ResponseEntity<String> editComment(@Valid @RequestBody CommentDTO commentDTO) {
+    public ResponseEntity<String> editComment(@Valid @RequestBody CommentUpdateDTO commentDTO) {
         commentService.editComment(commentDTO);
         return ApiResponse.of("OK");
     }

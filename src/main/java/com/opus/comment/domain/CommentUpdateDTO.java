@@ -5,7 +5,10 @@ import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
 
 @Getter
-public class CommentDTO {
+public class CommentUpdateDTO {
+
+    @NotBlank
+    private Integer commentId;
 
     @NotBlank
     private Integer pinId;
@@ -20,3 +23,5 @@ public class CommentDTO {
     @NotBlank(message = "내용을 입력해주세요.")
     private String content;
 }
+
+
