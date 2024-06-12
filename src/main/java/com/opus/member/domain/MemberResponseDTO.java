@@ -1,20 +1,27 @@
 package com.opus.member.domain;
 
-import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 
+import java.util.Optional;
+
 @Getter
-@AllArgsConstructor(access = AccessLevel.PRIVATE)
+@Builder
+@AllArgsConstructor
 public class MemberResponseDTO {
 
-    private String userName;
+    private String username;
 
     private String nickname;
 
     private String email;
 
     public static MemberResponseDTO of(MemberVO member) {
-        return new MemberResponseDTO(member.getUserName(), member.getNickname(), member.getEmail());
+        return MemberResponseDTO.builder()
+                .username(member.getUsername())
+                .nickname(member.getNickname())
+                .email(member.getEmail())
+                .build();
     }
 }

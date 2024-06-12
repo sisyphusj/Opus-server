@@ -1,8 +1,6 @@
 package com.opus.member.service;
 
 import com.opus.utils.SecurityUtil;
-import com.opus.common.ResponseCode;
-import com.opus.exception.BusinessExceptionHandler;
 import com.opus.member.domain.*;
 import com.opus.member.mapper.MemberMapper;
 import lombok.RequiredArgsConstructor;
@@ -11,7 +9,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Optional;
+import java.util.NoSuchElementException;
 
 @Service
 @RequiredArgsConstructor
@@ -23,7 +21,9 @@ public class MemberService {
 
     @Transactional
     public void registerMember(MemberDTO memberDTO) {
-        MemberVO member = MemberVO.of(memberDTO, passwordEncoder);
+        memberDTO.setPassword(passwordEncoder.encode(memberDTO.getPassword()));
+        MemberVO member = MemberVO.of(memberDTO);
+
         memberMapper.insertMember(member);
     }
 
@@ -44,23 +44,25 @@ public class MemberService {
 
     @Transactional(readOnly = true)
     public MemberResponseDTO getMyProfile() {
-        MemberVO memberVO = memberMapper.selectMemberByMemberId(SecurityUtil.getCurrentUserId());
-        Optional<MemberResponseDTO> member = Optional.of(MemberResponseDTO.of(memberVO));
-        return member.orElseThrow(() -> new BusinessExceptionHandler(ResponseCode.NOT_FOUND_ERROR, "해당 회원을 찾을 수 없습니다."));
+        MemberVO memberVO = memberMapper.selectMemberByMemberId(SecurityUtil.getCurrentUserId())
+                .orElseThrow(() -> new NoSuchElementException("해당 회원을 찾을 수 없습니다."));
+
+        return MemberResponseDTO.of(memberVO);
     }
 
     @Transactional
     public void editMyProfile(MemberDTO memberDTO) {
-        MemberVO member = MemberVO.of(memberDTO, SecurityUtil.getCurrentUserId(), passwordEncoder);
+        memberDTO.setPassword(passwordEncoder.encode(memberDTO.getPassword()));
+        MemberVO member = MemberVO.of(memberDTO, SecurityUtil.getCurrentUserId());
+
         memberMapper.updateMember(member);
     }
 
     @Transactional
     public void removeMyProfile() {
-        MemberVO memberVO = memberMapper.selectMemberByMemberId(SecurityUtil.getCurrentUserId());
-        if (memberVO == null) {
-            throw new BusinessExceptionHandler(ResponseCode.BUSINESS_ERROR, "해당 회원을 찾을 수 없습니다.");
-        }
+        memberMapper.selectMemberByMemberId(SecurityUtil.getCurrentUserId())
+                .orElseThrow(() -> new NoSuchElementException("해당 회원을 찾을 수 없습니다."));
+
         memberMapper.deleteMember(SecurityUtil.getCurrentUserId());
     }
 
