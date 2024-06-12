@@ -1,5 +1,6 @@
 package com.opus.config;
 
+import com.opus.auth.JwtLogoutHandler;
 import com.opus.filter.JwtFilter;
 import com.opus.auth.TokenProvider;
 import lombok.RequiredArgsConstructor;
@@ -34,7 +35,8 @@ public class SecurityConfig {
     private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
     private final JwtAccessDeniedHandler jwtAccessDeniedHandler;
 
-    private final String[] permittedUrls = {"api/auth/**", "api/member/register", "api/member/check/**", "api/pins", "api/pins/total" ,"/error"};
+    private final String[] permittedUrls = {"/api/auth/login", "/api/auth/logout", "/api/auth/reissue-token", "/api/member/register",
+            "/api/member/check/**", "/api/pins", "/api/pins/total", "/error"};
 
 
     @Bean
@@ -47,11 +49,10 @@ public class SecurityConfig {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(List.of("http://localhost:3000/"));
+        configuration.setAllowedOrigins(List.of("http://localhost:3000"));
         configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"));
         configuration.setAllowedHeaders(Arrays.asList("Origin", "Content-Type", "Accept", "Authorization"));
         configuration.setAllowCredentials(true);
-        configuration.setExposedHeaders(List.of("Authorization"));
 
         // 모든 요청에 대해 CORS 설정을 적용
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
@@ -65,6 +66,7 @@ public class SecurityConfig {
         httpSecurity
 
                 .csrf(AbstractHttpConfigurer::disable)
+
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))
 
                 .exceptionHandling((exceptionHandling) -> exceptionHandling
@@ -82,6 +84,7 @@ public class SecurityConfig {
 
                 .authorizeHttpRequests(
                         (authorizeRequests) -> authorizeRequests
+                                .requestMatchers(HttpMethod.GET, "/api/auth/test").permitAll()
                                 .requestMatchers(HttpMethod.GET, "/api/pins/comments").permitAll()
                                 .requestMatchers(HttpMethod.PUT, "/api/pins/comments").authenticated()
                                 .requestMatchers(permittedUrls).permitAll()
@@ -92,6 +95,14 @@ public class SecurityConfig {
                 .addFilterBefore(
                         new JwtFilter(tokenProvider),
                         UsernamePasswordAuthenticationFilter.class
+                )
+
+                .logout(logout -> logout
+                        .logoutUrl("/api/auth/logout")
+                        .addLogoutHandler(new JwtLogoutHandler())
+                        .invalidateHttpSession(true)
+                        .deleteCookies("Authorization")
+                        .permitAll()
                 );
 
         return httpSecurity.build();
