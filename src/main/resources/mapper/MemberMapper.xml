@@ -20,8 +20,10 @@
         select count(*) from member where email=#{email}
     </select>
 
-    <select id="selectMemberByMemberId"  resultMap="myMemberVO">
-        select username, nickname, email from member where member.member_id=#{memberId}
+    <select id="selectMemberByMemberId"  resultType="com.opus.member.domain.MemberVO">
+        select member.member_id, username, password, nickname, email
+        from member
+        where member.member_id = #{memberId}
     </select>
 
     <update id="updateMember">
@@ -31,11 +33,5 @@
     <delete id="deleteMember">
         delete from member where member.member_id=#{memberId}
     </delete>
-
-    <resultMap id="myMemberVO" type="com.opus.member.domain.MemberVO">
-        <result property="username" column="username"/>
-        <result property="nickname" column="nickname"/>
-        <result property="email" column="email"/>
-    </resultMap>
 
 </mapper>
