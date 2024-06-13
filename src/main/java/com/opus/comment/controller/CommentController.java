@@ -29,7 +29,7 @@ public class CommentController {
   }
 
   // 댓글 리스트
-  @GetMapping
+  @GetMapping("/list")
   public ResponseEntity<List<CommentResponseDTO>> getCommentListByPinId(@RequestParam int pinId) {
     return ApiResponse.of(commentService.getCommentListByPinId(pinId));
   }
