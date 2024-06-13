@@ -26,7 +26,7 @@ public class ErrorResponse {
      */
     @Builder
     protected ErrorResponse(final ResponseCode responseCode) {
-        this.msg = responseCode.getMsg();
+        this.msg = responseCode.getMessage();
         this.status = responseCode.getHttpStatus();
         this.code = responseCode.getCode();
         this.errors = new ArrayList<>();
@@ -40,7 +40,7 @@ public class ErrorResponse {
      */
     @Builder
     protected ErrorResponse(final ResponseCode responseCode, final String reason) {
-        this.msg = responseCode.getMsg();
+        this.msg = responseCode.getMessage();
         this.status = responseCode.getHttpStatus();
         this.code = responseCode.getCode();
         this.reason = reason;
@@ -54,7 +54,7 @@ public class ErrorResponse {
      */
     @Builder
     protected ErrorResponse(final ResponseCode responseCode, final List<FieldError> errors) {
-        this.msg = responseCode.getMsg();
+        this.msg = responseCode.getMessage();
         this.status = responseCode.getHttpStatus();
         this.code = responseCode.getCode();
         this.errors = errors;
