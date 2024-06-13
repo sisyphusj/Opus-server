@@ -12,15 +12,11 @@ public interface PinMapper {
 
     void insertPin(PinVO pin);
 
-    List<PinVO> selectPins(PinListRequestVO pinListRequestVO);
-
     List<PinVO> selectPinsByKeyword(PinListRequestVO pinListRequestVO);
 
     List<PinVO> selectPinsByMemberId(PinListRequestVO pinListRequestVO);
 
     Optional<PinVO> selectPinByPinId(int pid);
-
-    int countAllPins();
 
     int countPinsByKeyword(String keyword);
 

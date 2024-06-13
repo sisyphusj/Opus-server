@@ -85,9 +85,6 @@ public class PinService {
                 .keyword(keyword)
                 .build();
 
-        if (StringUtils.isBlank(keyword)) {
-            return PinListResponseDTO.of(pinMapper.selectPins(pinListRequestVO));
-        }
         return PinListResponseDTO.of(pinMapper.selectPinsByKeyword(pinListRequestVO));
     }
 
@@ -112,10 +109,6 @@ public class PinService {
 
     @Transactional(readOnly = true)
     public int countPins(String keyword) {
-        if (StringUtils.isBlank(keyword)) {
-            return pinMapper.countAllPins();
-        }
-
         return pinMapper.countPinsByKeyword(keyword);
     }
 
