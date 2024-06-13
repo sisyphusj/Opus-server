@@ -24,88 +24,91 @@ import java.util.Arrays;
 import java.util.List;
 
 /**
- * SecurityConfig
- * - Spring Security 설정 클래스
+ * SecurityConfig - Spring Security 설정 클래스
  */
 @EnableWebSecurity
 @Configuration
 @RequiredArgsConstructor
 public class SecurityConfig {
-    private final TokenProvider tokenProvider;
-    private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
-    private final JwtAccessDeniedHandler jwtAccessDeniedHandler;
 
-    private final String[] permittedUrls = {"/api/auth/login", "/api/auth/logout", "/api/auth/reissue-token", "/api/member/register",
-            "/api/member/check/**", "/api/pins", "/api/pins/total", "/error"};
+  private final TokenProvider tokenProvider;
+  private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
+  private final JwtAccessDeniedHandler jwtAccessDeniedHandler;
+
+  private final String[] permittedUrls = {"/api/auth/login", "/api/auth/logout",
+      "/api/auth/reissue-token", "/api/member/register",
+      "/api/member/check/**", "/api/pins", "/api/pins/total", "/error"};
 
 
-    @Bean
-    public PasswordEncoder passwordEncoder() {
-        // 비밀번호 암호화 방식을 지정하여 PasswordEncoder 빈을 생성
-        return new BCryptPasswordEncoder();
-    }
+  @Bean
+  public PasswordEncoder passwordEncoder() {
+    // 비밀번호 암호화 방식을 지정하여 PasswordEncoder 빈을 생성
+    return new BCryptPasswordEncoder();
+  }
 
-    // CORS 설정 추가
-    @Bean
-    public CorsConfigurationSource corsConfigurationSource() {
-        CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(List.of("http://localhost:3000"));
-        configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"));
-        configuration.setAllowedHeaders(Arrays.asList("Origin", "Content-Type", "Accept", "Authorization"));
-        configuration.setAllowCredentials(true);
+  // CORS 설정 추가
+  @Bean
+  public CorsConfigurationSource corsConfigurationSource() {
+    CorsConfiguration configuration = new CorsConfiguration();
+    configuration.setAllowedOrigins(List.of("http://localhost:3000"));
+    configuration.setAllowedMethods(
+        Arrays.asList("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"));
+    configuration.setAllowedHeaders(
+        Arrays.asList("Origin", "Content-Type", "Accept", "Authorization"));
+    configuration.setAllowCredentials(true);
 
-        // 모든 요청에 대해 CORS 설정을 적용
-        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        source.registerCorsConfiguration("/**", configuration);
+    // 모든 요청에 대해 CORS 설정을 적용
+    UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+    source.registerCorsConfiguration("/**", configuration);
 
-        return source;
-    }
+    return source;
+  }
 
-    @Bean
-    public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
-        httpSecurity
+  @Bean
+  public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
+    httpSecurity
 
-                .csrf(AbstractHttpConfigurer::disable)
+        .csrf(AbstractHttpConfigurer::disable)
 
-                .cors(cors -> cors.configurationSource(corsConfigurationSource()))
+        .cors(cors -> cors.configurationSource(corsConfigurationSource()))
 
-                .exceptionHandling((exceptionHandling) -> exceptionHandling
-                        .authenticationEntryPoint(jwtAuthenticationEntryPoint)
-                        .accessDeniedHandler(jwtAccessDeniedHandler)
-                )
+        .exceptionHandling(exceptionHandling -> exceptionHandling
+            .authenticationEntryPoint(jwtAuthenticationEntryPoint)
+            .accessDeniedHandler(jwtAccessDeniedHandler)
+        )
 
-                .headers((headers) -> headers.frameOptions(HeadersConfigurer.FrameOptionsConfig::sameOrigin)
-                )
+        .headers(headers -> headers.frameOptions(HeadersConfigurer.FrameOptionsConfig::sameOrigin)
+        )
 
-                .sessionManagement(
-                        (sessionManagement) -> sessionManagement
-                                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-                )
+        .sessionManagement(
+            sessionManagement -> sessionManagement
+                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+        )
 
-                .authorizeHttpRequests(
-                        (authorizeRequests) -> authorizeRequests
-                                .requestMatchers(HttpMethod.GET, "/api/auth/test").permitAll()
-                                .requestMatchers(HttpMethod.GET, "/api/pins/comments").permitAll()
-                                .requestMatchers(HttpMethod.PUT, "/api/pins/comments").authenticated()
-                                .requestMatchers(permittedUrls).permitAll()
-                                .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
-                                .anyRequest().authenticated()
-                )
+        .authorizeHttpRequests(
+            authorizeRequests -> authorizeRequests
+                .requestMatchers(HttpMethod.GET, "/api/auth/test").permitAll()
+                .requestMatchers(HttpMethod.GET, "/api/pins/comments").permitAll()
+                .requestMatchers(HttpMethod.PUT, "/api/pins/comments").authenticated()
+                .requestMatchers(permittedUrls).permitAll()
+                .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
+                .anyRequest().authenticated()
+        )
 
-                .addFilterBefore(
-                        new JwtFilter(tokenProvider),
-                        UsernamePasswordAuthenticationFilter.class
-                )
+        .addFilterBefore(
+            new JwtFilter(tokenProvider),
+            UsernamePasswordAuthenticationFilter.class
+        )
 
-                .logout(logout -> logout
-                        .logoutUrl("/api/auth/logout")
-                        .addLogoutHandler(new JwtLogoutHandler())
-                        .invalidateHttpSession(true)
-                        .deleteCookies("Authorization")
-                        .permitAll()
-                );
+        .logout(logout -> logout
+            .logoutUrl("/api/auth/logout")
+            .addLogoutHandler(new JwtLogoutHandler())
+            .invalidateHttpSession(true)
+            .deleteCookies("Authorization")
+            .permitAll()
+        );
 
-        return httpSecurity.build();
-    }
+    return httpSecurity.build();
+  }
 
 }

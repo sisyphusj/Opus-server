@@ -11,38 +11,38 @@ import java.util.List;
 @Builder
 public class PinListResponseDTO {
 
-    private Integer pinId;
+  private Integer pinId;
 
-    private String nickname;
+  private String nickname;
 
-    private String imagePath;
+  private String imagePath;
 
-    private String prompt;
+  private String prompt;
 
-    private String negativePrompt;
+  private String negativePrompt;
 
-    private String width;
+  private String width;
 
-    private String height;
+  private String height;
 
-    private String seed;
+  private String seed;
 
-    public static PinListResponseDTO of(PinVO pinVO) {
-        return PinListResponseDTO.builder()
-                .pinId(pinVO.getPinId())
-                .nickname(pinVO.getNickname())
-                .imagePath(pinVO.getImagePath())
-                .prompt(pinVO.getPrompt())
-                .negativePrompt(pinVO.getNegativePrompt())
-                .width(pinVO.getWidth())
-                .height(pinVO.getHeight())
-                .seed(pinVO.getSeed())
-                .build();
-    }
+  public static PinListResponseDTO of(PinVO pinVO) {
+    return PinListResponseDTO.builder()
+        .pinId(pinVO.getPinId())
+        .nickname(pinVO.getNickname())
+        .imagePath(pinVO.getImagePath())
+        .prompt(pinVO.getPrompt())
+        .negativePrompt(pinVO.getNegativePrompt())
+        .width(pinVO.getWidth())
+        .height(pinVO.getHeight())
+        .seed(pinVO.getSeed())
+        .build();
+  }
 
-    public static List<PinListResponseDTO> of(List<PinVO> pinVOList) {
-        return pinVOList.stream()
-                .map(PinListResponseDTO::of)
-                .toList();
-    }
+  public static List<PinListResponseDTO> of(List<PinVO> pinVOList) {
+    return pinVOList.stream()
+        .map(PinListResponseDTO::of)
+        .toList();
+  }
 }

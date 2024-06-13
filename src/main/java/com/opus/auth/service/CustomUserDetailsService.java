@@ -20,28 +20,28 @@ import java.util.Collections;
 @Slf4j
 public class CustomUserDetailsService implements UserDetailsService {
 
-    private final AuthMapper authMapper;
+  private final AuthMapper authMapper;
 
-    @Override
-    @Transactional(readOnly = true)
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        log.info("call loadUserByUsername, username={}", username);
+  @Override
+  @Transactional(readOnly = true)
+  public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+    log.info("call loadUserByUsername, username={}", username);
 
-        return authMapper.selectAuthByUsername(username)
-                .map(this::createUserDetails)
-                .orElseThrow(() -> new UsernameNotFoundException(username + " -> 데이터베이스에서 찾을 수 없습니다."));
-    }
+    return authMapper.selectAuthByUsername(username)
+        .map(this::createUserDetails)
+        .orElseThrow(() -> new UsernameNotFoundException(username + " -> 데이터베이스에서 찾을 수 없습니다."));
+  }
 
-    private UserDetails createUserDetails(AuthVO auth) {
-        log.info("call createUserDetails, member={}", auth);
+  private UserDetails createUserDetails(AuthVO auth) {
+    log.info("call createUserDetails, member={}", auth);
 
-        // 사용자 권한 설정 필요. 현재는 USER 권한만 부여
-        GrantedAuthority grantedAuthority = new SimpleGrantedAuthority("USER");
+    // 사용자 권한 설정 필요. 현재는 USER 권한만 부여
+    GrantedAuthority grantedAuthority = new SimpleGrantedAuthority("USER");
 
-        return new User(
-                String.valueOf(auth.getMemberId()), // memberId (primary key)
-                auth.getPassword(),
-                Collections.singleton(grantedAuthority)
-        );
-    }
+    return new User(
+        String.valueOf(auth.getMemberId()), // memberId (primary key)
+        auth.getPassword(),
+        Collections.singleton(grantedAuthority)
+    );
+  }
 }

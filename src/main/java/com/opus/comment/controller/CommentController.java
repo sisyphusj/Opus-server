@@ -19,39 +19,39 @@ import java.util.List;
 @RequiredArgsConstructor
 public class CommentController {
 
-    private final CommentService commentService;
+  private final CommentService commentService;
 
-    // 댓글 추가
-    @PostMapping
-    public ResponseEntity<String> addComment(@Valid @RequestBody CommentDTO commentDTO) {
-        commentService.addComment(commentDTO);
-        return ApiResponse.of("OK");
-    }
+  // 댓글 추가
+  @PostMapping
+  public ResponseEntity<String> addComment(@Valid @RequestBody CommentDTO commentDTO) {
+    commentService.addComment(commentDTO);
+    return ApiResponse.of("OK");
+  }
 
-    // 댓글 리스트
-    @GetMapping
-    public ResponseEntity<List<CommentResponseDTO>> getCommentListByPinId(@RequestParam int pinId) {
-        return ApiResponse.of(commentService.getCommentListByPinId(pinId));
-    }
+  // 댓글 리스트
+  @GetMapping
+  public ResponseEntity<List<CommentResponseDTO>> getCommentListByPinId(@RequestParam int pinId) {
+    return ApiResponse.of(commentService.getCommentListByPinId(pinId));
+  }
 
-    // 내 댓글 리스트
-    @GetMapping("/my-comments")
-    public ResponseEntity<List<CommentResponseDTO>> getMyCommentList() {
-        return ApiResponse.of(commentService.getMyCommentList());
-    }
+  // 내 댓글 리스트
+  @GetMapping("/my-comments")
+  public ResponseEntity<List<CommentResponseDTO>> getMyCommentList() {
+    return ApiResponse.of(commentService.getMyCommentList());
+  }
 
-    // 댓글 수정
-    @PutMapping
-    public ResponseEntity<String> editComment(@Valid @RequestBody CommentUpdateDTO commentDTO) {
-        commentService.editComment(commentDTO);
-        return ApiResponse.of("OK");
-    }
+  // 댓글 수정
+  @PutMapping
+  public ResponseEntity<String> editComment(@Valid @RequestBody CommentUpdateDTO commentDTO) {
+    commentService.editComment(commentDTO);
+    return ApiResponse.of("OK");
+  }
 
-    // 댓글 삭제
-    @DeleteMapping("/{commentId}")
-    public ResponseEntity<String> removeComment(@PathVariable int commentId) {
-        commentService.removeComment(commentId);
-        return ApiResponse.of("OK");
-    }
+  // 댓글 삭제
+  @DeleteMapping("/{commentId}")
+  public ResponseEntity<String> removeComment(@PathVariable int commentId) {
+    commentService.removeComment(commentId);
+    return ApiResponse.of("OK");
+  }
 
 }

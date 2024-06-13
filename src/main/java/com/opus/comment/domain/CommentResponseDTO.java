@@ -8,42 +8,42 @@ import java.util.List;
 @Getter
 public class CommentResponseDTO {
 
-    private Integer commentId;
+  private Integer commentId;
 
-    private Integer pinId;
+  private Integer pinId;
 
-    private String nickname;
+  private String nickname;
 
-    private Integer topLevelCommentId;
+  private Integer topLevelCommentId;
 
-    private String parentNickname;
+  private String parentNickname;
 
-    private int level;
+  private int level;
 
-    private String content;
+  private String content;
 
-    private String createdDate;
+  private String createdDate;
 
-    private String updatedDate;
+  private String updatedDate;
 
-    public static CommentResponseDTO of(CommentVO comment) {
-        return CommentResponseDTO.builder()
-                .commentId(comment.getCommentId())
-                .pinId(comment.getPinId())
-                .nickname(comment.getNickname())
-                .topLevelCommentId(comment.getTopLevelCommentId())
-                .parentNickname(comment.getParentNickname())
-                .level(comment.getLevel())
-                .content(comment.getContent())
-                .createdDate(comment.getCreatedDate())
-                .updatedDate(comment.getUpdatedDate())
-                .build();
-    }
+  public static CommentResponseDTO of(CommentVO comment) {
+    return CommentResponseDTO.builder()
+        .commentId(comment.getCommentId())
+        .pinId(comment.getPinId())
+        .nickname(comment.getNickname())
+        .topLevelCommentId(comment.getTopLevelCommentId())
+        .parentNickname(comment.getParentNickname())
+        .level(comment.getLevel())
+        .content(comment.getContent())
+        .createdDate(comment.getCreatedDate())
+        .updatedDate(comment.getUpdatedDate())
+        .build();
+  }
 
-    public static List<CommentResponseDTO> of(List<CommentVO> commentVOList) {
+  public static List<CommentResponseDTO> of(List<CommentVO> commentVOList) {
 
-        return commentVOList.stream()
-                .map(CommentResponseDTO::of)
-                .toList();
-    }
+    return commentVOList.stream()
+        .map(CommentResponseDTO::of)
+        .toList();
+  }
 }

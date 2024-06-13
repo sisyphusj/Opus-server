@@ -1,25 +1,30 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
-        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.opus.auth.mapper.RefreshTokenMapper">
 
-    <insert id="insertRefreshToken">
-        insert into TOKENS
-            (r_key, r_value)
-        values
-            (#{key}, #{value})
-    </insert>
+  <insert id="insertRefreshToken">
+    insert into TOKENS
+      (r_key, r_value)
+    values (#{key}, #{value})
+  </insert>
 
-    <select id="selectRefreshToken" resultType="com.opus.auth.domain.RefreshTokenVO">
-        select r_key as "key", r_value as "value" from TOKENS where r_key=#{key}
-    </select>
+  <select id="selectRefreshToken" resultType="com.opus.auth.domain.RefreshTokenVO">
+    select r_key as "key", r_value as "value"
+    from TOKENS
+    where r_key = #{key}
+  </select>
 
-    <update id="updateRefreshToken">
-        update TOKENS set r_value=#{value} where r_key=#{key}
-    </update>
+  <update id="updateRefreshToken">
+    update TOKENS
+    set r_value=#{value}
+    where r_key = #{key}
+  </update>
 
-    <delete id="deleteRefreshToken">
-        delete from TOKENS where r_key=#{key}
-    </delete>
+  <delete id="deleteRefreshToken">
+    delete
+    from TOKENS
+    where r_key = #{key}
+  </delete>
 
 </mapper>

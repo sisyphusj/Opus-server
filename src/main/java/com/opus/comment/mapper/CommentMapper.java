@@ -9,17 +9,17 @@ import java.util.Optional;
 @Mapper
 public interface CommentMapper {
 
-    void insertComment(CommentVO comment);
+  void insertComment(CommentVO comment);
 
-    List<CommentVO> selectCommentsByPinId(int pinId);
+  List<CommentVO> selectCommentsByPinId(int pinId);
 
-    List<CommentVO> selectCommentsByMemberId(int memberId);
+  List<CommentVO> selectCommentsByMemberId(int memberId);
 
-    Optional<CommentVO> selectCommentByCommentId(int commentId);
+  Optional<CommentVO> selectCommentByCommentId(int commentId);
 
-    int countChildCommentsByCommentId(int commentId);
+  int countChildCommentsByCommentId(int commentId);
 
-    void updateComment(CommentVO comment);
+  void updateComment(CommentVO comment);
 
-    void deleteComment(CommentVO comment);
+  void deleteComment(CommentVO comment);
 }

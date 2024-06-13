@@ -11,17 +11,17 @@ import java.util.Optional;
 @AllArgsConstructor
 public class MemberResponseDTO {
 
-    private String username;
+  private String username;
 
-    private String nickname;
+  private String nickname;
 
-    private String email;
+  private String email;
 
-    public static MemberResponseDTO of(MemberVO member) {
-        return MemberResponseDTO.builder()
-                .username(member.getUsername())
-                .nickname(member.getNickname())
-                .email(member.getEmail())
-                .build();
-    }
+  public static MemberResponseDTO of(MemberVO member) {
+    return MemberResponseDTO.builder()
+        .username(member.getUsername())
+        .nickname(member.getNickname())
+        .email(member.getEmail())
+        .build();
+  }
 }

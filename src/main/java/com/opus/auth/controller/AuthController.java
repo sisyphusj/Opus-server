@@ -16,25 +16,25 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 public class AuthController {
 
-    private final AuthService authService;
+  private final AuthService authService;
 
-    // 로그인
-    @PostMapping("/login")
-    public ResponseEntity<TokenDTO> login(@Valid @RequestBody LoginDTO loginDTO) {
-        return ApiResponse.of(authService.login(loginDTO));
-    }
+  // 로그인
+  @PostMapping("/login")
+  public ResponseEntity<TokenDTO> login(@Valid @RequestBody LoginDTO loginDTO) {
+    return ApiResponse.of(authService.login(loginDTO));
+  }
 
-    // 엑세스 토큰 재발급
-    @PostMapping("/reissue-token")
-    public ResponseEntity<TokenDTO> reissueToken(@Valid @RequestBody TokenDTO requestTokenDTO) {
-        return ApiResponse.of(authService.reissueToken(requestTokenDTO));
-    }
+  // 엑세스 토큰 재발급
+  @PostMapping("/reissue-token")
+  public ResponseEntity<TokenDTO> reissueToken(@Valid @RequestBody TokenDTO requestTokenDTO) {
+    return ApiResponse.of(authService.reissueToken(requestTokenDTO));
+  }
 
-    // 로그아웃
-    @PostMapping("/logout")
-    public ResponseEntity<String> logout() {
-        authService.logout();
-        return ApiResponse.of("OK");
-    }
+  // 로그아웃
+  @PostMapping("/logout")
+  public ResponseEntity<String> logout() {
+    authService.logout();
+    return ApiResponse.of("OK");
+  }
 
 }

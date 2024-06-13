@@ -16,54 +16,54 @@ import java.util.NoSuchElementException;
 @Slf4j
 public class MemberService {
 
-    private final MemberMapper memberMapper;
-    private final PasswordEncoder passwordEncoder;
+  private final MemberMapper memberMapper;
+  private final PasswordEncoder passwordEncoder;
 
-    @Transactional
-    public void registerMember(MemberDTO memberDTO) {
-        memberDTO.setPassword(passwordEncoder.encode(memberDTO.getPassword()));
-        MemberVO member = MemberVO.of(memberDTO);
+  @Transactional
+  public void registerMember(MemberDTO memberDTO) {
+    memberDTO.setPassword(passwordEncoder.encode(memberDTO.getPassword()));
+    MemberVO member = MemberVO.of(memberDTO);
 
-        memberMapper.insertMember(member);
-    }
+    memberMapper.insertMember(member);
+  }
 
-    @Transactional(readOnly = true)
-    public Boolean isUsernameDuplicated(String userName) {
-        return memberMapper.selectCountByUsername(userName) > 0;
-    }
+  @Transactional(readOnly = true)
+  public Boolean isUsernameDuplicated(String userName) {
+    return memberMapper.selectCountByUsername(userName) > 0;
+  }
 
-    @Transactional(readOnly = true)
-    public Boolean isNicknameDuplicated(String nickname) {
-        return memberMapper.selectCountByNickname(nickname) > 0;
-    }
+  @Transactional(readOnly = true)
+  public Boolean isNicknameDuplicated(String nickname) {
+    return memberMapper.selectCountByNickname(nickname) > 0;
+  }
 
-    @Transactional(readOnly = true)
-    public Boolean isEmailDuplicated(String email) {
-        return memberMapper.selectCountByEmail(email) > 0;
-    }
+  @Transactional(readOnly = true)
+  public Boolean isEmailDuplicated(String email) {
+    return memberMapper.selectCountByEmail(email) > 0;
+  }
 
-    @Transactional(readOnly = true)
-    public MemberResponseDTO getMyProfile() {
-        MemberVO memberVO = memberMapper.selectMemberByMemberId(SecurityUtil.getCurrentUserId())
-                .orElseThrow(() -> new NoSuchElementException("해당 회원을 찾을 수 없습니다."));
+  @Transactional(readOnly = true)
+  public MemberResponseDTO getMyProfile() {
+    MemberVO memberVO = memberMapper.selectMemberByMemberId(SecurityUtil.getCurrentUserId())
+        .orElseThrow(() -> new NoSuchElementException("해당 회원을 찾을 수 없습니다."));
 
-        return MemberResponseDTO.of(memberVO);
-    }
+    return MemberResponseDTO.of(memberVO);
+  }
 
-    @Transactional
-    public void editMyProfile(MemberDTO memberDTO) {
-        memberDTO.setPassword(passwordEncoder.encode(memberDTO.getPassword()));
-        MemberVO member = MemberVO.of(memberDTO, SecurityUtil.getCurrentUserId());
+  @Transactional
+  public void editMyProfile(MemberDTO memberDTO) {
+    memberDTO.setPassword(passwordEncoder.encode(memberDTO.getPassword()));
+    MemberVO member = MemberVO.of(memberDTO, SecurityUtil.getCurrentUserId());
 
-        memberMapper.updateMember(member);
-    }
+    memberMapper.updateMember(member);
+  }
 
-    @Transactional
-    public void removeMyProfile() {
-        memberMapper.selectMemberByMemberId(SecurityUtil.getCurrentUserId())
-                .orElseThrow(() -> new NoSuchElementException("해당 회원을 찾을 수 없습니다."));
+  @Transactional
+  public void removeMyProfile() {
+    memberMapper.selectMemberByMemberId(SecurityUtil.getCurrentUserId())
+        .orElseThrow(() -> new NoSuchElementException("해당 회원을 찾을 수 없습니다."));
 
-        memberMapper.deleteMember(SecurityUtil.getCurrentUserId());
-    }
+    memberMapper.deleteMember(SecurityUtil.getCurrentUserId());
+  }
 
 }

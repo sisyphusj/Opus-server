@@ -8,10 +8,10 @@ import org.springframework.http.ResponseEntity;
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class ApiResponse<T> {
 
-    private int status;
-    private T data;
+  private int status;
+  private T data;
 
-    public static <T> ResponseEntity<T> of(T data) {
-        return new ResponseEntity<>(data, HttpStatus.OK);
-    }
+  public static <T> ResponseEntity<T> of(T data) {
+    return new ResponseEntity<>(data, HttpStatus.OK);
+  }
 }

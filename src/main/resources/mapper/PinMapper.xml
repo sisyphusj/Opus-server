@@ -1,84 +1,91 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
-        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.opus.pin.mapper.PinMapper">
 
-    <insert id="insertPin">
-        insert into pins (pins.member_id, prompt, img_path, width, height, seed, negative_prompt)
-        values (#{memberId}, #{prompt}, #{imagePath}, #{width}, #{height}, #{seed}, #{negativePrompt})
-    </insert>
+  <insert id="insertPin">
+    insert into pins (pins.member_id, prompt, img_path, width, height, seed, negative_prompt)
+    values (#{memberId}, #{prompt}, #{imagePath}, #{width}, #{height}, #{seed}, #{negativePrompt})
+  </insert>
 
-    <select id="selectPinsByKeyword" resultMap="pinList">
-        SELECT pins.pin_id,
-        pins.member_id,
-        member.nickname,
-        pins.img_path,
-        pins.prompt,
-        pins.negative_prompt,
-        pins.width,
-        pins.height,
-        pins.seed
-        FROM pins
-        INNER JOIN member ON pins.member_id = member.member_id
-        <where>
-            <if test="keyword != null and keyword != ''">
-                AND pins.prompt LIKE CONCAT('%', #{keyword}, '%')
-            </if>
-        </where>
-        ORDER BY pins.pin_id DESC
-        LIMIT #{amount} OFFSET #{offset}
-    </select>
+  <select id="selectPinsByKeyword" resultMap="pinList">
+    SELECT pins.pin_id,
+    pins.member_id,
+    member.nickname,
+    pins.img_path,
+    pins.prompt,
+    pins.negative_prompt,
+    pins.width,
+    pins.height,
+    pins.seed
+    FROM pins
+    INNER JOIN member ON pins.member_id = member.member_id
+    <where>
+      <if test="keyword != null and keyword != ''">
+        AND pins.prompt LIKE CONCAT('%', #{keyword}, '%')
+      </if>
+    </where>
+    ORDER BY pins.pin_id DESC
+    LIMIT #{amount} OFFSET #{offset}
+  </select>
 
-    <select id="selectPinsByMemberId" resultMap ="pinList">
-        SELECT pins.pin_id,
-               pins.member_id,
-               member.nickname,
-               pins.img_path,
-               pins.prompt,
-               pins.negative_prompt,
-               pins.width,
-               pins.height,
-               pins.seed
-        FROM pins
-                 INNER JOIN member ON pins.member_id = member.member_id
-        WHERE member.member_id = #{memberId}
-        ORDER BY pins.pin_id DESC
-        LIMIT #{amount} OFFSET #{offset}
-    </select>
+  <select id="selectPinsByMemberId" resultMap="pinList">
+    SELECT pins.pin_id,
+           pins.member_id,
+           member.nickname,
+           pins.img_path,
+           pins.prompt,
+           pins.negative_prompt,
+           pins.width,
+           pins.height,
+           pins.seed
+    FROM pins
+           INNER JOIN member ON pins.member_id = member.member_id
+    WHERE member.member_id = #{memberId}
+    ORDER BY pins.pin_id DESC
+    LIMIT #{amount} OFFSET #{offset}
+  </select>
 
-    <select id="selectPinByPinId" resultMap="pinList">
-        SELECT pins.pin_id, pins.img_path, pins.prompt, pins.negative_prompt, pins.width, pins.height, pins.seed
-        FROM pins
-        WHERE pins.pin_id = #{pinId}
-    </select>
+  <select id="selectPinByPinId" resultMap="pinList">
+    SELECT pins.pin_id,
+           pins.img_path,
+           pins.prompt,
+           pins.negative_prompt,
+           pins.width,
+           pins.height,
+           pins.seed
+    FROM pins
+    WHERE pins.pin_id = #{pinId}
+  </select>
 
-    <select id="countPinsByKeyword" resultType="int">
-        select count(*)
-        from pins
-        <where>
-            <if test="keyword != null and keyword != ''">
-                AND prompt LIKE CONCAT('%', #{keyword}, '%')
-            </if>
-        </where>
-    </select>
+  <select id="countPinsByKeyword" resultType="int">
+    select count(*)
+    from pins
+    <where>
+      <if test="keyword != null and keyword != ''">
+        AND prompt LIKE CONCAT('%', #{keyword}, '%')
+      </if>
+    </where>
+  </select>
 
-    <delete id="deletePin">
-        delete
-        from pins
-        where pin_id = #{pinId} and pins.member_id = #{memberId}
-    </delete>
+  <delete id="deletePin">
+    delete
+    from pins
+    where pin_id = #{pinId}
+      and pins.member_id = #{memberId}
+  </delete>
 
-    <resultMap id="pinList" type="com.opus.pin.domain.PinVO">
-        <id property="pinId" column="pin_id"/>
-        <result property="memberId" column="member_id"/>
-        <result property="nickname" column="nickname"/>
-        <result property="imagePath" column="img_path"/>
-        <result property="prompt" column="prompt"/>
-        <result property="negativePrompt" column="negative_prompt"/>
-        <result property="width" column="width"/>
-        <result property="height" column="height"/>
-        <result property="seed" column="seed"/>
-    </resultMap>
+  <resultMap id="pinList" type="com.opus.pin.domain.PinVO">
+    <id property="pinId" column="pin_id"/>
+    <result property="memberId" column="member_id"/>
+    <result property="nickname" column="nickname"/>
+    <result property="imagePath" column="img_path"/>
+    <result property="prompt" column="prompt"/>
+    <result property="negativePrompt" column="negative_prompt"/>
+    <result property="width" column="width"/>
+    <result property="height" column="height"/>
+    <result property="seed" column="seed"/>
+  </resultMap>
 
 </mapper>

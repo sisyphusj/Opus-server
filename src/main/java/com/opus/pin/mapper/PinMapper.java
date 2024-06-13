@@ -10,15 +10,15 @@ import java.util.Optional;
 @Mapper
 public interface PinMapper {
 
-    void insertPin(PinVO pin);
+  void insertPin(PinVO pin);
 
-    List<PinVO> selectPinsByKeyword(PinListRequestVO pinListRequestVO);
+  List<PinVO> selectPinsByKeyword(PinListRequestVO pinListRequestVO);
 
-    List<PinVO> selectPinsByMemberId(PinListRequestVO pinListRequestVO);
+  List<PinVO> selectPinsByMemberId(PinListRequestVO pinListRequestVO);
 
-    Optional<PinVO> selectPinByPinId(int pid);
+  Optional<PinVO> selectPinByPinId(int pid);
 
-    int countPinsByKeyword(String keyword);
+  int countPinsByKeyword(String keyword);
 
-    void deletePin(int pinId, int memberId);
+  void deletePin(int pinId, int memberId);
 }

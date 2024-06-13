@@ -8,14 +8,14 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 @AllArgsConstructor
 public class LoginDTO {
 
-    @NotBlank
-    private String username;
+  @NotBlank
+  private String username;
 
-    @NotBlank
-    @Setter
-    private String password;
+  @NotBlank
+  @Setter
+  private String password;
 
-    public UsernamePasswordAuthenticationToken toAuthentication() {
-        return new UsernamePasswordAuthenticationToken(username, password);
-    }
+  public UsernamePasswordAuthenticationToken toAuthentication() {
+    return new UsernamePasswordAuthenticationToken(username, password);
+  }
 }

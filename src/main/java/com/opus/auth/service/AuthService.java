@@ -20,59 +20,62 @@ import org.springframework.transaction.annotation.Transactional;
 @Slf4j
 public class AuthService {
 
-    private final RefreshTokenMapper refreshTokenMapper;
-    private final AuthenticationManagerBuilder authenticationManagerBuilder;
-    private final TokenProvider tokenProvider;
+  private final RefreshTokenMapper refreshTokenMapper;
+  private final AuthenticationManagerBuilder authenticationManagerBuilder;
+  private final TokenProvider tokenProvider;
 
-    @Transactional
-    public TokenDTO login(LoginDTO loginDTO) {
+  @Transactional
+  public TokenDTO login(LoginDTO loginDTO) {
 
-        UsernamePasswordAuthenticationToken authToken = loginDTO.toAuthentication();
+    UsernamePasswordAuthenticationToken authToken = loginDTO.toAuthentication();
 
-        Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authToken);
+    Authentication authentication = authenticationManagerBuilder.getObject()
+        .authenticate(authToken);
 
-        TokenDTO tokenDTO = tokenProvider.createToken(authentication);
+    TokenDTO tokenDTO = tokenProvider.createToken(authentication);
 
-        RefreshTokenVO refreshTokenVO = RefreshTokenVO.builder()
-                .key(Integer.parseInt(authentication.getName()))
-                .value(tokenDTO.getRefreshToken())
-                .build();
+    RefreshTokenVO refreshTokenVO = RefreshTokenVO.builder()
+        .key(Integer.parseInt(authentication.getName()))
+        .value(tokenDTO.getRefreshToken())
+        .build();
 
-        refreshTokenMapper.deleteRefreshToken(refreshTokenVO.getKey());
+    refreshTokenMapper.deleteRefreshToken(refreshTokenVO.getKey());
 
-        refreshTokenMapper.insertRefreshToken(refreshTokenVO);
+    refreshTokenMapper.insertRefreshToken(refreshTokenVO);
 
-        return tokenDTO;
+    return tokenDTO;
+  }
+
+  @Transactional
+  public TokenDTO reissueToken(TokenDTO requestTokenDTO) {
+
+    if (!tokenProvider.validateToken(requestTokenDTO.getRefreshToken())) {
+      throw new BadCredentialsException("Refresh Token이 유효하지 않습니다.");
     }
 
-    @Transactional
-    public TokenDTO reissueToken(TokenDTO requestTokenDTO) {
+    Authentication authentication = tokenProvider.getAuthentication(
+        requestTokenDTO.getAccessToken());
 
-        if (!tokenProvider.validateToken(requestTokenDTO.getRefreshToken())) {
-            throw new BadCredentialsException("Refresh Token이 유효하지 않습니다.");
-        }
+    RefreshTokenVO refreshTokenVO = refreshTokenMapper.selectRefreshToken(
+            Integer.parseInt(authentication.getName()))
+        .orElseThrow(() -> new BadCredentialsException("로그아웃된 사용자입니다"));
 
-        Authentication authentication = tokenProvider.getAuthentication(requestTokenDTO.getAccessToken());
-
-        RefreshTokenVO refreshTokenVO = refreshTokenMapper.selectRefreshToken(Integer.parseInt(authentication.getName()))
-                .orElseThrow(() -> new BadCredentialsException("로그아웃된 사용자입니다"));
-
-        if (!refreshTokenVO.getValue().equals(requestTokenDTO.getRefreshToken())) {
-            throw new BadCredentialsException("토큰의 유저 정보가 일치하지 않습니다.");
-        }
-
-        TokenDTO tokenDTO = tokenProvider.createToken(authentication);
-
-        refreshTokenVO.setValue(tokenDTO.getRefreshToken());
-
-        refreshTokenMapper.updateRefreshToken(refreshTokenVO);
-
-        return tokenDTO;
+    if (!refreshTokenVO.getValue().equals(requestTokenDTO.getRefreshToken())) {
+      throw new BadCredentialsException("토큰의 유저 정보가 일치하지 않습니다.");
     }
 
-    @Transactional
-    public void logout() {
-        refreshTokenMapper.deleteRefreshToken(SecurityUtil.getCurrentUserId());
-    }
+    TokenDTO tokenDTO = tokenProvider.createToken(authentication);
+
+    refreshTokenVO.setValue(tokenDTO.getRefreshToken());
+
+    refreshTokenMapper.updateRefreshToken(refreshTokenVO);
+
+    return tokenDTO;
+  }
+
+  @Transactional
+  public void logout() {
+    refreshTokenMapper.deleteRefreshToken(SecurityUtil.getCurrentUserId());
+  }
 
 }

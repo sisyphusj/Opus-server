@@ -8,36 +8,37 @@ import lombok.Setter;
 @Builder
 @Getter
 public class PinVO {
-    @NotNull
-    private int memberId;
 
-    @NotNull
-    private int pinId;
+  @NotNull
+  private int memberId;
 
-    private String nickname;
+  @NotNull
+  private int pinId;
 
-    @Setter
-    private String imagePath;
+  private String nickname;
 
-    private String prompt;
+  @Setter
+  private String imagePath;
 
-    private String negativePrompt;
+  private String prompt;
 
-    private String width;
+  private String negativePrompt;
 
-    private String height;
+  private String width;
 
-    private String seed;
+  private String height;
 
-    public static PinVO of(PinDTO pinDTO, Integer memberId) {
-        return PinVO.builder()
-                .memberId(memberId)
-                .imagePath(pinDTO.getImagePath())
-                .prompt(pinDTO.getPrompt())
-                .negativePrompt(pinDTO.getNegativePrompt())
-                .width(pinDTO.getWidth())
-                .height(pinDTO.getHeight())
-                .seed(pinDTO.getSeed())
-                .build();
-    }
+  private String seed;
+
+  public static PinVO of(PinDTO pinDTO, Integer memberId) {
+    return PinVO.builder()
+        .memberId(memberId)
+        .imagePath(pinDTO.getImagePath())
+        .prompt(pinDTO.getPrompt())
+        .negativePrompt(pinDTO.getNegativePrompt())
+        .width(pinDTO.getWidth())
+        .height(pinDTO.getHeight())
+        .seed(pinDTO.getSeed())
+        .build();
+  }
 }

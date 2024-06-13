@@ -9,14 +9,14 @@ import lombok.Getter;
 @AllArgsConstructor
 public class AuthVO {
 
-    private Integer memberId;
+  private Integer memberId;
 
-    private String username;
+  private String username;
 
-    private String password;
+  private String password;
 
-    private String nickname;
+  private String nickname;
 
-    private String email;
+  private String email;
 
 }

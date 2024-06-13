@@ -8,17 +8,17 @@ import java.util.Optional;
 @Mapper
 public interface MemberMapper {
 
-    void insertMember(MemberVO member);
+  void insertMember(MemberVO member);
 
-    int selectCountByUsername(String userName);
+  int selectCountByUsername(String userName);
 
-    int selectCountByNickname(String nickname);
+  int selectCountByNickname(String nickname);
 
-    int selectCountByEmail(String email);
+  int selectCountByEmail(String email);
 
-    Optional<MemberVO> selectMemberByMemberId(int memberId);
+  Optional<MemberVO> selectMemberByMemberId(int memberId);
 
-    void updateMember(MemberVO member);
+  void updateMember(MemberVO member);
 
-    void deleteMember(int memberId);
+  void deleteMember(int memberId);
 }

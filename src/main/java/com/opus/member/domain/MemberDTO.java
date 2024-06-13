@@ -7,17 +7,17 @@ import lombok.Setter;
 @Getter
 public class MemberDTO {
 
-    @NotBlank
-    private String username;
+  @NotBlank
+  private String username;
 
-    @NotBlank
-    @Setter
-    private String password;
+  @NotBlank
+  @Setter
+  private String password;
 
-    @NotBlank
-    private String nickname;
+  @NotBlank
+  private String nickname;
 
-    @NotBlank
-    private String email;
+  @NotBlank
+  private String email;
 
 }

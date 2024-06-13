@@ -7,12 +7,12 @@ import lombok.*;
 @AllArgsConstructor
 public class PinListRequestVO {
 
-    private Integer memberId;
+  private Integer memberId;
 
-    private Integer amount;
+  private Integer amount;
 
-    private Integer offset;
+  private Integer offset;
 
-    private String keyword;
+  private String keyword;
 
 }

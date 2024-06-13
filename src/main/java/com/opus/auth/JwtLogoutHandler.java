@@ -16,20 +16,21 @@ import java.io.IOException;
 @Component
 public class JwtLogoutHandler implements LogoutHandler {
 
-    @Override
-    public void logout(HttpServletRequest request, jakarta.servlet.http.HttpServletResponse response, Authentication authentication) {
+  @Override
+  public void logout(HttpServletRequest request, jakarta.servlet.http.HttpServletResponse response,
+      Authentication authentication) {
 
-        SecurityContextHolder.clearContext();
+    SecurityContextHolder.clearContext();
 
-        request.getSession().invalidate();
+    request.getSession().invalidate();
 
-        response.setStatus(HttpServletResponse.SC_OK);
+    response.setStatus(HttpServletResponse.SC_OK);
 
-        try {
-            response.getWriter().write("로그아웃 성공");
-        } catch (IOException e) {
-            log.error(e.getMessage());
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR);
-        }
+    try {
+      response.getWriter().write("로그아웃 성공");
+    } catch (IOException e) {
+      log.error(e.getMessage());
+      throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR);
     }
+  }
 }

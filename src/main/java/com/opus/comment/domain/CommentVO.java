@@ -7,23 +7,23 @@ import lombok.Getter;
 @Builder
 public class CommentVO {
 
-    private Integer commentId;
+  private Integer commentId;
 
-    private int pinId;
+  private int pinId;
 
-    private int memberId;
+  private int memberId;
 
-    private String nickname;
+  private String nickname;
 
-    private Integer topLevelCommentId;
+  private Integer topLevelCommentId;
 
-    private String parentNickname;
+  private String parentNickname;
 
-    private int level;
+  private int level;
 
-    private String content;
+  private String content;
 
-    private String createdDate;
+  private String createdDate;
 
-    private String updatedDate;
+  private String updatedDate;
 }

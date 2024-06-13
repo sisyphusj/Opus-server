@@ -7,16 +7,16 @@ import lombok.Getter;
 @Getter
 public class CommentDTO {
 
-    @NotBlank
-    private Integer pinId;
+  @NotBlank
+  private Integer pinId;
 
-    private Integer topLevelCommentId;
+  private Integer topLevelCommentId;
 
-    private String parentNickname;
+  private String parentNickname;
 
-    @Max(1)
-    private int level;
+  @Max(1)
+  private int level;
 
-    @NotBlank(message = "내용을 입력해주세요.")
-    private String content;
+  @NotBlank(message = "내용을 입력해주세요.")
+  private String content;
 }
