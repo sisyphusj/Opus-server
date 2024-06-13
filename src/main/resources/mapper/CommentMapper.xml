@@ -11,14 +11,16 @@
 
   <select id="selectCommentsByPinId" resultMap="commentList">
     SELECT comment_id,
-           comment.pin_id,
-           member.nickname,
+           pin_id,
+           comment.member_id,
            top_level_comment_id,
            level,
            content,
            created_at,
            updated_at,
-           parent_nickname
+           deleted_at,
+           parent_nickname,
+           member.nickname
     FROM comment
            INNER JOIN member ON comment.member_id = member.member_id
     WHERE comment.pin_id = #{pinId}
@@ -28,14 +30,16 @@
 
   <select id="selectCommentsByMemberId" resultMap="commentList">
     SELECT comment_id,
-           comment.pin_id,
-           member.nickname,
+           pin_id,
+           comment.member_id,
            top_level_comment_id,
            level,
            content,
            created_at,
            updated_at,
-           parent_nickname
+           deleted_at,
+           parent_nickname,
+           member.nickname
     FROM comment
            INNER JOIN member ON comment.member_id = member.member_id
     WHERE comment.member_id = #{memberId}
@@ -45,14 +49,16 @@
 
   <select id="selectCommentByCommentId" resultMap="commentList">
     SELECT comment_id,
-           comment.pin_id,
-           member.nickname,
+           pin_id,
+           comment.member_id,
            top_level_comment_id,
            level,
            content,
            created_at,
            updated_at,
-           parent_nickname
+           deleted_at,
+           parent_nickname,
+           member.nickname
     FROM comment
            INNER JOIN member ON comment.member_id = member.member_id
     WHERE comment_id = #{commentId}
@@ -84,13 +90,15 @@
   <resultMap id="commentList" type="com.opus.comment.domain.CommentVO">
     <id property="commentId" column="comment_id"/>
     <result property="pinId" column="pin_id"/>
-    <result property="memberNickname" column="nickname"/>
+    <result property="memberId" column="comment.member_id"/>
     <result property="topLevelCommentId" column="top_level_comment_id"/>
     <result property="level" column="level"/>
     <result property="content" column="content"/>
     <result property="createdDate" column="created_at"/>
     <result property="updatedDate" column="updated_at"/>
+    <result property="deletedDate" column="deleted_at"/>
     <result property="parentNickname" column="parent_nickname"/>
+    <result property="nickname" column="member.nickname"/>
   </resultMap>
 
 </mapper>

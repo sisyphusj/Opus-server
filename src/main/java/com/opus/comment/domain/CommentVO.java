@@ -1,5 +1,6 @@
 package com.opus.comment.domain;
 
+import java.time.LocalDateTime;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -13,17 +14,20 @@ public class CommentVO {
 
   private int memberId;
 
-  private String nickname;
-
   private Integer topLevelCommentId;
-
-  private String parentNickname;
 
   private int level;
 
   private String content;
 
-  private String createdDate;
+  private LocalDateTime createdDate;
 
-  private String updatedDate;
+  private LocalDateTime updatedDate;
+
+  private LocalDateTime deletedDate;
+
+  private String parentNickname;
+
+  private String nickname;
+
 }

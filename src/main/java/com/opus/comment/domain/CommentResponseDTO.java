@@ -1,5 +1,6 @@
 package com.opus.comment.domain;
 
+import java.time.LocalDateTime;
 import lombok.Builder;
 import lombok.Getter;
 import java.util.List;
@@ -22,9 +23,11 @@ public class CommentResponseDTO {
 
   private String content;
 
-  private String createdDate;
+  private LocalDateTime createdDate;
 
-  private String updatedDate;
+  private LocalDateTime updatedDate;
+
+  private LocalDateTime deletedDate;
 
   public static CommentResponseDTO of(CommentVO comment) {
     return CommentResponseDTO.builder()
@@ -37,6 +40,7 @@ public class CommentResponseDTO {
         .content(comment.getContent())
         .createdDate(comment.getCreatedDate())
         .updatedDate(comment.getUpdatedDate())
+        .deletedDate(comment.getDeletedDate())
         .build();
   }
 
