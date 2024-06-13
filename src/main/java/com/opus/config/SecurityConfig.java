@@ -1,6 +1,5 @@
 package com.opus.config;
 
-import com.opus.auth.JwtLogoutHandler;
 import com.opus.common.PermittedUrls;
 import com.opus.filter.JwtFilter;
 import com.opus.auth.TokenProvider;
@@ -92,14 +91,6 @@ public class SecurityConfig {
         .addFilterBefore(
             new JwtFilter(tokenProvider),
             UsernamePasswordAuthenticationFilter.class
-        )
-
-        .logout(logout -> logout
-            .logoutUrl("/api/auth/logout")
-            .addLogoutHandler(new JwtLogoutHandler())
-            .invalidateHttpSession(true)
-            .deleteCookies("Authorization")
-            .permitAll()
         );
 
     return httpSecurity.build();

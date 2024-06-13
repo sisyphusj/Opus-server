@@ -4,6 +4,7 @@ import com.opus.auth.domain.LoginDTO;
 import com.opus.auth.service.AuthService;
 import com.opus.auth.domain.TokenDTO;
 import com.opus.common.ApiResponse;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -32,8 +33,8 @@ public class AuthController {
 
   // 로그아웃
   @PostMapping("/logout")
-  public ResponseEntity<String> logout() {
-    authService.logout();
+  public ResponseEntity<String> logout(HttpServletRequest request) {
+    authService.logout(request);
     return ApiResponse.of("OK");
   }
 
