@@ -2,16 +2,15 @@ package com.opus.comment.service;
 
 import com.opus.comment.domain.CommentResponseDTO;
 import com.opus.comment.domain.CommentUpdateDTO;
+import com.opus.exception.BusinessException;
 import com.opus.utils.SecurityUtil;
 import com.opus.comment.domain.CommentInsertDTO;
 import com.opus.comment.domain.CommentVO;
 import com.opus.comment.mapper.CommentMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -76,7 +75,7 @@ public class CommentService {
         .orElseThrow(() -> new NoSuchElementException("해당 댓글이 존재하지 않습니다."));
 
     if (commentMapper.countChildCommentsByCommentId(commentId) > 0) {
-      throw new ResponseStatusException(HttpStatus.NOT_FOUND, "자식 댓글이 존재하는 댓글은 삭제할 수 없습니다.");
+      throw new BusinessException("자식 댓글이 존재하는 댓글은 삭제할 수 없습니다.");
     }
 
     // TODO 삭제 권한 검증 추가

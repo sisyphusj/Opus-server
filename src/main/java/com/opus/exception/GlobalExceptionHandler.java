@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.security.authentication.AuthenticationCredentialsNotFoundException;
 import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
@@ -21,7 +22,6 @@ import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.servlet.NoHandlerFoundException;
 
 import javax.security.sasl.AuthenticationException;
-import java.io.IOException;
 import java.util.NoSuchElementException;
 
 @RestControllerAdvice
@@ -111,19 +111,6 @@ public class GlobalExceptionHandler {
   }
 
   /**
-   * IO Exception
-   *
-   * @param e IOException
-   * @return ResponseEntity<ErrorResponse>
-   */
-  @ExceptionHandler(IOException.class)
-  protected ResponseEntity<ErrorResponse> handleIOException(IOException e) {
-    log.error("handleIOException", e);
-    final ErrorResponse response = ErrorResponse.of(ResponseCode.IO_EXCEPTION, e.getMessage());
-    return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
-  }
-
-  /**
    * 잘못된 서버 요청
    *
    * @param e HttpClientErrorException
@@ -146,7 +133,7 @@ public class GlobalExceptionHandler {
   @ExceptionHandler(AuthenticationException.class)
   public ResponseEntity<ErrorResponse> handleAuthenticationException(AuthenticationException e) {
     log.error("handleAuthenticationException", e);
-    final ErrorResponse response = ErrorResponse.of(ResponseCode.USER_UNAUTHORIZED, e.getMessage());
+    final ErrorResponse response = ErrorResponse.of(ResponseCode.USER_UNAUTHORIZED, "인증 오류");
     return new ResponseEntity<>(response, HttpStatus.UNAUTHORIZED);
   }
 
@@ -216,7 +203,21 @@ public class GlobalExceptionHandler {
   protected ResponseEntity<ErrorResponse> handleBadCredentialsException(BadCredentialsException e) {
     log.error("handleBadCredentialsException", e);
     final ErrorResponse response = ErrorResponse.of(ResponseCode.ID_OR_PASSWORD_NOT_VALID,
-        e.getMessage());
+        "잘못된 자격증명입니다.");
+    return new ResponseEntity<>(response, HttpStatus.UNAUTHORIZED);
+  }
+
+  /**
+   * UsernameNotFoundException 처리
+   *
+   * @param e
+   * @return
+   */
+  @ExceptionHandler(UsernameNotFoundException.class)
+  protected ResponseEntity<ErrorResponse> handleUsernameNotFoundException(
+      UsernameNotFoundException e) {
+    log.error("handleUsernameNotFoundException", e);
+    final ErrorResponse response = ErrorResponse.of(ResponseCode.USER_NOT_FOUND, e.getMessage());
     return new ResponseEntity<>(response, HttpStatus.UNAUTHORIZED);
   }
 
@@ -234,17 +235,15 @@ public class GlobalExceptionHandler {
   }
 
   /**
-   * 모든 예외 처리
+   * 모든 예외 처리 시스템 내부 오류 처리 (사용자에게 노출되지 않음)
    *
    * @param e Exception
    * @return ResponseEntity<ErrorResponse>
    */
   @ExceptionHandler(Exception.class)
   protected final ResponseEntity<ErrorResponse> handleAllExceptions(Exception e) {
-    log.error("handleException {} , {}", e, e.toString());
-    log.error("stack trace", e);
-    final ErrorResponse response = ErrorResponse.of(ResponseCode.INTERNAL_SERVER_ERROR,
-        e.getMessage());
+    log.error("error : ", e);
+    final ErrorResponse response = ErrorResponse.of(ResponseCode.INTERNAL_SERVER_ERROR);
     return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
   }
 

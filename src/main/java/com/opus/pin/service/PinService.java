@@ -72,7 +72,7 @@ public class PinService {
 
     } catch (IOException e) {
       log.error("IO Exception occurred while processing the image", e);
-      throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "internal server error");
+      throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
 
