@@ -50,6 +50,7 @@ public enum ResponseCode {
      */
     USER_UNAUTHORIZED(401, "A001", "허가받지 않은 요청입니다."),
     SESSION_NOT_VALID(401, "A002", "세션이 유효하지 않습니다."),
+    ID_OR_PASSWORD_NOT_VALID(401, "A003", "아이디 또는 비밀번호가 올바르지 않습니다."),
 
     /**
      * 404 Not Found
