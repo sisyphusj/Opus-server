@@ -10,15 +10,15 @@
   </insert>
 
   <select id="selectPinsByKeyword" resultMap="pinList">
-    SELECT pins.pin_id,
+    SELECT pin_id,
     pins.member_id,
-    member.nickname,
-    pins.img_path,
     pins.prompt,
     pins.negative_prompt,
+    pins.img_path,
     pins.width,
     pins.height,
-    pins.seed
+    pins.seed,
+    member.nickname
     FROM pins
     INNER JOIN member ON pins.member_id = member.member_id
     <where>
@@ -31,15 +31,15 @@
   </select>
 
   <select id="selectPinsByMemberId" resultMap="pinList">
-    SELECT pins.pin_id,
+    SELECT pin_id,
            pins.member_id,
-           member.nickname,
-           pins.img_path,
            pins.prompt,
            pins.negative_prompt,
+           pins.img_path,
            pins.width,
            pins.height,
-           pins.seed
+           pins.seed,
+           member.nickname
     FROM pins
            INNER JOIN member ON pins.member_id = member.member_id
     WHERE member.member_id = #{memberId}
@@ -47,11 +47,12 @@
     LIMIT #{amount} OFFSET #{offset}
   </select>
 
-  <select id="selectPinByPinId" resultMap="pinList">
-    SELECT pins.pin_id,
-           pins.img_path,
+  <select id="selectPinByPinId" resultType="com.opus.pin.domain.PinVO">
+    SELECT pin_id,
+           pins.member_id,
            pins.prompt,
            pins.negative_prompt,
+           pins.img_path,
            pins.width,
            pins.height,
            pins.seed
@@ -76,16 +77,16 @@
       and pins.member_id = #{memberId}
   </delete>
 
-  <resultMap id="pinList" type="com.opus.pin.domain.PinVO">
+  <resultMap id="pinList" type="com.opus.pin.domain.PinListVO">
     <id property="pinId" column="pin_id"/>
-    <result property="memberId" column="member_id"/>
-    <result property="nickname" column="nickname"/>
-    <result property="imagePath" column="img_path"/>
+    <result property="memberId" column="pin.member_id"/>
     <result property="prompt" column="prompt"/>
     <result property="negativePrompt" column="negative_prompt"/>
+    <result property="imagePath" column="img_path"/>
     <result property="width" column="width"/>
     <result property="height" column="height"/>
     <result property="seed" column="seed"/>
+    <result property="nickname" column="member.nickname"/>
   </resultMap>
 
 </mapper>

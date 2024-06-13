@@ -1,6 +1,7 @@
 package com.opus.pin.mapper;
 
 import com.opus.pin.domain.PinListRequestVO;
+import com.opus.pin.domain.PinListVO;
 import com.opus.pin.domain.PinVO;
 import org.apache.ibatis.annotations.Mapper;
 
@@ -12,9 +13,9 @@ public interface PinMapper {
 
   void insertPin(PinVO pin);
 
-  List<PinVO> selectPinsByKeyword(PinListRequestVO pinListRequestVO);
+  List<PinListVO> selectPinsByKeyword(PinListRequestVO pinListRequestVO);
 
-  List<PinVO> selectPinsByMemberId(PinListRequestVO pinListRequestVO);
+  List<PinListVO> selectPinsByMemberId(PinListRequestVO pinListRequestVO);
 
   Optional<PinVO> selectPinByPinId(int pid);
 

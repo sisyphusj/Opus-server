@@ -3,6 +3,7 @@ package com.opus.pin.controller;
 import com.opus.common.ApiResponse;
 import com.opus.pin.domain.PinDTO;
 import com.opus.pin.domain.PinListResponseDTO;
+import com.opus.pin.domain.PinResponseDTO;
 import com.opus.pin.service.PinService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -45,7 +46,7 @@ public class PinController {
 
   // pinId 로 pin 조회
   @GetMapping("/{pinId}")
-  public ResponseEntity<PinListResponseDTO> getPinByPinId(@PathVariable int pinId) {
+  public ResponseEntity<PinResponseDTO> getPinByPinId(@PathVariable int pinId) {
     return ApiResponse.of(pinService.getPinByPinId(pinId));
   }
 

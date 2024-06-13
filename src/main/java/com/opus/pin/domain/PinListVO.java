@@ -6,7 +6,7 @@ import lombok.Setter;
 
 @Builder
 @Getter
-public class PinVO {
+public class PinListVO {
 
   private int pinId;
 
@@ -25,8 +25,10 @@ public class PinVO {
 
   private String seed;
 
-  public static PinVO of(PinDTO pinDTO, Integer memberId) {
-    return PinVO.builder()
+  private String nickname;
+
+  public static PinListVO of(PinDTO pinDTO, Integer memberId) {
+    return PinListVO.builder()
         .memberId(memberId)
         .imagePath(pinDTO.getImagePath())
         .prompt(pinDTO.getPrompt())

@@ -27,21 +27,21 @@ public class PinListResponseDTO {
 
   private String seed;
 
-  public static PinListResponseDTO of(PinVO pinVO) {
+  public static PinListResponseDTO of(PinListVO pinListVO) {
     return PinListResponseDTO.builder()
-        .pinId(pinVO.getPinId())
-        .nickname(pinVO.getNickname())
-        .imagePath(pinVO.getImagePath())
-        .prompt(pinVO.getPrompt())
-        .negativePrompt(pinVO.getNegativePrompt())
-        .width(pinVO.getWidth())
-        .height(pinVO.getHeight())
-        .seed(pinVO.getSeed())
+        .pinId(pinListVO.getPinId())
+        .nickname(pinListVO.getNickname())
+        .imagePath(pinListVO.getImagePath())
+        .prompt(pinListVO.getPrompt())
+        .negativePrompt(pinListVO.getNegativePrompt())
+        .width(pinListVO.getWidth())
+        .height(pinListVO.getHeight())
+        .seed(pinListVO.getSeed())
         .build();
   }
 
-  public static List<PinListResponseDTO> of(List<PinVO> pinVOList) {
-    return pinVOList.stream()
+  public static List<PinListResponseDTO> of(List<PinListVO> pinListVO) {
+    return pinListVO.stream()
         .map(PinListResponseDTO::of)
         .toList();
   }
