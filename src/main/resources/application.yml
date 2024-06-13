@@ -18,7 +18,7 @@ mybatis:
     map-underscore-to-camel-case: true
   type-aliases-package: com.opus.**
   mapper-locations: classpath:mapper/*.xml
- 
+
 spring:
   datasource:
     driver-class-name: net.sf.log4jdbc.sql.jdbcapi.DriverSpy
@@ -40,4 +40,4 @@ local:
 jwt:
   secret: 9de40f72d94d5bbce017acf7cbe4b3c04cbeef6e96f94b47cbaff1414afe831b73486c124e2417c6ebf897124d6954714fa61d83dfbe230d052757f967a1d517
   header: Authorization
-  token-validity-in-seconds: 86400
+  token-validity-in-seconds: 300
