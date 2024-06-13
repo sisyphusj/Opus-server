@@ -181,19 +181,6 @@ public class GlobalExceptionHandler {
     }
 
     /**
-     * 중복된 데이터가 있는 경우
-     *
-     * @param e DuplicateEntryException
-     * @return ResponseEntity<ErrorResponse>
-     */
-    @ExceptionHandler(DuplicateEntryException.class)
-    protected ResponseEntity<ErrorResponse> handleDuplicateEntryException(DuplicateEntryException e) {
-        log.error("handleDuplicateEntryException", e);
-        final ErrorResponse response = ErrorResponse.of(ResponseCode.DATA_ALREADY_EXIST, e.getMessage());
-        return new ResponseEntity<>(response, HttpStatus.CONFLICT);
-    }
-
-    /**
      * ResponseStatusException 처리
      *
      * @param e ResponseStatusException
@@ -249,13 +236,13 @@ public class GlobalExceptionHandler {
     /**
      * 비즈니스 로직에서 발생하는 예외 처리
      *
-     * @param e BusinessExceptionHandler
+     * @param e BusinessException
      * @return ResponseEntity<ErrorResponse>
      */
-    @ExceptionHandler(BusinessExceptionHandler.class)
-    public ResponseEntity<ErrorResponse> handleBusinessException(BusinessExceptionHandler e) {
+    @ExceptionHandler(BusinessException.class)
+    public ResponseEntity<ErrorResponse> handleBusinessException(BusinessException e) {
         log.error("handleBusinessException", e);
-        final ErrorResponse response = ErrorResponse.of(ResponseCode.BUSINESS_ERROR, e.getMessage());
+        final ErrorResponse response = ErrorResponse.of(e.getResponseCode(), e.getMessage());
         return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 }
