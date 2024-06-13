@@ -21,10 +21,8 @@ public class MemberService {
 
   @Transactional
   public void registerMember(MemberInsertDTO memberInsertDTO) {
-    memberInsertDTO.setPassword(passwordEncoder.encode(memberInsertDTO.getPassword()));
-    MemberVO member = MemberVO.of(memberInsertDTO);
-
-    memberMapper.insertMember(member);
+    memberInsertDTO.updatePassword(passwordEncoder.encode(memberInsertDTO.getPassword()));
+    memberMapper.insertMember(MemberVO.of(memberInsertDTO));
   }
 
   @Transactional(readOnly = true)
@@ -44,18 +42,15 @@ public class MemberService {
 
   @Transactional(readOnly = true)
   public MemberResponseDTO getMyProfile() {
-    MemberVO memberVO = memberMapper.selectMemberByMemberId(SecurityUtil.getCurrentUserId())
+    return memberMapper.selectMemberByMemberId(SecurityUtil.getCurrentUserId())
+        .map(MemberResponseDTO::of)
         .orElseThrow(() -> new NoSuchElementException("해당 회원을 찾을 수 없습니다."));
-
-    return MemberResponseDTO.of(memberVO);
   }
 
   @Transactional
   public void editMyProfile(MemberInsertDTO memberInsertDTO) {
-    memberInsertDTO.setPassword(passwordEncoder.encode(memberInsertDTO.getPassword()));
-    MemberVO member = MemberVO.of(memberInsertDTO, SecurityUtil.getCurrentUserId());
-
-    memberMapper.updateMember(member);
+    memberInsertDTO.updatePassword(passwordEncoder.encode(memberInsertDTO.getPassword()));
+    memberMapper.updateMember(MemberVO.of(memberInsertDTO, SecurityUtil.getCurrentUserId()));
   }
 
   @Transactional

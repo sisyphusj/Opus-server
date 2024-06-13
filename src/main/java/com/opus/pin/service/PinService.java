@@ -100,10 +100,9 @@ public class PinService {
 
   @Transactional
   public PinResponseDTO getPinByPinId(int pinId) {
-    PinVO pin = pinMapper.selectPinByPinId(pinId)
+    return pinMapper.selectPinByPinId(pinId)
+        .map(PinResponseDTO::of)
         .orElseThrow(() -> new NoSuchElementException("해당 핀을 찾을 수 없습니다."));
-
-    return PinResponseDTO.of(pin);
   }
 
   @Transactional(readOnly = true)

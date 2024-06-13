@@ -2,7 +2,6 @@ package com.opus.member.domain;
 
 import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
-import lombok.Setter;
 
 @Getter
 public class MemberInsertDTO {
@@ -11,7 +10,6 @@ public class MemberInsertDTO {
   private String username;
 
   @NotBlank
-  @Setter
   private String password;
 
   @NotBlank
@@ -19,5 +17,9 @@ public class MemberInsertDTO {
 
   @NotBlank
   private String email;
+
+  public void updatePassword(String password) {
+    this.password = password;
+  }
 
 }
