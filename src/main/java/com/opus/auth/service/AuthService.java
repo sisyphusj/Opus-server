@@ -34,7 +34,7 @@ public class AuthService {
         TokenDTO tokenDTO = tokenProvider.createToken(authentication);
 
         RefreshTokenVO refreshTokenVO = RefreshTokenVO.builder()
-                .key(authentication.getName())
+                .key(Integer.parseInt(authentication.getName()))
                 .value(tokenDTO.getRefreshToken())
                 .build();
 
@@ -54,7 +54,7 @@ public class AuthService {
 
         Authentication authentication = tokenProvider.getAuthentication(requestTokenDTO.getAccessToken());
 
-        RefreshTokenVO refreshTokenVO = refreshTokenMapper.selectRefreshToken(authentication.getName())
+        RefreshTokenVO refreshTokenVO = refreshTokenMapper.selectRefreshToken(Integer.parseInt(authentication.getName()))
                 .orElseThrow(() -> new BadCredentialsException("로그아웃된 사용자입니다"));
 
         if (!refreshTokenVO.getValue().equals(requestTokenDTO.getRefreshToken())) {
@@ -72,10 +72,7 @@ public class AuthService {
 
     @Transactional
     public void logout() {
-
-        String memberId = String.valueOf(SecurityUtil.getCurrentUserId());
-
-        refreshTokenMapper.deleteRefreshToken(memberId);
+        refreshTokenMapper.deleteRefreshToken(SecurityUtil.getCurrentUserId());
     }
 
 }

@@ -10,8 +10,8 @@ import lombok.Setter;
 @AllArgsConstructor
 public class RefreshTokenVO {
 
-    // username
-    private String key;
+    // memberId
+    private int key;
 
     // refresh token
     @Setter

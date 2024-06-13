@@ -10,9 +10,9 @@ public interface RefreshTokenMapper {
 
     void insertRefreshToken(RefreshTokenVO refreshTokenVO);
 
-    Optional<RefreshTokenVO> selectRefreshToken(String key);
+    Optional<RefreshTokenVO> selectRefreshToken(int key);
 
     void updateRefreshToken(RefreshTokenVO refreshTokenVO);
 
-    void deleteRefreshToken(String key);
+    void deleteRefreshToken(int key);
 }
