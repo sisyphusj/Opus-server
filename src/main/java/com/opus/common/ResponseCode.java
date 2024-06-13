@@ -56,6 +56,7 @@ public enum ResponseCode {
    */
   NOT_FOUND_ERROR(404, "U001", "요청한 리소스가 존재하지 않습니다."),
   NULL_POINT_ERROR(404, "U002", "Null Point Exception 발생"),
+  USER_NOT_FOUND(404, "U003", "사용자를 찾을 수 없습니다."),
 
   /**
    * 405 Method Not Allowed
