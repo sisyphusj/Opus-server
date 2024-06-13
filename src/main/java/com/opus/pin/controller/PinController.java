@@ -1,7 +1,7 @@
 package com.opus.pin.controller;
 
 import com.opus.common.ApiResponse;
-import com.opus.pin.domain.PinDTO;
+import com.opus.pin.domain.PinInsertDTO;
 import com.opus.pin.domain.PinListResponseDTO;
 import com.opus.pin.domain.PinResponseDTO;
 import com.opus.pin.service.PinService;
@@ -24,8 +24,8 @@ public class PinController {
 
   // pin 추가
   @PostMapping
-  public ResponseEntity<String> addPin(@Valid @RequestBody PinDTO pinDTO) {
-    pinService.addPin(pinDTO);
+  public ResponseEntity<String> addPin(@Valid @RequestBody PinInsertDTO pinInsertDTO) {
+    pinService.addPin(pinInsertDTO);
     return ApiResponse.of("OK");
   }
 

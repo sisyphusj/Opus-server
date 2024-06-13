@@ -25,15 +25,15 @@ public class PinVO {
 
   private String seed;
 
-  public static PinVO of(PinDTO pinDTO, Integer memberId) {
+  public static PinVO of(PinInsertDTO pinInsertDTO, Integer memberId) {
     return PinVO.builder()
         .memberId(memberId)
-        .imagePath(pinDTO.getImagePath())
-        .prompt(pinDTO.getPrompt())
-        .negativePrompt(pinDTO.getNegativePrompt())
-        .width(pinDTO.getWidth())
-        .height(pinDTO.getHeight())
-        .seed(pinDTO.getSeed())
+        .imagePath(pinInsertDTO.getImagePath())
+        .prompt(pinInsertDTO.getPrompt())
+        .negativePrompt(pinInsertDTO.getNegativePrompt())
+        .width(pinInsertDTO.getWidth())
+        .height(pinInsertDTO.getHeight())
+        .seed(pinInsertDTO.getSeed())
         .build();
   }
 }

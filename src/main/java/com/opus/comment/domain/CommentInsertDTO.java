@@ -6,7 +6,7 @@ import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 
 @Getter
-public class CommentDTO {
+public class CommentInsertDTO {
 
   @NotNull
   private Integer pinId;

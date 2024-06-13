@@ -40,8 +40,8 @@ public class PinService {
   }
 
   @Transactional
-  public void addPin(PinDTO pinDTO) {
-    PinVO pin = PinVO.of(pinDTO, SecurityUtil.getCurrentUserId());
+  public void addPin(PinInsertDTO pinInsertDTO) {
+    PinVO pin = PinVO.of(pinInsertDTO, SecurityUtil.getCurrentUserId());
 
     try {
       // URL에서 이미지를 다운로드

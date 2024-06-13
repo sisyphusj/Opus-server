@@ -4,7 +4,7 @@ import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
 
 @Getter
-public class PinDTO {
+public class PinInsertDTO {
 
   @NotBlank
   private String imagePath;

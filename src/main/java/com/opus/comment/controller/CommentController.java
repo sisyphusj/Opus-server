@@ -1,6 +1,6 @@
 package com.opus.comment.controller;
 
-import com.opus.comment.domain.CommentDTO;
+import com.opus.comment.domain.CommentInsertDTO;
 import com.opus.comment.domain.CommentResponseDTO;
 import com.opus.comment.domain.CommentUpdateDTO;
 import com.opus.comment.service.CommentService;
@@ -23,8 +23,8 @@ public class CommentController {
 
   // 댓글 추가
   @PostMapping
-  public ResponseEntity<String> addComment(@Valid @RequestBody CommentDTO commentDTO) {
-    commentService.addComment(commentDTO);
+  public ResponseEntity<String> addComment(@Valid @RequestBody CommentInsertDTO commentInsertDTO) {
+    commentService.addComment(commentInsertDTO);
     return ApiResponse.of("OK");
   }
 

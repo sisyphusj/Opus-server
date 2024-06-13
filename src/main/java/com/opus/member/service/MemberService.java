@@ -20,9 +20,9 @@ public class MemberService {
   private final PasswordEncoder passwordEncoder;
 
   @Transactional
-  public void registerMember(MemberDTO memberDTO) {
-    memberDTO.setPassword(passwordEncoder.encode(memberDTO.getPassword()));
-    MemberVO member = MemberVO.of(memberDTO);
+  public void registerMember(MemberInsertDTO memberInsertDTO) {
+    memberInsertDTO.setPassword(passwordEncoder.encode(memberInsertDTO.getPassword()));
+    MemberVO member = MemberVO.of(memberInsertDTO);
 
     memberMapper.insertMember(member);
   }
@@ -51,9 +51,9 @@ public class MemberService {
   }
 
   @Transactional
-  public void editMyProfile(MemberDTO memberDTO) {
-    memberDTO.setPassword(passwordEncoder.encode(memberDTO.getPassword()));
-    MemberVO member = MemberVO.of(memberDTO, SecurityUtil.getCurrentUserId());
+  public void editMyProfile(MemberInsertDTO memberInsertDTO) {
+    memberInsertDTO.setPassword(passwordEncoder.encode(memberInsertDTO.getPassword()));
+    MemberVO member = MemberVO.of(memberInsertDTO, SecurityUtil.getCurrentUserId());
 
     memberMapper.updateMember(member);
   }

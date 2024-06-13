@@ -5,7 +5,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 @Getter
-public class MemberDTO {
+public class MemberInsertDTO {
 
   @NotBlank
   private String username;

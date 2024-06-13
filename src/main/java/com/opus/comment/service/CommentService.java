@@ -3,7 +3,7 @@ package com.opus.comment.service;
 import com.opus.comment.domain.CommentResponseDTO;
 import com.opus.comment.domain.CommentUpdateDTO;
 import com.opus.utils.SecurityUtil;
-import com.opus.comment.domain.CommentDTO;
+import com.opus.comment.domain.CommentInsertDTO;
 import com.opus.comment.domain.CommentVO;
 import com.opus.comment.mapper.CommentMapper;
 import lombok.RequiredArgsConstructor;
@@ -24,15 +24,15 @@ public class CommentService {
   private final CommentMapper commentMapper;
 
   @Transactional
-  public void addComment(CommentDTO commentDTO) {
+  public void addComment(CommentInsertDTO commentInsertDTO) {
 
     CommentVO comment = CommentVO.builder()
-        .pinId(commentDTO.getPinId())
+        .pinId(commentInsertDTO.getPinId())
         .memberId(SecurityUtil.getCurrentUserId())
-        .topLevelCommentId(commentDTO.getTopLevelCommentId())
-        .level(commentDTO.getLevel())
-        .content(commentDTO.getContent())
-        .parentNickname(commentDTO.getParentNickname())
+        .topLevelCommentId(commentInsertDTO.getTopLevelCommentId())
+        .level(commentInsertDTO.getLevel())
+        .content(commentInsertDTO.getContent())
+        .parentNickname(commentInsertDTO.getParentNickname())
         .build();
 
     commentMapper.insertComment(comment);
