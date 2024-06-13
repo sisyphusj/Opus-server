@@ -1,10 +1,12 @@
 package com.opus.filter;
 
 import com.opus.auth.TokenProvider;
+import com.opus.common.PermittedUrls;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import java.util.Arrays;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
@@ -26,6 +28,12 @@ public class JwtFilter extends OncePerRequestFilter {
       FilterChain filterChain) throws IOException, ServletException {
     String jwt = resolveToken(request);
     String requestURI = request.getRequestURI();
+
+    if (Arrays.stream(PermittedUrls.PERMITTED_URLS)
+        .noneMatch((requestURI::startsWith))) {
+      filterChain.doFilter(request, response);
+      return;
+    }
 
     if (StringUtils.hasText(jwt) && tokenProvider.validateToken(jwt)) {
       Authentication authentication = tokenProvider.getAuthentication(jwt);

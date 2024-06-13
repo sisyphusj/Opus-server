@@ -1,6 +1,7 @@
 package com.opus.config;
 
 import com.opus.auth.JwtLogoutHandler;
+import com.opus.common.PermittedUrls;
 import com.opus.filter.JwtFilter;
 import com.opus.auth.TokenProvider;
 import lombok.RequiredArgsConstructor;
@@ -34,11 +35,6 @@ public class SecurityConfig {
   private final TokenProvider tokenProvider;
   private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
   private final JwtAccessDeniedHandler jwtAccessDeniedHandler;
-
-  private final String[] permittedUrls = {"/api/auth/login", "/api/auth/logout",
-      "/api/auth/reissue-token", "/api/member/register",
-      "/api/member/check/**", "/api/pins", "/api/pins/total", "/error"};
-
 
   @Bean
   public PasswordEncoder passwordEncoder() {
@@ -88,9 +84,7 @@ public class SecurityConfig {
         .authorizeHttpRequests(
             authorizeRequests -> authorizeRequests
                 .requestMatchers(HttpMethod.GET, "/api/auth/test").permitAll()
-                .requestMatchers(HttpMethod.GET, "/api/pins/comments").permitAll()
-                .requestMatchers(HttpMethod.PUT, "/api/pins/comments").authenticated()
-                .requestMatchers(permittedUrls).permitAll()
+                .requestMatchers(PermittedUrls.PERMITTED_URLS).permitAll()
                 .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                 .anyRequest().authenticated()
         )
