@@ -3,7 +3,6 @@ package com.opus.auth.domain;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
-import lombok.Setter;
 
 @Getter
 @Builder
@@ -14,7 +13,10 @@ public class RefreshTokenVO {
   private int key;
 
   // refresh token
-  @Setter
   private String value;
+
+  public void updateValue(String value) {
+    this.value = value;
+  }
 
 }

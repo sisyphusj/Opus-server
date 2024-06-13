@@ -41,11 +41,11 @@ public class PinService {
 
   @Transactional
   public void addPin(PinInsertDTO pinInsertDTO) {
-    PinVO pin = PinVO.of(pinInsertDTO, SecurityUtil.getCurrentUserId());
+    PinVO pinVO = PinVO.of(pinInsertDTO, SecurityUtil.getCurrentUserId());
 
     try {
       // URL에서 이미지를 다운로드
-      URL url = new URL(pin.getImagePath());
+      URL url = new URL(pinVO.getImagePath());
       String fileName = generateFileName();
       Path tempFilePath = Files.createTempFile("tempfile", ".jpg");
 
@@ -60,15 +60,15 @@ public class PinService {
 
       // 이미지 경로 업데이트 및 저장
       String urlPath = imageAccessPath + fileName;
-      pin.setImagePath(urlPath);
-      pinMapper.insertPin(pin);
+      pinVO.updateImagePath(urlPath);
+      pinMapper.insertPin(pinVO);
 
       // 로깅 및 성공 응답 반환
       log.info("File saved successfully with name = {}", fileName);
 
     } catch (MalformedURLException e) {
-      log.error("Invalid URL: {}", pin.getImagePath(), e);
-      throw new IllegalArgumentException("Invalid URL: " + pin.getImagePath());
+      log.error("Invalid URL: {}", pinVO.getImagePath(), e);
+      throw new IllegalArgumentException("Invalid URL: " + pinVO.getImagePath());
 
     } catch (IOException e) {
       log.error("IO Exception occurred while processing the image", e);

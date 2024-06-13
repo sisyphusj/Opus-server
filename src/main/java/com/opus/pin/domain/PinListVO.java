@@ -2,7 +2,6 @@ package com.opus.pin.domain;
 
 import lombok.Builder;
 import lombok.Getter;
-import lombok.Setter;
 
 @Builder
 @Getter
@@ -16,7 +15,6 @@ public class PinListVO {
 
   private String negativePrompt;
 
-  @Setter
   private String imagePath;
 
   private String width;

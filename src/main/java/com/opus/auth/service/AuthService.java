@@ -66,7 +66,7 @@ public class AuthService {
 
     TokenDTO tokenDTO = tokenProvider.createToken(authentication);
 
-    refreshTokenVO.setValue(tokenDTO.getRefreshToken());
+    refreshTokenVO.updateValue(tokenDTO.getRefreshToken());
 
     refreshTokenMapper.updateRefreshToken(refreshTokenVO);
 
