@@ -29,7 +29,7 @@ public class JwtLogoutHandler implements LogoutHandler {
     try {
       response.getWriter().write("로그아웃 성공");
     } catch (IOException e) {
-      log.error(e.getMessage());
+      log.error("error : ", e);
       throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
