@@ -19,23 +19,21 @@ mybatis:
   type-aliases-package: com.opus.**
   mapper-locations: classpath:mapper/*.xml
 
-spring:
-  datasource:
-    driver-class-name: net.sf.log4jdbc.sql.jdbcapi.DriverSpy
-    url: jdbc:log4jdbc:mysql://localhost:3306/opusdb?serverTimezone=UTC&characterEncoding=UTF-8
-    username: root
-    password: 1234
-
 #spring:
 #  datasource:
-#    driver-class-name: com.mysql.cj.jdbc.Driver
-#    url: jdbc:mysql://localhost:3306/opusdb?serverTimezone=UTC&characterEncoding=UTF-8
+#    driver-class-name: net.sf.log4jdbc.sql.jdbcapi.DriverSpy
+#    url: jdbc:log4jdbc:mysql://localhost:3306/opusdb?serverTimezone=UTC&characterEncoding=UTF-8
 #    username: root
 #    password: 1234
 
-local:
-  url: C:\\Users\\gpflv\\Desktop\\Opus-front\\public\\images\\
-  url1: /images/
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/opusdb?serverTimezone=UTC&characterEncoding=UTF-8
+    username: root
+    password: 1234
+  profiles:
+    active: aws-credentials
 
 jwt:
   secret: 9de40f72d94d5bbce017acf7cbe4b3c04cbeef6e96f94b47cbaff1414afe831b73486c124e2417c6ebf897124d6954714fa61d83dfbe230d052757f967a1d517

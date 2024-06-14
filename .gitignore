@@ -26,7 +26,9 @@ bin/
 out/
 !**/src/main/**/out/
 !**/src/test/**/out/
-opus.properties
+
+### properties ###
+/src/main/resources/application-aws-credentials.yml
 
 ### NetBeans ###
 /nbproject/private/

@@ -59,6 +59,9 @@ dependencies {
     // commons-lang3
     implementation 'org.apache.commons:commons-lang3:3.12.0'
 
+    // aws cloud spring
+    implementation 'org.springframework.cloud:spring-cloud-starter-aws:2.2.6.RELEASE'
+
     testCompileOnly 'org.projectlombok:lombok'
     testAnnotationProcessor 'org.projectlombok:lombok'
 }
