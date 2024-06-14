@@ -9,10 +9,10 @@
     values (#{key}, #{value})
   </insert>
 
-  <select id="selectRefreshToken" resultType="com.opus.auth.domain.RefreshTokenVO">
+  <select id="selectRefreshTokenByToken" resultType="com.opus.auth.domain.RefreshTokenVO">
     select r_key as "key", r_value as "value"
     from TOKENS
-    where r_key = #{key}
+    where r_value = #{value}
   </select>
 
   <update id="updateRefreshToken">
