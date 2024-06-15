@@ -23,7 +23,7 @@ public class PinController {
     private final PinService pinService;
 
     // pin 추가
-    @PostMapping
+    @PostMapping("/register")
     public ResponseEntity<String> addPin(@Valid @RequestBody PinInsertDTO pinInsertDTO) {
         pinService.addPin(pinInsertDTO);
         return ApiResponse.of("OK");
