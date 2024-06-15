@@ -62,6 +62,9 @@ dependencies {
     // aws cloud spring
     implementation 'org.springframework.cloud:spring-cloud-starter-aws:2.2.6.RELEASE'
 
+    // jasypt
+    implementation 'com.github.ulisesbocchio:jasypt-spring-boot-starter:3.0.4'
+
     testCompileOnly 'org.projectlombok:lombok'
     testAnnotationProcessor 'org.projectlombok:lombok'
 }
