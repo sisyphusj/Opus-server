@@ -22,7 +22,6 @@ public class JasyptConfig {
         SimpleStringPBEConfig config = new SimpleStringPBEConfig();
 
         config.setPassword(encryptKey);
-        config.setPassword("password");
         config.setAlgorithm("PBEWithMD5AndDES");
         config.setKeyObtentionIterations("1000");
         config.setPoolSize("1");
@@ -31,6 +30,7 @@ public class JasyptConfig {
         config.setIvGeneratorClassName("org.jasypt.iv.NoIvGenerator");
         config.setStringOutputType("base64");
         encryptor.setConfig(config);
+
         return encryptor;
     }
 }

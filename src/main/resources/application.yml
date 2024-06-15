@@ -30,19 +30,19 @@ spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://localhost:3306/opusdb?serverTimezone=UTC&characterEncoding=UTF-8
-    username: ENC(L0vV+d2n0gV8AKD/pQdTg6zROGA15fqwnnyvB5aZz+k=)
-    password: ENC(8nAjTpGn5WBJrbsz9tAhuJX6r8rGyGrR3FtGB6Ib1pg=)
+    username: ENC(gCwiKydUoXeVvb6xoS5r7A==)
+    password: ENC(QiX5IUOIcTnWEOw2gtJZ7Q==)
 
 jwt:
-  secret: ENC(nHqrlEZwBuZwYxLmy5evG2EvFiqlFhU8FqYr1l2PP1iDdN0l/ucS2ycsrihZnyC3p1yzdtkKaTVSpN7A8nl4u7kq3/aeMiL9bvv5Vj9P9VfVWZg3N9GbDbKNQY7qVRX1QJcszAxjSk0PXo6HbATNe41K+RYQ3KjYlpjIsf/sTfU=)
+  secret: ENC(fg9kODJ9UjVeq0byMaQOdtqiRUCyEZLvqvbE8jonnEWUnUrCssFcGxPjZDVPbQwcYNdmPRm+O8i8/ME5/xwfdk5nB01jbgn1aHM5PYSN7PY6Pm+obkhOv0ti26BSvZJa0MZBpx8lYMx2ze5ByLi7guKHgw8WKzY55FK8y8wKts00IPrKMPzVkr/BAgSbMKek)
   header: Authorization
   token-validity-in-seconds: 300
 
 cloud:
   aws:
     credentials:
-      accessKey: ENC(f09xhZV+DQPCesU9HUbjFaaRNCXkW/yYQdFCEJotkCY=)
-      secretKey: ENC(ewmAaQ14EJoYhVrVh7ufNC8gmd+8O9HpUo7LylgAI8w=)
+      accessKey: ENC(GYPCDY/ip5LiI4NC0VQRY4Zdx7E7o4NQg/NKCJTGGy0=)
+      secretKey: ENC(qjr/nCczvRLshZ9aNNaIBGXHCNrtHqgVtpmZQd93VQgBYSEzDU3IuEj9QVsMzoRXPPFeXbkASvk=)
     s3:
       bucket: sisyphusj-bucket/opus-image
     region:
