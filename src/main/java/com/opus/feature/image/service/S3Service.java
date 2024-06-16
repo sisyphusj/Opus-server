@@ -32,7 +32,7 @@ public class S3Service {
 
 		try {
 			URL url = new URL(imageUrl);
-			String uniqueFileName = UUID.randomUUID().toString() + ".jpg";
+			String uniqueFileName = UUID.randomUUID() + ".jpg";
 
 			byte[] imageData = downloadImageData(url);
 			long contentLength = imageData.length;
@@ -48,6 +48,7 @@ public class S3Service {
 	}
 
 	private void uploadToS3(String fileName, InputStream inputStream, long contentLength) {
+
 		ObjectMetadata metadata = new ObjectMetadata();
 		metadata.setContentType("image/jpeg");
 		metadata.setContentLength(contentLength);
@@ -57,6 +58,7 @@ public class S3Service {
 	}
 
 	private byte[] downloadImageData(URL url) {
+
 		try (InputStream inputStream = url.openStream();
 			 ByteArrayOutputStream buffer = new ByteArrayOutputStream(8192)) {
 
