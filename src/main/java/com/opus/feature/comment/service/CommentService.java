@@ -27,20 +27,13 @@ public class CommentService {
 	@Transactional
 	public void addComment(CommentInsertDTO commentInsertDTO) {
 
-		CommentVO comment = CommentVO.builder()
-			.pinId(commentInsertDTO.getPinId())
-			.memberId(SecurityUtil.getCurrentUserId())
-			.topLevelCommentId(commentInsertDTO.getTopLevelCommentId())
-			.level(commentInsertDTO.getLevel())
-			.content(commentInsertDTO.getContent())
-			.parentNickname(commentInsertDTO.getParentNickname())
-			.build();
-
+		CommentVO comment = CommentVO.of(commentInsertDTO);
 		commentMapper.insertComment(comment);
 	}
 
 	@Transactional(readOnly = true)
 	public List<CommentResponseDTO> getCommentListByPinId(int pinId) {
+
 		List<CommentVO> comments = commentMapper.selectCommentsByPinId(pinId);
 		return comments.stream()
 			.map(CommentResponseDTO::of)
@@ -49,6 +42,7 @@ public class CommentService {
 
 	@Transactional(readOnly = true)
 	public List<CommentResponseDTO> getMyCommentList() {
+
 		List<CommentVO> comments = commentMapper.selectCommentsByMemberId(
 			SecurityUtil.getCurrentUserId());
 		return comments.stream()
@@ -56,17 +50,9 @@ public class CommentService {
 			.toList();
 	}
 
-	public void editComment(CommentUpdateDTO commentDTO) {
-		CommentVO comment = CommentVO.builder()
-			.commentId(commentDTO.getCommentId())
-			.pinId(commentDTO.getPinId())
-			.memberId(SecurityUtil.getCurrentUserId())
-			.topLevelCommentId(commentDTO.getTopLevelCommentId())
-			.parentNickname(commentDTO.getParentNickname())
-			.level(commentDTO.getLevel())
-			.content(commentDTO.getContent())
-			.build();
+	public void editComment(CommentUpdateDTO commentUpdateDTO) {
 
+		CommentVO comment = CommentVO.of(commentUpdateDTO);
 		commentMapper.updateComment(comment);
 	}
 
