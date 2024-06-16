@@ -1,73 +1,75 @@
 package com.opus.aws;
 
-import com.amazonaws.services.s3.AmazonS3;
-import com.amazonaws.services.s3.model.ObjectMetadata;
-import com.amazonaws.services.s3.model.PutObjectRequest;
-import com.opus.exception.BusinessException;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.util.UUID;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
+
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import com.amazonaws.services.s3.AmazonS3;
+import com.amazonaws.services.s3.model.ObjectMetadata;
+import com.amazonaws.services.s3.model.PutObjectRequest;
+import com.opus.exception.BusinessException;
+
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+
 @Slf4j
 @Service
+@RequiredArgsConstructor
 public class S3Service {
 
-    @Autowired
-    private AmazonS3 s3Client;
+	private final AmazonS3 s3Client;
 
-    @Value("${cloud.aws.s3.bucket}")
-    private String bucketName;
+	@Value("${cloud.aws.s3.bucket}")
+	private String bucketName;
 
-    public String uploadFileFromUrl(String imageUrl) {
-        try {
-            URL url = new URL(imageUrl);
-            String originalFileName = extractFileNameFromUrl(url);
-            String uniqueFileName = generateUniqueFileName(originalFileName);
+	public String uploadFileFromUrl(String imageUrl) {
 
-            try (InputStream inputStream = url.openStream()) {
-                ObjectMetadata metadata = new ObjectMetadata();
-                metadata.setContentType("image/jpeg");
+		try {
+			URL url = new URL(imageUrl);
+			String uniqueFileName = UUID.randomUUID().toString() + ".jpg";
 
-                PutObjectRequest request = new PutObjectRequest(bucketName, uniqueFileName, inputStream, metadata);
-                s3Client.putObject(request);
-            }
+			byte[] imageData = downloadImageData(url);
+			long contentLength = imageData.length;
+			ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(imageData);
 
-            return s3Client.getUrl(bucketName, uniqueFileName).toString();
+			uploadToS3(uniqueFileName, byteArrayInputStream, contentLength);
+			return s3Client.getUrl(bucketName, uniqueFileName).toString();
 
-        } catch (IOException e) {
-            log.error("error : ", e);
-            throw new BusinessException("파일 업로드 실패");
-        }
-    }
+		} catch (IOException e) {
+			log.error("error : ", e);
+			throw new BusinessException("파일 업로드 실패");
+		}
+	}
 
-    private String extractFileNameFromUrl(URL url) {
-        String path = url.getPath();
-        String fileName = path.substring(path.lastIndexOf("/") + 1);
-        if (fileName.isEmpty()) {
-            log.warn("URL에서 파일 이름을 추출할 수 없습니다. 기본 파일 이름 'image' 을 사용합니다.");
-            return "image";
-        }
-        return fileName;
-    }
+	private void uploadToS3(String fileName, InputStream inputStream, long contentLength) {
+		ObjectMetadata metadata = new ObjectMetadata();
+		metadata.setContentType("image/jpeg");
+		metadata.setContentLength(contentLength);
 
-    private String generateUniqueFileName(String originalFileName) {
-        String randomName = UUID.randomUUID().toString();
-        if (originalFileName != null && !originalFileName.isEmpty()) {
-            int extensionIndex = originalFileName.lastIndexOf('.');
-            if (extensionIndex != -1) {
-                return randomName + originalFileName.substring(extensionIndex);
-            } else {
-                log.warn("파일 이름에 확장자가 없습니다. 기본 확장자 '.jpg'을 사용합니다.");
-                return randomName + ".jpg";
-            }
-        } else {
-            log.error("파일 이름이 존재하지 않습니다.");
-            throw new BusinessException("파일 업로드 실패");
-        }
-    }
+		PutObjectRequest request = new PutObjectRequest(bucketName, fileName, inputStream, metadata);
+		s3Client.putObject(request);
+	}
+
+	private byte[] downloadImageData(URL url) {
+		try (InputStream inputStream = url.openStream();
+			 ByteArrayOutputStream buffer = new ByteArrayOutputStream(8192)) {
+
+			byte[] data = new byte[4096];
+			int bytesRead;
+
+			while ((bytesRead = inputStream.read(data, 0, data.length)) != -1) {
+				buffer.write(data, 0, bytesRead);
+			}
+
+			return buffer.toByteArray();
+		} catch (IOException e) {
+			throw new BusinessException("파일 업로드 실패");
+		}
+	}
 }

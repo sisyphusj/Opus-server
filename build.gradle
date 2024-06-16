@@ -65,6 +65,10 @@ dependencies {
     // jasypt
     implementation 'com.github.ulisesbocchio:jasypt-spring-boot-starter:3.0.5'
 
+    // jaxb
+    implementation 'com.amazonaws:aws-java-sdk-s3:1.12.429' // S3 서비스와 상호 작용
+    implementation 'javax.xml.bind:jaxb-api:2.4.0-b180830.0359'
+
     testCompileOnly 'org.projectlombok:lombok'
     testAnnotationProcessor 'org.projectlombok:lombok'
 }
