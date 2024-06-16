@@ -1,8 +1,8 @@
 package com.opus.feature.image.service;
 
 import java.net.URI;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
@@ -30,18 +30,21 @@ public class ImageService {
 
 	@Value("${kakao.accessKey}")
 	private String accessKey;
+
 	private final RestTemplate restTemplate;
+
 	private final S3Service s3Service;
+	private static final String BASE_URL = "https://api.kakaobrain.com/v2/inference/karlo/t2i";
 
 	public List<ImageDetailDTO> generateImage(ImageGenerateDTO imageGenerateDTO) {
 		URI uri = UriComponentsBuilder
-			.fromUriString("https://api.kakaobrain.com/v2/inference/karlo/t2i")
+			.fromUriString(BASE_URL)
 			.encode()
 			.build()
 			.toUri();
 
 		HttpHeaders headers = new HttpHeaders();
-		headers.set("Content-Type", "application/json");
+		headers.set("Content-Type", MediaType.APPLICATION_JSON_VALUE);
 		headers.set("Authorization", "KakaoAK " + accessKey);
 
 		log.info("uri = {}", uri);
@@ -54,26 +57,29 @@ public class ImageService {
 
 		ResponseEntity<ImageResponseDTO> responseEntity = restTemplate.exchange(requestEntity, ImageResponseDTO.class);
 
-		if (responseEntity.getStatusCode() == HttpStatus.OK) {
-			return processImages(responseEntity);
-		} else {
+		if (responseEntity.getStatusCode() != HttpStatus.OK) {
 			throw new BusinessException("이미지 생성을 실패하였습니다.");
 		}
+
+		return processImages(responseEntity);
 	}
 
-	public List<ImageDetailDTO> processImages(ResponseEntity<ImageResponseDTO> responseEntity) {
-		// api에서 절대 null을 반환하지 않는다.
-		ImageResponseDTO responseDTO = Objects.requireNonNull(responseEntity.getBody(), "이미지를 생성할 수 없습니다.");
+	private List<ImageDetailDTO> processImages(ResponseEntity<ImageResponseDTO> responseEntity) {
 
-		return responseDTO.getImageDetails().stream()
-			.map(
-				imageDetailDTO -> {
-					String originalUrl = imageDetailDTO.getImageUrl();
-					imageDetailDTO.updateImageUrl(s3Service.uploadFileFromUrl(originalUrl));
+		if (responseEntity.getBody() == null) {
+			log.error("error : responseEntity.getBody is Null");
+			throw new BusinessException("이미지를 생성할 수 없습니다.");
+		}
 
-					return imageDetailDTO;
-				}
-			)
-			.toList();
+		ImageResponseDTO responseDTO = responseEntity.getBody();
+		List<ImageDetailDTO> imageDetailDTOList = new ArrayList<>();
+
+		for (ImageDetailDTO imageDetailDTO : responseDTO.getImageDetails()) {
+			String originalUrl = imageDetailDTO.getImageUrl();
+			imageDetailDTO.updateImageUrl(s3Service.uploadFileFromUrl(originalUrl));
+			imageDetailDTOList.add(imageDetailDTO);
+		}
+
+		return imageDetailDTOList;
 	}
 }
