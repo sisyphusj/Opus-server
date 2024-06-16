@@ -20,9 +20,8 @@ import jakarta.validation.constraints.NotEmpty;
 import lombok.RequiredArgsConstructor;
 
 @RestController
-@RequestMapping("api/member")
+@RequestMapping("/api/member")
 @RequiredArgsConstructor
-
 public class MemberController {
 
 	private final MemberService memberService;

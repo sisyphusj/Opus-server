@@ -19,9 +19,8 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @RestController
-@RequestMapping("api/images")
+@RequestMapping("/api/images")
 @RequiredArgsConstructor
-
 public class ImageController {
 
 	private final ImageService imageService;
