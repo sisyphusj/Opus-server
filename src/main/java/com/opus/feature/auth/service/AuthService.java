@@ -7,7 +7,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.opus.feature.auth.TokenProvider;
+import com.opus.component.TokenProvider;
 import com.opus.feature.auth.domain.LoginDTO;
 import com.opus.feature.auth.domain.RefreshTokenVO;
 import com.opus.feature.auth.domain.TokenDTO;

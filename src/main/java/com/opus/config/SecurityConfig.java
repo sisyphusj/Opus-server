@@ -20,7 +20,7 @@ import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import com.opus.common.PermittedUrls;
-import com.opus.feature.auth.TokenProvider;
+import com.opus.component.TokenProvider;
 import com.opus.filter.JwtFilter;
 
 import lombok.RequiredArgsConstructor;

@@ -7,7 +7,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
 
-import com.opus.feature.auth.TokenProvider;
+import com.opus.component.TokenProvider;
 
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;

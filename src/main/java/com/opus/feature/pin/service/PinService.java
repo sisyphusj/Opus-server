@@ -6,8 +6,8 @@ import java.util.NoSuchElementException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.opus.aws.S3Service;
 import com.opus.exception.BusinessException;
+import com.opus.feature.image.service.S3Service;
 import com.opus.feature.pin.domain.PinInsertDTO;
 import com.opus.feature.pin.domain.PinListRequestVO;
 import com.opus.feature.pin.domain.PinListResponseDTO;

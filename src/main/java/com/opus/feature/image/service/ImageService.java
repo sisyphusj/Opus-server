@@ -14,7 +14,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import com.opus.aws.S3Service;
 import com.opus.exception.BusinessException;
 import com.opus.feature.image.domain.ImageDetailDTO;
 import com.opus.feature.image.domain.ImageGenerateDTO;

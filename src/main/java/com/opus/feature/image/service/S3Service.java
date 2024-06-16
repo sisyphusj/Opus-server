@@ -1,4 +1,4 @@
-package com.opus.aws;
+package com.opus.feature.image.service;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;

@@ -1,4 +1,4 @@
-package com.opus.feature.auth;
+package com.opus.component;
 
 import java.security.Key;
 import java.util.Arrays;
