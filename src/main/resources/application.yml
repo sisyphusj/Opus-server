@@ -47,3 +47,6 @@ cloud:
       bucket: sisyphusj-bucket/opus-image
     region:
       static: us-east-1
+
+kakao:
+  accessKey: ENC(eGTNJfDjBQD1GOfIx5xb4c4hCBaUxWYeoYkhRiJPRbx9NlU67OsPQymBrBAYF6i4)
