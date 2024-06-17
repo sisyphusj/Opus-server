@@ -6,7 +6,6 @@ import java.util.NoSuchElementException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.opus.exception.BusinessException;
 import com.opus.feature.image.service.S3Service;
 import com.opus.feature.pin.domain.PinInsertDTO;
 import com.opus.feature.pin.domain.PinListRequestVO;
@@ -29,21 +28,7 @@ public class PinService {
 
 	@Transactional
 	public void addPin(PinInsertDTO pinInsertDTO) {
-		PinVO pinVO = PinVO.of(pinInsertDTO, SecurityUtil.getCurrentUserId());
-
-		try {
-			String imageUrl = pinVO.getImagePath();
-			String s3Url = s3Service.uploadFileFromUrl(imageUrl);
-
-			pinVO.updateImagePath(s3Url);
-			pinMapper.insertPin(pinVO);
-
-		} catch (BusinessException e) {
-			throw e;
-		} catch (Exception e) {
-			log.error("error : ", e);
-			throw new BusinessException("이미지 업로드 실패");
-		}
+		pinMapper.insertPin(PinVO.of(pinInsertDTO, SecurityUtil.getCurrentUserId()));
 	}
 
 	@Transactional(readOnly = true)
