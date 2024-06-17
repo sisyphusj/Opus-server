@@ -14,6 +14,7 @@ import com.opus.feature.like.domain.CommentLikeDTO;
 import com.opus.feature.like.domain.PinLikeDTO;
 import com.opus.feature.like.service.LikeService;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -27,14 +28,14 @@ public class LikeController {
 
 	// 게시글에 좋아요 추가
 	@PostMapping("/pin")
-	public ResponseEntity<String> addPinLike(@RequestBody PinLikeDTO pinLikeDTO) {
+	public ResponseEntity<String> addPinLike(@Valid @RequestBody PinLikeDTO pinLikeDTO) {
 		likeService.addPinLike(pinLikeDTO);
 		return ApiResponse.of("OK");
 	}
 
 	// 댓글에 좋아요 추가
 	@PostMapping("/comment")
-	public ResponseEntity<String> addCommentLike(@RequestBody CommentLikeDTO commentLikeDTO) {
+	public ResponseEntity<String> addCommentLike(@Valid @RequestBody CommentLikeDTO commentLikeDTO) {
 		likeService.addCommentLike(commentLikeDTO);
 		return ApiResponse.of("OK");
 	}
