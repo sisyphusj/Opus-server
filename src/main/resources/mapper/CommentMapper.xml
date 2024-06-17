@@ -5,14 +5,14 @@
 <mapper namespace="com.opus.feature.comment.mapper.CommentMapper">
 
     <insert id="insertComment">
-        INSERT INTO comment (pin_id, member_id, top_level_comment_id, level, content, parent_nickname)
+        INSERT INTO comments (pin_id, member_id, top_level_comment_id, level, content, parent_nickname)
         values (#{pinId}, #{memberId}, #{topLevelCommentId}, #{level}, #{content}, #{parentNickname})
     </insert>
 
     <select id="selectCommentsByPinId" resultMap="commentList">
         SELECT comment_id,
                pin_id,
-               comment.member_id,
+               comments.member_id,
                top_level_comment_id,
                level,
                content,
@@ -21,17 +21,17 @@
                deleted_at,
                parent_nickname,
                member.nickname
-        FROM comment
-                 INNER JOIN member ON comment.member_id = member.member_id
-        WHERE comment.pin_id = #{pinId}
-          and comment.is_deleted = 0
+        FROM comments
+                 INNER JOIN member ON comments.member_id = member.member_id
+        WHERE comments.pin_id = #{pinId}
+          and comments.is_deleted = 0
         ORDER BY comment_id ASC, level ASC
     </select>
 
     <select id="selectCommentsByMemberId" resultMap="commentList">
         SELECT comment_id,
                pin_id,
-               comment.member_id,
+               comments.member_id,
                top_level_comment_id,
                level,
                content,
@@ -40,17 +40,17 @@
                deleted_at,
                parent_nickname,
                member.nickname
-        FROM comment
-                 INNER JOIN member ON comment.member_id = member.member_id
-        WHERE comment.member_id = #{memberId}
-          and comment.is_deleted = 0
+        FROM comments
+                 INNER JOIN member ON comments.member_id = member.member_id
+        WHERE comments.member_id = #{memberId}
+          and comments.is_deleted = 0
         ORDER BY comment_id ASC, level ASC
     </select>
 
     <select id="selectCommentByCommentId" resultMap="commentList">
         SELECT comment_id,
                pin_id,
-               comment.member_id,
+               comments.member_id,
                top_level_comment_id,
                level,
                content,
@@ -59,32 +59,32 @@
                deleted_at,
                parent_nickname,
                member.nickname
-        FROM comment
-                 INNER JOIN member ON comment.member_id = member.member_id
+        FROM comments
+                 INNER JOIN member ON comments.member_id = member.member_id
         WHERE comment_id = #{commentId}
-          and comment.is_deleted = 0
+          and comments.is_deleted = 0
     </select>
 
     <select id="countChildCommentsByCommentId" resultType="int">
         SELECT COUNT(*)
-        FROM comment
+        FROM comments
         WHERE top_level_comment_id = #{commentId}
-          and comment.is_deleted = 0
+          and comments.is_deleted = 0
     </select>
 
     <update id="updateComment">
-        UPDATE comment
+        UPDATE comments
         SET content    = #{content},
             updated_at = now()
         WHERE comment_id = #{commentId}
-          AND comment.member_id = #{memberId}
+          AND comments.member_id = #{memberId}
     </update>
 
     <delete id="deleteComment">
         DELETE
-        FROM comment
+        FROM comments
         WHERE comment_id = #{commentId}
-          AND comment.member_id = #{memberId}
+          AND comments.member_id = #{memberId}
     </delete>
 
     <resultMap id="commentList" type="com.opus.feature.comment.domain.CommentVO">
