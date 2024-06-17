@@ -26,7 +26,6 @@ import lombok.extern.slf4j.Slf4j;
 @RestController
 @RequestMapping("/api/pins")
 @RequiredArgsConstructor
-
 public class PinController {
 
 	private final PinService pinService;
