@@ -1,5 +1,7 @@
 package com.opus.feature.member.domain;
 
+import com.opus.utils.SecurityUtil;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -19,9 +21,9 @@ public class MemberVO {
 
 	private String email;
 
-	public static MemberVO of(MemberInsertDTO memberInsertDTO, Integer memberId) {
+	public static MemberVO fromRegistrationDTO(MemberInsertDTO memberInsertDTO) {
 		return MemberVO.builder()
-			.memberId(memberId)
+			.memberId(SecurityUtil.getCurrentUserId())
 			.username(memberInsertDTO.getUsername())
 			.password(memberInsertDTO.getPassword())
 			.nickname(memberInsertDTO.getNickname())

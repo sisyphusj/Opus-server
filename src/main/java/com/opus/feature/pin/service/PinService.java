@@ -6,7 +6,6 @@ import java.util.NoSuchElementException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.opus.feature.image.service.S3Service;
 import com.opus.feature.pin.domain.PinInsertDTO;
 import com.opus.feature.pin.domain.PinListRequestVO;
 import com.opus.feature.pin.domain.PinListResponseDTO;
@@ -23,12 +22,11 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class PinService {
 
-	private final S3Service s3Service;
 	private final PinMapper pinMapper;
 
 	@Transactional
 	public void addPin(PinInsertDTO pinInsertDTO) {
-		pinMapper.insertPin(PinVO.of(pinInsertDTO, SecurityUtil.getCurrentUserId()));
+		pinMapper.insertPin(PinVO.of(pinInsertDTO));
 	}
 
 	@Transactional(readOnly = true)

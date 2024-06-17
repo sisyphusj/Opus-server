@@ -21,13 +21,13 @@ import lombok.extern.slf4j.Slf4j;
 public class MemberService {
 
 	private final MemberMapper memberMapper;
-	
+
 	private final PasswordEncoder passwordEncoder;
 
 	@Transactional
 	public void registerMember(MemberInsertDTO memberInsertDTO) {
 		memberInsertDTO.updatePassword(passwordEncoder.encode(memberInsertDTO.getPassword()));
-		memberMapper.insertMember(MemberVO.of(memberInsertDTO));
+		memberMapper.insertMember(MemberVO.fromRegistrationDTO(memberInsertDTO));
 	}
 
 	@Transactional(readOnly = true)
@@ -55,7 +55,7 @@ public class MemberService {
 	@Transactional
 	public void editMyProfile(MemberInsertDTO memberInsertDTO) {
 		memberInsertDTO.updatePassword(passwordEncoder.encode(memberInsertDTO.getPassword()));
-		memberMapper.updateMember(MemberVO.of(memberInsertDTO, SecurityUtil.getCurrentUserId()));
+		memberMapper.updateMember(MemberVO.of(memberInsertDTO));
 	}
 
 	@Transactional

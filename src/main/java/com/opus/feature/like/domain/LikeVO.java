@@ -1,5 +1,7 @@
 package com.opus.feature.like.domain;
 
+import com.opus.utils.SecurityUtil;
+
 import lombok.Builder;
 import lombok.Getter;
 
@@ -13,16 +15,16 @@ public class LikeVO {
 	// pinId/commentId
 	private int id;
 
-	public static LikeVO of(int memberId, PinLikeDTO pinLikeDTO) {
+	public static LikeVO of(PinLikeDTO pinLikeDTO) {
 		return LikeVO.builder()
-			.memberId(memberId)
+			.memberId(SecurityUtil.getCurrentUserId())
 			.id(pinLikeDTO.getPinId())
 			.build();
 	}
 
-	public static LikeVO of(int memberId, CommentLikeDTO commentLikeDTO) {
+	public static LikeVO of(CommentLikeDTO commentLikeDTO) {
 		return LikeVO.builder()
-			.memberId(memberId)
+			.memberId(SecurityUtil.getCurrentUserId())
 			.id(commentLikeDTO.getCommentId())
 			.build();
 	}

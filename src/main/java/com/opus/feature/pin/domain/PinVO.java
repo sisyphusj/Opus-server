@@ -1,5 +1,7 @@
 package com.opus.feature.pin.domain;
 
+import com.opus.utils.SecurityUtil;
+
 import lombok.Builder;
 import lombok.Getter;
 
@@ -23,9 +25,9 @@ public class PinVO {
 
 	private String seed;
 
-	public static PinVO of(PinInsertDTO pinInsertDTO, Integer memberId) {
+	public static PinVO of(PinInsertDTO pinInsertDTO) {
 		return PinVO.builder()
-			.memberId(memberId)
+			.memberId(SecurityUtil.getCurrentUserId())
 			.imagePath(pinInsertDTO.getImagePath())
 			.prompt(pinInsertDTO.getPrompt())
 			.negativePrompt(pinInsertDTO.getNegativePrompt())
