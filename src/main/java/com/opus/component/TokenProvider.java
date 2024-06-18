@@ -4,6 +4,7 @@ import java.security.Key;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Date;
+import java.util.List;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.InitializingBean;
@@ -96,9 +97,8 @@ public class TokenProvider implements InitializingBean {
 	}
 
 	public TokenDTO reissueTokenFromMemberId(int memberId, String refreshToken) {
-		// TODO 권한 기능을 구현 후 권한 정보를 조회하여 권한 정보를 부여해야 함
 		UserDetails userDetails = new User(String.valueOf(memberId), "",
-			Arrays.asList(new SimpleGrantedAuthority("USER")));
+			List.of(new SimpleGrantedAuthority("USER")));
 
 		String authorities = userDetails.getAuthorities().stream()
 			.map(GrantedAuthority::getAuthority)
