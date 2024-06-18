@@ -38,12 +38,12 @@ public class LikeService {
 		likeMapper.insertCommentLike(LikeVO.of(commentLikeDTO));
 	}
 
-	@Transactional
+	@Transactional(readOnly = true)
 	public Integer countPinLike(int pinId) {
 		return likeMapper.countPinLike(pinId);
 	}
 
-	@Transactional
+	@Transactional(readOnly = true)
 	public Integer countCommentLike(int commentId) {
 		return likeMapper.countCommentLike(commentId);
 	}
