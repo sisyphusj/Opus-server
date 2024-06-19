@@ -1,49 +1,41 @@
 package com.opus.component;
 
 import java.io.IOException;
-import java.time.Instant;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
 import com.opus.exception.BusinessException;
+import com.opus.utils.SecurityUtil;
 
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+@Getter
 @Slf4j
+@RequiredArgsConstructor
 @Component
 public class LikeProvider {
 
+	// clients 맵에 대한 getter 메서드 추가
 	private final Map<Integer, List<ClientInfo>> clients = new ConcurrentHashMap<>();
 
-	@Getter
-	private static class ClientInfo {
+	private final int memberId = SecurityUtil.getCurrentUserId();
 
-		private final SseEmitter emitter;
-
-		private final int memberId;
-
-		private Instant lastActiveTime;
-
-		public ClientInfo(SseEmitter emitter, int memberId) {
-			this.emitter = emitter;
-			this.memberId = memberId;
-			this.lastActiveTime = Instant.now();
+	/**
+	 *  클라이언트(사용자)가 구독 요청을 보내면 구독자 목록에 추가
+	 */
+	public SseEmitter subscribe(int pinId) {
+		if (checkDuplicateSubscribe(clients.get(pinId), memberId)) {
+			throw new BusinessException("이미 구독중입니다.");
 		}
 
-		public void updateLastActiveTime() {
-			this.lastActiveTime = Instant.now();
-		}
-	}
-
-	// 클라이언트(사용자)가 구독 요청을 보내면 구독자 목록에 추가
-	public SseEmitter subscribe(int pinId, int memberId) {
 		SseEmitter emitter = new SseEmitter(Long.MAX_VALUE);
 
 		ClientInfo clientInfo = new ClientInfo(emitter, memberId);
@@ -74,19 +66,26 @@ public class LikeProvider {
 		}
 	}
 
-	// 클라이언트(사용자)가 구독 취소 요청을 보내면 구독자 목록에서 삭제
-	public void unsubscribe(int pinId, int memberId) {
-		List<ClientInfo> clientList = clients.get(pinId);
+	/**
+	 * 클라이언트(사용자)가 구독 취소 요청을 보내면 구독자 목록에서 삭제
+	 */
+	public void unsubscribe(int pinId) {
+		List<ClientInfo> clientList = Optional.of(clients.get(pinId))
+			.orElseThrow(() -> {
+				log.error("error : 해당 핀을 구독한 클라이언트가 없습니다.");
+				return new BusinessException("구독 중이지 않습니다.");
+			});
 
-		if (clientList != null) {
-			clientList.removeIf(client -> client.getMemberId() == memberId);
-			if (clientList.isEmpty()) {
-				clients.remove(pinId);
-			}
+		clientList.removeIf(client -> client.getMemberId() == memberId);
+
+		if (clientList.isEmpty()) {
+			clients.remove(pinId);
 		}
 	}
 
-	// 주기적으로 최신 좋아요 수를 설정
+	/**
+	 * 주기적으로 최신 좋아요 수를 설정
+	 */
 	public void updateLatestLikeCount(int pinId, int likeCount) {
 		sendPinLikeUpdate(pinId, likeCount);
 	}
@@ -95,17 +94,17 @@ public class LikeProvider {
 	 * 클라이언트(사용자)에게 좋아요 수를 전송
 	 */
 	private void sendPinLikeUpdate(int pinId, int likeCount) {
-		List<ClientInfo> clientList = clients.get(pinId);
-
-		if (clientList == null) {
-			log.error("error : Emitter가 존재하지 않습니다. {}", pinId);
-			throw new BusinessException("데이터를 불러오는데 실패하였습니다.");
-		}
+		List<ClientInfo> clientList = Optional.of(clients.get(pinId))
+			.orElseThrow(() -> {
+				log.error("error : 해당 핀을 구독한 클라이언트가 없습니다.");
+				return new BusinessException("구독 중이지 않습니다.");
+			});
 
 		for (ClientInfo clientInfo : clientList) {
 			try {
 				clientInfo.getEmitter()
-					.send(SseEmitter.event().name("like-update")
+					.send(SseEmitter.event()
+						.name("like-update")
 						.data(Map.of("pinId", pinId, "likeCount", likeCount)));
 
 				clientInfo.updateLastActiveTime();
@@ -117,19 +116,14 @@ public class LikeProvider {
 		}
 	}
 
-	/**
-	 * 10분 간격으로 클라이언트 청소
-	 */
-	@Scheduled(fixedRate = 600000)
-	private void cleanUpClients() {
-		Instant now = Instant.now();
-		clients.forEach((pinId, clientList) -> {
-			clientList.removeIf(client -> client.getLastActiveTime().isBefore(now.minusSeconds(600)));
+	private boolean checkDuplicateSubscribe(List<ClientInfo> clientInfoList, int memberId) {
+		if (clientInfoList == null) {
+			return false;
+		}
 
-			if (clientList.isEmpty()) {
-				clients.remove(pinId);
-			}
-		});
+		return clientInfoList.stream()
+			.map(ClientInfo::getMemberId)
+			.anyMatch(id -> id == memberId);
 	}
 
 }
