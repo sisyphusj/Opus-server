@@ -26,19 +26,17 @@ public class LikeProvider {
 	// clients 맵에 대한 getter 메서드 추가
 	private final Map<Integer, List<ClientInfo>> clients = new ConcurrentHashMap<>();
 
-	private final int memberId = SecurityUtil.getCurrentUserId();
-
 	/**
 	 *  클라이언트(사용자)가 구독 요청을 보내면 구독자 목록에 추가
 	 */
 	public SseEmitter subscribe(int pinId) {
-		if (checkDuplicateSubscribe(clients.get(pinId), memberId)) {
+		if (checkDuplicateSubscribe(clients.get(pinId), SecurityUtil.getCurrentUserId())) {
 			throw new BusinessException("이미 구독중입니다.");
 		}
 
 		SseEmitter emitter = new SseEmitter(Long.MAX_VALUE);
 
-		ClientInfo clientInfo = new ClientInfo(emitter, memberId);
+		ClientInfo clientInfo = new ClientInfo(emitter, SecurityUtil.getCurrentUserId());
 
 		// pinId가 clients 리스트에 미등록인 경우는 람다 표현식 실행
 		// pinId가 clients 리스트에 등록된 경우는 해당 리스트에 추가
@@ -76,7 +74,7 @@ public class LikeProvider {
 				return new BusinessException("구독 중이지 않습니다.");
 			});
 
-		clientList.removeIf(client -> client.getMemberId() == memberId);
+		clientList.removeIf(client -> client.getMemberId() == SecurityUtil.getCurrentUserId());
 
 		if (clientList.isEmpty()) {
 			clients.remove(pinId);
