@@ -17,6 +17,8 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
+import com.opus.common.ResponseCode;
+import com.opus.exception.CustomException;
 import com.opus.feature.auth.domain.TokenDTO;
 
 import io.jsonwebtoken.Claims;
@@ -129,15 +131,12 @@ public class TokenProvider implements InitializingBean {
 				.build()
 				.parseClaimsJws(authToken);
 			return true;
-		} catch (io.jsonwebtoken.security.SecurityException | MalformedJwtException e) {
-			log.error("잘못된 JWT 서명입니다.");
+		} catch (SecurityException | MalformedJwtException | UnsupportedJwtException e) {
+			log.error("토큰이 유효하지 않습니다.");
+			throw new CustomException(ResponseCode.INVALID_TOKEN);
 		} catch (ExpiredJwtException e) {
-			log.error("만료된 JWT 토큰입니다.");
-		} catch (UnsupportedJwtException e) {
-			log.error("지원되지 않는 JWT 토큰입니다.");
-		} catch (IllegalArgumentException e) {
-			log.error("잘못된 JWT 토큰입니다.");
+			log.error("토큰이 만료되었습니다.");
+			throw new CustomException(ResponseCode.TOKEN_EXPIRED);
 		}
-		return false;
 	}
 }

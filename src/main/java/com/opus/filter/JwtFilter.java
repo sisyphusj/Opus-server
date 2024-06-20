@@ -8,6 +8,7 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import com.opus.component.TokenProvider;
+import com.opus.exception.CustomException;
 
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -30,10 +31,17 @@ public class JwtFilter extends OncePerRequestFilter {
 		String jwt = resolveToken(request);
 		String requestURI = request.getRequestURI();
 
-		if (StringUtils.hasText(jwt) && tokenProvider.validateToken(jwt)) {
-			Authentication authentication = tokenProvider.getAuthentication(jwt);
-			SecurityContextHolder.getContext().setAuthentication(authentication);
-			log.debug("{} 인증 정보를 저장했습니다, uri: {}", authentication.getName(), requestURI);
+		try {
+			if (StringUtils.hasText(jwt) && tokenProvider.validateToken(jwt)) {
+				Authentication authentication = tokenProvider.getAuthentication(jwt);
+
+				SecurityContextHolder.getContext().setAuthentication(authentication);
+				log.debug("{} 인증 정보를 저장했습니다, uri: {}", authentication.getName(), requestURI);
+			}
+
+		} catch (CustomException e) {
+			SecurityContextHolder.clearContext();
+			request.setAttribute("exception", e);
 		}
 		filterChain.doFilter(request, response);
 	}
