@@ -15,8 +15,4 @@ public class RefreshTokenVO {
 	// refresh token
 	private String value;
 
-	public void updateValue(String value) {
-		this.value = value;
-	}
-
 }

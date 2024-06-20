@@ -15,12 +15,6 @@
         where r_value = #{value}
     </select>
 
-    <update id="updateRefreshToken">
-        update TOKENS
-        set r_value=#{value}
-        where r_key = #{key}
-    </update>
-
     <delete id="deleteRefreshToken">
         delete
         from TOKENS

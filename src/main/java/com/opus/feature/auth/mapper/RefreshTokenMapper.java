@@ -13,7 +13,5 @@ public interface RefreshTokenMapper {
 
 	Optional<RefreshTokenVO> selectRefreshTokenByToken(String value);
 
-	void updateRefreshToken(RefreshTokenVO refreshTokenVO);
-
 	void deleteRefreshToken(int key);
 }
