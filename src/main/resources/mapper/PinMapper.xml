@@ -12,13 +12,13 @@
     <select id="selectPinsByKeyword" resultMap="pinList">
         SELECT pin_id,
         pins.member_id,
-        pins.prompt,
-        pins.negative_prompt,
-        pins.img_path,
-        pins.width,
-        pins.height,
-        pins.seed,
-        member.nickname
+        prompt,
+        negative_prompt,
+        img_path,
+        width,
+        height,
+        seed,
+        nickname
         FROM pins
         INNER JOIN member ON pins.member_id = member.member_id
         <where>
@@ -33,13 +33,13 @@
     <select id="selectPinsByMemberId" resultMap="pinList">
         SELECT pin_id,
                pins.member_id,
-               pins.prompt,
-               pins.negative_prompt,
-               pins.img_path,
-               pins.width,
-               pins.height,
-               pins.seed,
-               member.nickname
+               prompt,
+               negative_prompt,
+               img_path,
+               width,
+               height,
+               seed,
+               nickname
         FROM pins
                  INNER JOIN member ON pins.member_id = member.member_id
         WHERE member.member_id = #{memberId}
@@ -50,12 +50,12 @@
     <select id="selectPinByPinId" resultType="com.opus.feature.pin.domain.PinVO">
         SELECT pin_id,
                pins.member_id,
-               pins.prompt,
-               pins.negative_prompt,
-               pins.img_path,
-               pins.width,
-               pins.height,
-               pins.seed
+               prompt,
+               negative_prompt,
+               img_path,
+               width,
+               height,
+               seed
         FROM pins
         WHERE pins.pin_id = #{pinId}
     </select>
