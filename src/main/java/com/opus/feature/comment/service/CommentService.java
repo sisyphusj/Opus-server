@@ -35,6 +35,7 @@ public class CommentService {
 	public List<CommentResponseDTO> getCommentListByPinId(int pinId) {
 
 		List<CommentVO> comments = commentMapper.selectCommentsByPinId(pinId);
+
 		return comments.stream()
 			.map(CommentResponseDTO::of)
 			.toList();
@@ -45,6 +46,7 @@ public class CommentService {
 
 		List<CommentVO> comments = commentMapper.selectCommentsByMemberId(
 			SecurityUtil.getCurrentUserId());
+
 		return comments.stream()
 			.map(CommentResponseDTO::of)
 			.toList();
@@ -65,8 +67,6 @@ public class CommentService {
 		if (commentMapper.countChildCommentsByCommentId(commentId) > 0) {
 			throw new BusinessException("자식 댓글이 존재하는 댓글은 삭제할 수 없습니다.");
 		}
-
-		// TODO 삭제 권한 검증 추가
 
 		CommentVO comment = CommentVO.builder()
 			.commentId(commentId)

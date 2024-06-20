@@ -31,6 +31,7 @@ public class PinService {
 
 	@Transactional(readOnly = true)
 	public List<PinListResponseDTO> getPinList(int offset, int amount, String keyword) {
+
 		PinListRequestVO pinListRequestVO = PinListRequestVO.builder()
 			.offset(offset)
 			.amount(amount)
@@ -42,6 +43,7 @@ public class PinService {
 
 	@Transactional(readOnly = true)
 	public List<PinListResponseDTO> getMyPinList(int offset, int amount) {
+
 		PinListRequestVO pinListRequestVO = PinListRequestVO.builder()
 			.memberId(SecurityUtil.getCurrentUserId())
 			.offset(offset)
@@ -53,6 +55,7 @@ public class PinService {
 
 	@Transactional
 	public PinResponseDTO getPinByPinId(int pinId) {
+
 		return pinMapper.selectPinByPinId(pinId)
 			.map(PinResponseDTO::of)
 			.orElseThrow(() -> new NoSuchElementException("해당 핀을 찾을 수 없습니다."));
@@ -65,6 +68,7 @@ public class PinService {
 
 	@Transactional
 	public void removePin(int pinId) {
+
 		pinMapper.selectPinByPinId(pinId)
 			.orElseThrow(() -> new NoSuchElementException("해당 핀을 찾을 수 없습니다."));
 

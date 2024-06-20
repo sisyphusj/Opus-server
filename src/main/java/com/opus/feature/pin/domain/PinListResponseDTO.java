@@ -28,6 +28,7 @@ public class PinListResponseDTO {
 	private String seed;
 
 	public static PinListResponseDTO of(PinListVO pinListVO) {
+
 		return PinListResponseDTO.builder()
 			.pinId(pinListVO.getPinId())
 			.nickname(pinListVO.getNickname())
@@ -41,6 +42,7 @@ public class PinListResponseDTO {
 	}
 
 	public static List<PinListResponseDTO> of(List<PinListVO> pinListVO) {
+
 		return pinListVO.stream()
 			.map(PinListResponseDTO::of)
 			.toList();

@@ -28,8 +28,8 @@ public class MemberController {
 
 	// 회원가입
 	@PostMapping("/register")
-	public ResponseEntity<String> registerMember(
-		@Valid @RequestBody MemberInsertDTO memberInsertDTO) {
+	public ResponseEntity<String> registerMember(@Valid @RequestBody MemberInsertDTO memberInsertDTO) {
+
 		memberService.registerMember(memberInsertDTO);
 		return ApiResponse.of("OK");
 	}
@@ -61,6 +61,7 @@ public class MemberController {
 	// 프로필 수정
 	@PutMapping
 	public ResponseEntity<String> editMyProfile(@Valid @RequestBody MemberInsertDTO memberInsertDTO) {
+
 		memberService.editMyProfile(memberInsertDTO);
 		return ApiResponse.of("OK");
 	}
@@ -68,6 +69,7 @@ public class MemberController {
 	// 회원 탈퇴
 	@DeleteMapping
 	public ResponseEntity<String> removeMyProfile() {
+
 		memberService.removeMyProfile();
 		return ApiResponse.of("OK");
 	}

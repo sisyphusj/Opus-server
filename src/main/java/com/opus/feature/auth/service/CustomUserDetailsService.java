@@ -27,7 +27,6 @@ public class CustomUserDetailsService implements UserDetailsService {
 	@Override
 	@Transactional(readOnly = true)
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-		log.info("call loadUserByUsername, username={}", username);
 
 		return authMapper.selectAuthByUsername(username)
 			.map(this::createUserDetails)
@@ -35,9 +34,7 @@ public class CustomUserDetailsService implements UserDetailsService {
 	}
 
 	private UserDetails createUserDetails(AuthVO auth) {
-		log.info("call createUserDetails, member={}", auth);
 
-		// 사용자 권한 설정 필요. 현재는 USER 권한만 부여
 		GrantedAuthority grantedAuthority = new SimpleGrantedAuthority("USER");
 
 		return new User(

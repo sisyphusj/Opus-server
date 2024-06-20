@@ -22,6 +22,7 @@ public class MemberVO {
 	private String email;
 
 	public static MemberVO fromRegistrationDTO(MemberInsertDTO memberInsertDTO) {
+
 		return MemberVO.builder()
 			.memberId(SecurityUtil.getCurrentUserId())
 			.username(memberInsertDTO.getUsername())
@@ -32,6 +33,7 @@ public class MemberVO {
 	}
 
 	public static MemberVO of(MemberInsertDTO memberInsertDTO) {
+
 		return MemberVO.builder()
 			.username(memberInsertDTO.getUsername())
 			.password(memberInsertDTO.getPassword())

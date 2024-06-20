@@ -24,6 +24,7 @@ public class ErrorResponse {
 
 	@Builder
 	protected ErrorResponse(final ResponseCode responseCode) {
+
 		this.msg = responseCode.getMessage();
 		this.status = responseCode.getHttpStatus();
 		this.code = responseCode.getCode();
@@ -32,6 +33,7 @@ public class ErrorResponse {
 
 	@Builder
 	protected ErrorResponse(final ResponseCode responseCode, final String reason) {
+
 		this.msg = responseCode.getMessage();
 		this.status = responseCode.getHttpStatus();
 		this.code = responseCode.getCode();

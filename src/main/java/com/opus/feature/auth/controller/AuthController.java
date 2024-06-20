@@ -38,6 +38,7 @@ public class AuthController {
 	// 로그아웃
 	@PostMapping("/logout")
 	public ResponseEntity<String> logout() {
+
 		authService.logout();
 		return ApiResponse.of("OK");
 	}

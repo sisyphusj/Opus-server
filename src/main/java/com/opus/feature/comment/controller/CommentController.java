@@ -34,6 +34,7 @@ public class CommentController {
 	// 댓글 추가
 	@PostMapping
 	public ResponseEntity<String> addComment(@Valid @RequestBody CommentInsertDTO commentInsertDTO) {
+
 		commentService.addComment(commentInsertDTO);
 		return ApiResponse.of("OK");
 	}
@@ -53,6 +54,7 @@ public class CommentController {
 	// 댓글 수정
 	@PutMapping
 	public ResponseEntity<String> editComment(@Valid @RequestBody CommentUpdateDTO commentDTO) {
+
 		commentService.editComment(commentDTO);
 		return ApiResponse.of("OK");
 	}
@@ -60,6 +62,7 @@ public class CommentController {
 	// 댓글 삭제
 	@DeleteMapping("/{commentId}")
 	public ResponseEntity<String> removeComment(@PathVariable int commentId) {
+
 		commentService.removeComment(commentId);
 		return ApiResponse.of("OK");
 	}

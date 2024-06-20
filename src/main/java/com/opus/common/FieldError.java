@@ -21,6 +21,7 @@ public class FieldError {
 	 * 검증 오류 보관 객체인 BindingResult를 변환
 	 */
 	public static List<FieldError> of(final BindingResult bindingResult) {
+
 		final List<org.springframework.validation.FieldError> errors = bindingResult.getFieldErrors();
 
 		return errors.stream()

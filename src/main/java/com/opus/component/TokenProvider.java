@@ -49,11 +49,13 @@ public class TokenProvider implements InitializingBean {
 
 	@Override
 	public void afterPropertiesSet() {
+
 		byte[] keyBytes = Decoders.BASE64.decode(secret);
 		this.key = Keys.hmacShaKeyFor(keyBytes);
 	}
 
 	public TokenDTO createToken(Authentication authentication) {
+
 		String authorities = authentication.getAuthorities().stream()
 			.map(GrantedAuthority::getAuthority)
 			.collect(Collectors.joining(","));
@@ -82,6 +84,7 @@ public class TokenProvider implements InitializingBean {
 	}
 
 	public Authentication getAuthentication(String token) {
+
 		Claims claims = Jwts.parserBuilder()
 			.setSigningKey(key)
 			.build()
@@ -99,6 +102,7 @@ public class TokenProvider implements InitializingBean {
 	}
 
 	public TokenDTO reissueTokenFromMemberId(int memberId, String refreshToken) {
+
 		UserDetails userDetails = new User(String.valueOf(memberId), "",
 			List.of(new SimpleGrantedAuthority("USER")));
 

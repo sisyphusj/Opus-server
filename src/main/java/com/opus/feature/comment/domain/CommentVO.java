@@ -34,6 +34,7 @@ public class CommentVO {
 	private String nickname;
 
 	public static CommentVO of(CommentInsertDTO commentInsertDTO) {
+
 		return CommentVO.builder()
 			.pinId(commentInsertDTO.getPinId())
 			.memberId(SecurityUtil.getCurrentUserId())
@@ -45,6 +46,7 @@ public class CommentVO {
 	}
 
 	public static CommentVO of(CommentUpdateDTO commentUpdateDTO) {
+
 		return CommentVO.builder()
 			.commentId(commentUpdateDTO.getCommentId())
 			.pinId(commentUpdateDTO.getPinId())

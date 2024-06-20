@@ -22,6 +22,7 @@ public class LikeService {
 
 	@Transactional
 	public void addPinLike(PinLikeDTO pinLikeDTO) {
+
 		if (likeMapper.countPinLikeByMemberId(SecurityUtil.getCurrentUserId(), pinLikeDTO.getPinId()) > 0) {
 			throw new BusinessException("이미 좋아요를 눌렀습니다.");
 		}
@@ -31,6 +32,7 @@ public class LikeService {
 
 	@Transactional
 	public void addCommentLike(CommentLikeDTO commentLikeDTO) {
+
 		if (likeMapper.countCommentLikeByMemberId(SecurityUtil.getCurrentUserId(), commentLikeDTO.getCommentId()) > 0) {
 			throw new BusinessException("이미 좋아요를 눌렀습니다.");
 		}
@@ -50,6 +52,7 @@ public class LikeService {
 
 	@Transactional
 	public void removePinLike(int pinId) {
+
 		if (likeMapper.countPinLikeByMemberId(SecurityUtil.getCurrentUserId(), pinId) == 0) {
 			throw new BusinessException("좋아요를 누르지 않았습니다.");
 		}
@@ -59,6 +62,7 @@ public class LikeService {
 
 	@Transactional
 	public void removeCommentLike(int commentId) {
+
 		if (likeMapper.countCommentLikeByMemberId(SecurityUtil.getCurrentUserId(), commentId) == 0) {
 			throw new BusinessException("좋아요를 누르지 않았습니다.");
 		}

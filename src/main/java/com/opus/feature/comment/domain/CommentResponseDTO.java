@@ -31,6 +31,7 @@ public class CommentResponseDTO {
 	private LocalDateTime deletedDate;
 
 	public static CommentResponseDTO of(CommentVO comment) {
+		
 		return CommentResponseDTO.builder()
 			.commentId(comment.getCommentId())
 			.pinId(comment.getPinId())

@@ -26,6 +26,7 @@ public class PinVO {
 	private String seed;
 
 	public static PinVO of(PinInsertDTO pinInsertDTO) {
+
 		return PinVO.builder()
 			.memberId(SecurityUtil.getCurrentUserId())
 			.imagePath(pinInsertDTO.getImagePath())

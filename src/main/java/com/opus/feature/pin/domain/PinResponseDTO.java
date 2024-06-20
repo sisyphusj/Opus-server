@@ -26,6 +26,7 @@ public class PinResponseDTO {
 	private String seed;
 
 	public static PinResponseDTO of(PinVO pinVO) {
+
 		return PinResponseDTO.builder()
 			.pinId(pinVO.getPinId())
 			.imagePath(pinVO.getImagePath())

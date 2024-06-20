@@ -33,6 +33,7 @@ public class PinController {
 	// pin 추가
 	@PostMapping("/register")
 	public ResponseEntity<String> addPin(@Valid @RequestBody PinInsertDTO pinInsertDTO) {
+
 		pinService.addPin(pinInsertDTO);
 		return ApiResponse.of("OK");
 	}
@@ -42,6 +43,7 @@ public class PinController {
 	public ResponseEntity<List<PinListResponseDTO>> getPinList(@RequestParam int offset,
 		@RequestParam int amount,
 		@RequestParam(required = false) String keyword) {
+
 		return ApiResponse.of(pinService.getPinList(offset, amount, keyword));
 	}
 
@@ -67,6 +69,7 @@ public class PinController {
 	// pin 삭제
 	@DeleteMapping("/{pinId}")
 	public ResponseEntity<String> removePin(@PathVariable int pinId) {
+
 		pinService.removePin(pinId);
 		return ApiResponse.of("OK");
 	}

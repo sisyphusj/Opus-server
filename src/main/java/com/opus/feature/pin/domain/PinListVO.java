@@ -26,6 +26,7 @@ public class PinListVO {
 	private String nickname;
 
 	public static PinListVO of(PinInsertDTO pinInsertDTO, Integer memberId) {
+
 		return PinListVO.builder()
 			.memberId(memberId)
 			.imagePath(pinInsertDTO.getImagePath())

@@ -16,6 +16,7 @@ public class LikeVO {
 	private int id;
 
 	public static LikeVO of(PinLikeDTO pinLikeDTO) {
+
 		return LikeVO.builder()
 			.memberId(SecurityUtil.getCurrentUserId())
 			.id(pinLikeDTO.getPinId())
@@ -23,6 +24,7 @@ public class LikeVO {
 	}
 
 	public static LikeVO of(CommentLikeDTO commentLikeDTO) {
+
 		return LikeVO.builder()
 			.memberId(SecurityUtil.getCurrentUserId())
 			.id(commentLikeDTO.getCommentId())

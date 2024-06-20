@@ -29,6 +29,7 @@ public class LikeController {
 	// 게시글에 좋아요 추가
 	@PostMapping("/pin")
 	public ResponseEntity<String> addPinLike(@Valid @RequestBody PinLikeDTO pinLikeDTO) {
+
 		likeService.addPinLike(pinLikeDTO);
 		return ApiResponse.of("OK");
 	}
@@ -36,6 +37,7 @@ public class LikeController {
 	// 댓글에 좋아요 추가
 	@PostMapping("/comment")
 	public ResponseEntity<String> addCommentLike(@Valid @RequestBody CommentLikeDTO commentLikeDTO) {
+
 		likeService.addCommentLike(commentLikeDTO);
 		return ApiResponse.of("OK");
 	}
@@ -55,6 +57,7 @@ public class LikeController {
 	// 게시글에 대한 좋아요 삭제
 	@DeleteMapping("/pin/{pinId}")
 	public ResponseEntity<String> removePinLike(@PathVariable int pinId) {
+
 		likeService.removePinLike(pinId);
 		return ApiResponse.of("OK");
 	}
@@ -62,6 +65,7 @@ public class LikeController {
 	// 댓글에 대한 좋아요 삭제
 	@DeleteMapping("/comment/{commentId}")
 	public ResponseEntity<String> removeCommentLike(@PathVariable int commentId) {
+
 		likeService.removeCommentLike(commentId);
 		return ApiResponse.of("OK");
 	}

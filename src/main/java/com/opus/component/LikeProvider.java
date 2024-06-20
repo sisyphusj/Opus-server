@@ -28,6 +28,7 @@ public class LikeProvider {
 	 *  클라이언트(사용자)가 구독 요청을 보내면 구독자 목록에 추가
 	 */
 	public SseEmitter subscribe(int pinId) {
+
 		if (checkDuplicateSubscribe(clients.get(pinId), SecurityUtil.getCurrentUserId())) {
 			throw new BusinessException("이미 구독중입니다.");
 		}
@@ -52,6 +53,7 @@ public class LikeProvider {
 	 * 클라이언트 제거 로직
 	 */
 	private void unsubscribeClient(int pinId, ClientInfo clientInfo) {
+
 		if (!clients.containsKey(pinId))
 			return;
 
@@ -68,6 +70,7 @@ public class LikeProvider {
 	 * 클라이언트(사용자)가 구독 취소 요청을 보내면 구독자 목록에서 삭제
 	 */
 	public void unsubscribe(int pinId) {
+
 		if (!clients.containsKey(pinId))
 			return;
 
@@ -91,6 +94,7 @@ public class LikeProvider {
 	 * 클라이언트(사용자)에게 좋아요 수를 전송
 	 */
 	private void sendPinLikeUpdate(int pinId, int likeCount) {
+
 		if (!clients.containsKey(pinId))
 			throw new BusinessException("구독 중인 클라이언트가 없습니다.");
 
@@ -118,6 +122,7 @@ public class LikeProvider {
 	 * 중복이면 참을 반환
 	 */
 	private boolean checkDuplicateSubscribe(List<ClientInfo> clientInfoList, int memberId) {
+
 		if (clientInfoList == null) {
 			return false;
 		}
@@ -131,6 +136,7 @@ public class LikeProvider {
 	 * 주기적으로 클라이언트를 정리하는 메소드
 	 */
 	public void cleanUpClients() {
+
 		Instant now = Instant.now();
 		clients.forEach((pinId, clientList) -> {
 			clientList.removeIf(client -> client.getLastActiveTime().isBefore(now.minusSeconds(600)));

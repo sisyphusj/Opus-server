@@ -51,7 +51,6 @@ public class AuthService {
 	}
 
 	@Transactional
-	// TODO REDIS 캐시 적용
 	public TokenDTO reissueToken(TokenDTO requestTokenDTO) {
 
 		// Refresh Token 유효성 검증

@@ -45,6 +45,7 @@ public class SubscribeController {
 	// 구독 취소
 	@DeleteMapping("/unsubscribe/{pinId}")
 	public ResponseEntity<String> unsubscribe(@PathVariable int pinId) {
+
 		likeProvider.unsubscribe(pinId);
 		return ApiResponse.of("OK");
 	}
