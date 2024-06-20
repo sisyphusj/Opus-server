@@ -1,6 +1,5 @@
 package com.opus.component;
 
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.stereotype.Component;
@@ -10,16 +9,15 @@ import com.opus.exception.CustomException;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Component
+@RequiredArgsConstructor
 public class JwtAuthenticationEntryPoint implements AuthenticationEntryPoint {
-	private final HandlerExceptionResolver resolver;
 
-	public JwtAuthenticationEntryPoint(@Qualifier("handlerExceptionResolver") HandlerExceptionResolver resolver) {
-		this.resolver = resolver;
-	}
+	private final HandlerExceptionResolver handlerExceptionResolver;
 
 	@Override
 	public void commence(HttpServletRequest request, HttpServletResponse response,
@@ -29,10 +27,10 @@ public class JwtAuthenticationEntryPoint implements AuthenticationEntryPoint {
 		CustomException customException = (CustomException)request.getAttribute("exception");
 
 		if (customException == null) {
-			resolver.resolveException(request, response, null, authException);
+			handlerExceptionResolver.resolveException(request, response, null, authException);
 			return;
 		}
 
-		resolver.resolveException(request, response, null, customException);
+		handlerExceptionResolver.resolveException(request, response, null, customException);
 	}
 }
