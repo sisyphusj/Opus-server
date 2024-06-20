@@ -1,9 +1,9 @@
 package com.opus.component;
 
 import java.io.IOException;
+import java.time.Instant;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 
@@ -14,12 +14,10 @@ import com.opus.exception.BusinessException;
 import com.opus.utils.SecurityUtil;
 
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 @Getter
 @Slf4j
-@RequiredArgsConstructor
 @Component
 public class LikeProvider {
 
@@ -54,13 +52,15 @@ public class LikeProvider {
 	 * 클라이언트 제거 로직
 	 */
 	private void unsubscribeClient(int pinId, ClientInfo clientInfo) {
+		if (!clients.containsKey(pinId))
+			return;
+
 		List<ClientInfo> clientList = clients.get(pinId);
 
-		if (clientList != null) {
-			clientList.remove(clientInfo); // 해당 pin의 클라이언트 리스트가 존재하면 현재 클라이언트만 삭제
-			if (clientList.isEmpty()) {
-				clients.remove(pinId); // 클라이언트 리스트가 없다면 해당 pin에 대한 전체 삭제
-			}
+		clientList.remove(clientInfo); // 해당 pin의 클라이언트 리스트가 존재하면 현재 클라이언트만 삭제
+
+		if (clientList.isEmpty()) {
+			clients.remove(pinId); // 클라이언트 리스트가 없다면 해당 pin에 대한 전체 삭제
 		}
 	}
 
@@ -68,11 +68,10 @@ public class LikeProvider {
 	 * 클라이언트(사용자)가 구독 취소 요청을 보내면 구독자 목록에서 삭제
 	 */
 	public void unsubscribe(int pinId) {
-		List<ClientInfo> clientList = Optional.of(clients.get(pinId))
-			.orElseThrow(() -> {
-				log.error("error : 해당 핀을 구독한 클라이언트가 없습니다.");
-				return new BusinessException("구독 중이지 않습니다.");
-			});
+		if (!clients.containsKey(pinId))
+			return;
+
+		List<ClientInfo> clientList = clients.get(pinId);
 
 		clientList.removeIf(client -> client.getMemberId() == SecurityUtil.getCurrentUserId());
 
@@ -92,11 +91,10 @@ public class LikeProvider {
 	 * 클라이언트(사용자)에게 좋아요 수를 전송
 	 */
 	private void sendPinLikeUpdate(int pinId, int likeCount) {
-		List<ClientInfo> clientList = Optional.of(clients.get(pinId))
-			.orElseThrow(() -> {
-				log.error("error : 해당 핀을 구독한 클라이언트가 없습니다.");
-				return new BusinessException("구독 중이지 않습니다.");
-			});
+		if (!clients.containsKey(pinId))
+			throw new BusinessException("구독 중인 클라이언트가 없습니다.");
+
+		List<ClientInfo> clientList = clients.get(pinId);
 
 		for (ClientInfo clientInfo : clientList) {
 			try {
@@ -109,11 +107,16 @@ public class LikeProvider {
 
 			} catch (IOException e) {
 				log.error("error : ", e);
+				clientInfo.getEmitter().completeWithError(e);
 				clientList.remove(clientInfo);
 			}
 		}
 	}
 
+	/**
+	 * 중복으로 구독을 요청하는 경우에 대한 메소드
+	 * 중복이면 참을 반환
+	 */
 	private boolean checkDuplicateSubscribe(List<ClientInfo> clientInfoList, int memberId) {
 		if (clientInfoList == null) {
 			return false;
@@ -122,6 +125,20 @@ public class LikeProvider {
 		return clientInfoList.stream()
 			.map(ClientInfo::getMemberId)
 			.anyMatch(id -> id == memberId);
+	}
+
+	/**
+	 * 주기적으로 클라이언트를 정리하는 메소드
+	 */
+	public void cleanUpClients() {
+		Instant now = Instant.now();
+		clients.forEach((pinId, clientList) -> {
+			clientList.removeIf(client -> client.getLastActiveTime().isBefore(now.minusSeconds(600)));
+
+			if (clientList.isEmpty()) {
+				clients.remove(pinId);
+			}
+		});
 	}
 
 }
