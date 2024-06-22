@@ -30,6 +30,11 @@ public class LikeService {
 		likeMapper.insertPinLike(LikeVO.of(pinLikeDTO));
 	}
 
+	@Transactional(readOnly = true)
+	public Boolean checkPinLike(int pinId) {
+		return likeMapper.countPinLikeByMemberId(SecurityUtil.getCurrentUserId(), pinId) > 0;
+	}
+
 	@Transactional
 	public void addCommentLike(CommentLikeDTO commentLikeDTO) {
 
@@ -38,6 +43,11 @@ public class LikeService {
 		}
 
 		likeMapper.insertCommentLike(LikeVO.of(commentLikeDTO));
+	}
+
+	@Transactional(readOnly = true)
+	public Boolean checkCommentLike(int commentId) {
+		return likeMapper.countCommentLikeByMemberId(SecurityUtil.getCurrentUserId(), commentId) > 0;
 	}
 
 	@Transactional(readOnly = true)

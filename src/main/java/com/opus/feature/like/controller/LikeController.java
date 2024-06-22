@@ -34,12 +34,24 @@ public class LikeController {
 		return ApiResponse.of("OK");
 	}
 
+	// 게시글에 좋아요 여부 확인
+	@GetMapping("/check/pin/{pinId}")
+	public ResponseEntity<Boolean> checkPinLike(@PathVariable int pinId) {
+		return ApiResponse.of(likeService.checkPinLike(pinId));
+	}
+
 	// 댓글에 좋아요 추가
 	@PostMapping("/comment")
 	public ResponseEntity<String> addCommentLike(@Valid @RequestBody CommentLikeDTO commentLikeDTO) {
 
 		likeService.addCommentLike(commentLikeDTO);
 		return ApiResponse.of("OK");
+	}
+
+	// 댓글에 좋아요 여부 확인
+	@GetMapping("/check/comment/{commentId}")
+	public ResponseEntity<Boolean> checkCommentLike(@PathVariable int commentId) {
+		return ApiResponse.of(likeService.checkCommentLike(commentId));
 	}
 
 	// 게시글에 대한 좋아요 수
