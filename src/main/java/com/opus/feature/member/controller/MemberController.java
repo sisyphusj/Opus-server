@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.opus.common.ApiResponse;
 import com.opus.feature.member.domain.MemberInsertDTO;
 import com.opus.feature.member.domain.MemberResponseDTO;
+import com.opus.feature.member.domain.MemberUpdateInsertDTO;
 import com.opus.feature.member.service.MemberService;
 
 import jakarta.validation.Valid;
@@ -60,9 +61,9 @@ public class MemberController {
 
 	// 프로필 수정
 	@PutMapping
-	public ResponseEntity<String> editMyProfile(@Valid @RequestBody MemberInsertDTO memberInsertDTO) {
+	public ResponseEntity<String> editMyProfile(@Valid @RequestBody MemberUpdateInsertDTO memberUpdateInsertDTO) {
 
-		memberService.editMyProfile(memberInsertDTO);
+		memberService.editMyProfile(memberUpdateInsertDTO);
 		return ApiResponse.of("OK");
 	}
 

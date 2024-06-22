@@ -29,13 +29,13 @@ public class MemberVO {
 			.build();
 	}
 
-	public static MemberVO of(MemberInsertDTO memberInsertDTO) {
+	public static MemberVO of(MemberUpdateInsertDTO memberUpdateInsertDTO) {
 
 		return MemberVO.builder()
-			.username(memberInsertDTO.getUsername())
-			.password(memberInsertDTO.getPassword())
-			.nickname(memberInsertDTO.getNickname())
-			.email(memberInsertDTO.getEmail())
+			.username(memberUpdateInsertDTO.getUsername())
+			.password(memberUpdateInsertDTO.getPassword())
+			.nickname(memberUpdateInsertDTO.getNickname())
+			.email(memberUpdateInsertDTO.getEmail())
 			.build();
 	}
 }

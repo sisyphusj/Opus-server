@@ -2,12 +2,14 @@ package com.opus.feature.member.service;
 
 import java.util.NoSuchElementException;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.opus.feature.member.domain.MemberInsertDTO;
 import com.opus.feature.member.domain.MemberResponseDTO;
+import com.opus.feature.member.domain.MemberUpdateInsertDTO;
 import com.opus.feature.member.domain.MemberVO;
 import com.opus.feature.member.mapper.MemberMapper;
 import com.opus.utils.SecurityUtil;
@@ -58,10 +60,13 @@ public class MemberService {
 	}
 
 	@Transactional
-	public void editMyProfile(MemberInsertDTO memberInsertDTO) {
+	public void editMyProfile(MemberUpdateInsertDTO memberUpdateInsertDTO) {
 
-		memberInsertDTO.updatePassword(passwordEncoder.encode(memberInsertDTO.getPassword()));
-		memberMapper.updateMember(MemberVO.of(memberInsertDTO));
+		if (!StringUtils.isBlank(memberUpdateInsertDTO.getPassword())) {
+			memberUpdateInsertDTO.updatePassword(passwordEncoder.encode(memberUpdateInsertDTO.getPassword()));
+		}
+		
+		memberMapper.updateMember(MemberVO.of(memberUpdateInsertDTO));
 	}
 
 	@Transactional

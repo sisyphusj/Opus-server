@@ -35,12 +35,17 @@
 
     <update id="updateMember">
         update member
-        set username=#{username},
-            password=#{password},
-            nickname=#{nickname},
-            email=#{email}
-        where member.member_id = #{memberId}
+        <set>
+            username = #{username},
+            <if test="password != null and password != ''">
+                password = #{password},
+            </if>
+            nickname = #{nickname},
+            email = #{email}
+        </set>
+        where member_id = #{memberId}
     </update>
+
 
     <delete id="deleteMember">
         delete
