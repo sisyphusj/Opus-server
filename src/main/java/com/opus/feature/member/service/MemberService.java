@@ -46,7 +46,7 @@ public class MemberService {
 	 * username 이 포함된 정보가 1 이상 존재하면 true 반환
 	 */
 	@Transactional(readOnly = true)
-	public Boolean isUsernameDuplicated(String username) {
+	public boolean isUsernameDuplicated(String username) {
 
 		return memberMapper.selectCountByUsername(username) > 0;
 	}
@@ -56,7 +56,7 @@ public class MemberService {
 	 * nickname 이 포함된 정보가 1 이상 존재하면 true 반환
 	 */
 	@Transactional(readOnly = true)
-	public Boolean isNicknameDuplicated(String nickname) {
+	public boolean isNicknameDuplicated(String nickname) {
 
 		return memberMapper.selectCountByNickname(nickname) > 0;
 	}
@@ -66,7 +66,7 @@ public class MemberService {
 	 * email 이 포함된 정보가 1 이상 존재하면 true 반환
 	 */
 	@Transactional(readOnly = true)
-	public Boolean isEmailDuplicated(String email) {
+	public boolean isEmailDuplicated(String email) {
 
 		return memberMapper.selectCountByEmail(email) > 0;
 	}

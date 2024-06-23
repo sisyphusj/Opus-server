@@ -31,7 +31,7 @@ public class LikeService {
 	}
 
 	@Transactional(readOnly = true)
-	public Boolean checkPinLike(int pinId) {
+	public boolean checkPinLike(int pinId) {
 		return likeMapper.countPinLikeByMemberId(SecurityUtil.getCurrentUserId(), pinId) > 0;
 	}
 
@@ -46,17 +46,17 @@ public class LikeService {
 	}
 
 	@Transactional(readOnly = true)
-	public Boolean checkCommentLike(int commentId) {
+	public boolean checkCommentLike(int commentId) {
 		return likeMapper.countCommentLikeByMemberId(SecurityUtil.getCurrentUserId(), commentId) > 0;
 	}
 
 	@Transactional(readOnly = true)
-	public Integer countPinLike(int pinId) {
+	public int countPinLike(int pinId) {
 		return likeMapper.countPinLike(pinId);
 	}
 
 	@Transactional(readOnly = true)
-	public Integer countCommentLike(int commentId) {
+	public int countCommentLike(int commentId) {
 		return likeMapper.countCommentLike(commentId);
 	}
 
