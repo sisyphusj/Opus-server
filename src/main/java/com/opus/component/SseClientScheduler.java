@@ -1,5 +1,6 @@
 package com.opus.component;
 
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
@@ -15,6 +16,7 @@ public class SseClientScheduler {
 	 * 10분 간격으로 cleanUpClients 실행
 	 */
 	@Scheduled(fixedRate = 600000)
+	@Async
 	public void cleanupScheduler() {
 		likeProvider.cleanUpClients();
 	}
@@ -23,6 +25,7 @@ public class SseClientScheduler {
 	 * 30초 간격으로 sendPingMessages 실행
 	 */
 	@Scheduled(fixedRate = 30000)
+	@Async
 	public void sendPingMessages() {
 		likeProvider.sendPingMessages();
 	}
