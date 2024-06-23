@@ -20,9 +20,13 @@ public class LikeService {
 
 	private final LikeMapper likeMapper;
 
+	/**
+	 * 핀에 대한 좋아요 추가
+	 */
 	@Transactional
 	public void addPinLike(PinLikeDTO pinLikeDTO) {
 
+		// 이미 좋아요를 한 상태인지 확인
 		if (likeMapper.countPinLikeByMemberId(SecurityUtil.getCurrentUserId(), pinLikeDTO.getPinId()) > 0) {
 			throw new BusinessException("이미 좋아요를 눌렀습니다.");
 		}
@@ -30,14 +34,22 @@ public class LikeService {
 		likeMapper.insertPinLike(LikeVO.of(pinLikeDTO));
 	}
 
+	/**
+	 * 핀에 좋아요를 한 상태인지 확인
+	 * 이미 좋아요를 한 상태라면 true
+	 */
 	@Transactional(readOnly = true)
 	public boolean checkPinLike(int pinId) {
 		return likeMapper.countPinLikeByMemberId(SecurityUtil.getCurrentUserId(), pinId) > 0;
 	}
 
+	/**
+	 * 댓글에 좋아요 추가
+	 */
 	@Transactional
 	public void addCommentLike(CommentLikeDTO commentLikeDTO) {
 
+		// 이미 좋아요를 한 상태인지 확인
 		if (likeMapper.countCommentLikeByMemberId(SecurityUtil.getCurrentUserId(), commentLikeDTO.getCommentId()) > 0) {
 			throw new BusinessException("이미 좋아요를 눌렀습니다.");
 		}
@@ -45,24 +57,38 @@ public class LikeService {
 		likeMapper.insertCommentLike(LikeVO.of(commentLikeDTO));
 	}
 
+	/**
+	 * 댓글에 좋아요를 한 상태인지 확인
+	 * 이미 좋아료를 한 상태라면 true
+	 */
 	@Transactional(readOnly = true)
 	public boolean checkCommentLike(int commentId) {
 		return likeMapper.countCommentLikeByMemberId(SecurityUtil.getCurrentUserId(), commentId) > 0;
 	}
 
+	/**
+	 * 해당 핀에 대한 좋아요 개수를 반환
+	 */
 	@Transactional(readOnly = true)
 	public int countPinLike(int pinId) {
 		return likeMapper.countPinLike(pinId);
 	}
 
+	/**
+	 * 해당 댓글에 대한 좋아요 개수를 반환
+	 */
 	@Transactional(readOnly = true)
 	public int countCommentLike(int commentId) {
 		return likeMapper.countCommentLike(commentId);
 	}
 
+	/**
+	 * 핀에 대한 좋아요 취소
+	 */
 	@Transactional
 	public void removePinLike(int pinId) {
 
+		// 좋아요를 한 상태가 아닌지 확인
 		if (likeMapper.countPinLikeByMemberId(SecurityUtil.getCurrentUserId(), pinId) == 0) {
 			throw new BusinessException("좋아요를 누르지 않았습니다.");
 		}
@@ -70,9 +96,13 @@ public class LikeService {
 		likeMapper.deletePinLike(SecurityUtil.getCurrentUserId(), pinId);
 	}
 
+	/**
+	 * 댓글에 대한 좋아요 취소
+	 */
 	@Transactional
 	public void removeCommentLike(int commentId) {
 
+		// 좋아요를 한 상태가 아닌지 확인
 		if (likeMapper.countCommentLikeByMemberId(SecurityUtil.getCurrentUserId(), commentId) == 0) {
 			throw new BusinessException("좋아요를 누르지 않았습니다.");
 		}
