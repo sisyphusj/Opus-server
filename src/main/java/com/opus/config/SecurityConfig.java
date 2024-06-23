@@ -86,12 +86,14 @@ public class SecurityConfig {
 
 			.authorizeHttpRequests(
 				authorizeRequests -> authorizeRequests
-					.requestMatchers(HttpMethod.GET, "/api/auth/test").permitAll()
-					.requestMatchers(HttpMethod.GET, "/api/likes/pin/**").permitAll()
-					.requestMatchers(HttpMethod.GET, "/api/likes/comment/**").permitAll()
-					.requestMatchers(PermittedUrls.PERMITTED_URLS).permitAll()
-					.requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
-					.anyRequest().authenticated()
+					.requestMatchers(HttpMethod.GET, "/api/auth/test", "/api/likes/pin/**", "/api/likes/comment/**")
+					.permitAll()
+					.requestMatchers(PermittedUrls.PERMITTED_URLS)
+					.permitAll()
+					.requestMatchers(HttpMethod.OPTIONS, "/**")
+					.permitAll()
+					.anyRequest()
+					.authenticated()
 			)
 
 			.addFilterBefore(
