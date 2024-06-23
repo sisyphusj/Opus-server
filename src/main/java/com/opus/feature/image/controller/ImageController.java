@@ -25,6 +25,9 @@ public class ImageController {
 
 	private final ImageService imageService;
 
+	/**
+	 * 이미지 생성
+	 */
 	@PostMapping
 	public ResponseEntity<List<ImageDetailDTO>> generateImage(@Valid @RequestBody ImageGenerateDTO imageGenerateDTO) {
 		return ApiResponse.of(imageService.generateImage(imageGenerateDTO));

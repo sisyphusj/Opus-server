@@ -6,6 +6,10 @@ import org.springframework.stereotype.Component;
 
 import lombok.RequiredArgsConstructor;
 
+/**
+ * SseClientScheduler - SSE 클라이언트 스케줄러
+ */
+
 @Component
 @RequiredArgsConstructor
 public class SseClientScheduler {

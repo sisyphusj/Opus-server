@@ -10,7 +10,7 @@ import lombok.Getter;
 public class AuthVO {
 
 	private Integer memberId;
- 
+
 	private String username;
 
 	private String password;

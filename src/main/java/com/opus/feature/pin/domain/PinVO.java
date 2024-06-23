@@ -5,6 +5,10 @@ import com.opus.utils.SecurityUtil;
 import lombok.Builder;
 import lombok.Getter;
 
+/**
+ * 핀 VO
+ */
+
 @Builder
 @Getter
 public class PinVO {

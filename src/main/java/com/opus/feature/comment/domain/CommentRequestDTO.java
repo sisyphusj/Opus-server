@@ -18,6 +18,6 @@ public class CommentRequestDTO {
 	@Max(1)
 	private int level;
 
-	@NotBlank(message = "내용을 입력해주세요.")
+	@NotBlank
 	private String content;
 }

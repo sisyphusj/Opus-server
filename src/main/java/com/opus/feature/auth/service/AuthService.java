@@ -11,7 +11,6 @@ import com.opus.component.TokenProvider;
 import com.opus.feature.auth.domain.LoginDTO;
 import com.opus.feature.auth.domain.RefreshTokenVO;
 import com.opus.feature.auth.domain.TokenDTO;
-import com.opus.feature.auth.mapper.AuthMapper;
 import com.opus.feature.auth.mapper.RefreshTokenMapper;
 import com.opus.utils.SecurityUtil;
 
@@ -24,20 +23,28 @@ import lombok.extern.slf4j.Slf4j;
 public class AuthService {
 
 	private final RefreshTokenMapper refreshTokenMapper;
-	private final AuthenticationManagerBuilder authenticationManagerBuilder;
-	private final TokenProvider tokenProvider;
-	private final AuthMapper authMapper;
 
+	private final AuthenticationManagerBuilder authenticationManagerBuilder;
+
+	private final TokenProvider tokenProvider;
+
+	/**
+	 * 로그인 처리
+	 */
 	@Transactional
 	public TokenDTO login(LoginDTO loginDTO) {
 
+		// 로그인 정보를 기반으로 AuthenticationToken 생성
 		UsernamePasswordAuthenticationToken authToken = loginDTO.toAuthentication();
 
+		// 실제 인증 과정
 		Authentication authentication = authenticationManagerBuilder.getObject()
 			.authenticate(authToken);
 
+		// 인증 정보를 기반으로 JWT 토큰 생성
 		TokenDTO tokenDTO = tokenProvider.createToken(authentication);
 
+		// Refresh Token 저장
 		RefreshTokenVO refreshTokenVO = RefreshTokenVO.builder()
 			.key(Integer.parseInt(authentication.getName()))
 			.value(tokenDTO.getRefreshToken())
@@ -50,6 +57,9 @@ public class AuthService {
 		return tokenDTO;
 	}
 
+	/**
+	 * Refresh Token을 이용한 토큰 재발급
+	 */
 	@Transactional
 	public TokenDTO reissueToken(TokenDTO requestTokenDTO) {
 
@@ -66,6 +76,9 @@ public class AuthService {
 		return tokenProvider.reissueTokenFromMemberId(refreshTokenVO.getKey(), refreshTokenVO.getValue());
 	}
 
+	/**
+	 * 로그아웃
+	 */
 	@Transactional
 	public void logout() {
 		refreshTokenMapper.deleteRefreshToken(SecurityUtil.getCurrentUserId());

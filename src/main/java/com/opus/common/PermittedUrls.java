@@ -1,5 +1,9 @@
 package com.opus.common;
 
+/**
+ * PermittedUrls - 허용 URL 클래스
+ */
+
 public class PermittedUrls {
 
 	private PermittedUrls() {

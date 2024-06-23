@@ -3,6 +3,10 @@ package com.opus.feature.pin.domain;
 import lombok.Builder;
 import lombok.Getter;
 
+/**
+ * 핀 리스트 조회 응답 VO
+ */
+
 @Builder
 @Getter
 public class PinListVO {

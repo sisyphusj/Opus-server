@@ -9,6 +9,7 @@ import lombok.Getter;
 @Getter
 public class ImageResponseDTO {
 
+	// 이미지 생성 결과
 	@JsonProperty("images")
 	private List<ImageDetailDTO> imageDetails;
 }

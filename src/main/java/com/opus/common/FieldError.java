@@ -7,6 +7,10 @@ import org.springframework.validation.BindingResult;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
+/**
+ * BindingResult의 검증 오류를 보관하는 클래스
+ */
+
 @Getter
 @AllArgsConstructor
 public class FieldError {

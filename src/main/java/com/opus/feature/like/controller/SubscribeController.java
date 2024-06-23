@@ -30,13 +30,17 @@ public class SubscribeController {
 
 	private final LikeService likeService;
 
-	// pin 좋아요 수 실시간 구독
+	/**
+	 * 게시글 좋아요 구독
+	 */
 	@GetMapping(value = "/subscribe/{pinId}", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
 	public ResponseEntity<SseEmitter> subscribeToPinLikes(@PathVariable int pinId) {
 		return ApiResponse.of(likeProvider.subscribe(pinId));
 	}
 
-	// 각 구독 클라이언트들의 정보 최신화 적용
+	/**
+	 * 구독한 클라이언트들에게 좋아요 카운트를 브로드캐스트
+	 */
 	@PostMapping("/broadcast")
 	public void updateLikeCount(@Valid @RequestBody PinLikeDTO pinLikeDTO) {
 		likeProvider.updateLatestLikeCount(pinLikeDTO.getPinId(), likeService.countPinLike(pinLikeDTO.getPinId()));

@@ -16,6 +16,10 @@ import com.opus.utils.SecurityUtil;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 
+/**
+ * LikeProvider - 좋아요 수를 실시간으로 전송하는 클래스
+ */
+
 @Getter
 @Slf4j
 @Component
@@ -179,6 +183,7 @@ public class LikeProvider {
 	 */
 	private void sendPingToClient(int pinId, List<ClientInfo> clientList) {
 
+		// 클라이언트 리스트를 순회하며 핑 메시지 전송
 		for (ClientInfo clientInfo : clientList) {
 
 			try {

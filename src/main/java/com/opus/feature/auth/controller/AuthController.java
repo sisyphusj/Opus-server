@@ -23,19 +23,25 @@ public class AuthController {
 
 	private final AuthService authService;
 
-	// 로그인
+	/**
+	 * 로그인
+	 */
 	@PostMapping("/login")
 	public ResponseEntity<TokenDTO> login(@Valid @RequestBody LoginDTO loginDTO) {
 		return ApiResponse.of(authService.login(loginDTO));
 	}
 
-	// 엑세스 토큰 재발급
+	/**
+	 * 토큰 재발급
+	 */
 	@PostMapping("/reissue-token")
 	public ResponseEntity<TokenDTO> reissueToken(@Valid @RequestBody TokenDTO requestTokenDTO) {
 		return ApiResponse.of(authService.reissueToken(requestTokenDTO));
 	}
 
-	// 로그아웃
+	/**
+	 * 로그아웃
+	 */
 	@PostMapping("/logout")
 	public ResponseEntity<String> logout() {
 

@@ -6,6 +6,10 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 
+/**
+ * 핀 리스트 응답 DTO
+ */
+
 @Slf4j
 @Getter
 @Builder

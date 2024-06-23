@@ -9,6 +9,10 @@ import com.amazonaws.auth.BasicAWSCredentials;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3ClientBuilder;
 
+/**
+ * S3Config - AWS S3 설정 클래스
+ */
+
 @Configuration
 public class S3Config {
 
@@ -21,6 +25,7 @@ public class S3Config {
 	@Value("${cloud.aws.region.static}")
 	private String region;
 
+	// S3 클라이언트 빈 등록
 	@Bean
 	public AmazonS3 s3Client() {
 

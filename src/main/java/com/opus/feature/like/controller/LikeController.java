@@ -26,7 +26,9 @@ public class LikeController {
 
 	private final LikeService likeService;
 
-	// 게시글에 좋아요 추가
+	/**
+	 * 게시글에 좋아요 추가
+	 */
 	@PostMapping("/pin")
 	public ResponseEntity<String> addPinLike(@Valid @RequestBody PinLikeDTO pinLikeDTO) {
 
@@ -34,13 +36,17 @@ public class LikeController {
 		return ApiResponse.of("OK");
 	}
 
-	// 게시글에 좋아요 여부 확인
+	/**
+	 * 게시글에 좋아요 여부 확인
+	 */
 	@GetMapping("/check/pin/{pinId}")
 	public ResponseEntity<Boolean> checkPinLike(@PathVariable int pinId) {
 		return ApiResponse.of(likeService.checkPinLike(pinId));
 	}
 
-	// 댓글에 좋아요 추가
+	/**
+	 * 댓글에 좋아요 추가
+	 */
 	@PostMapping("/comment")
 	public ResponseEntity<String> addCommentLike(@Valid @RequestBody CommentLikeDTO commentLikeDTO) {
 
@@ -48,25 +54,33 @@ public class LikeController {
 		return ApiResponse.of("OK");
 	}
 
-	// 댓글에 좋아요 여부 확인
+	/**
+	 * 댓글에 좋아요 여부 확인
+	 */
 	@GetMapping("/check/comment/{commentId}")
 	public ResponseEntity<Boolean> checkCommentLike(@PathVariable int commentId) {
 		return ApiResponse.of(likeService.checkCommentLike(commentId));
 	}
 
-	// 게시글에 대한 좋아요 수
+	/**
+	 * 게시글에 대한 좋아요 수
+	 */
 	@GetMapping(value = "/pin/{pinId}")
 	public ResponseEntity<Integer> countPinLike(@PathVariable int pinId) {
 		return ApiResponse.of(likeService.countPinLike(pinId));
 	}
 
-	// 댓글에 대한 좋아요 수
+	/**
+	 * 댓글에 대한 좋아요 수
+	 */
 	@GetMapping(value = "/comment/{commentId}")
 	public ResponseEntity<Integer> countCommentLike(@PathVariable int commentId) {
 		return ApiResponse.of(likeService.countCommentLike(commentId));
 	}
 
-	// 게시글에 대한 좋아요 삭제
+	/**
+	 * 게시글에 대한 좋아요 삭제
+	 */
 	@DeleteMapping("/pin/{pinId}")
 	public ResponseEntity<String> removePinLike(@PathVariable int pinId) {
 
@@ -74,7 +88,9 @@ public class LikeController {
 		return ApiResponse.of("OK");
 	}
 
-	// 댓글에 대한 좋아요 삭제
+	/**
+	 * 댓글에 대한 좋아요 삭제
+	 */
 	@DeleteMapping("/comment/{commentId}")
 	public ResponseEntity<String> removeCommentLike(@PathVariable int commentId) {
 

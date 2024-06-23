@@ -17,6 +17,7 @@ public class ImageDetailDTO {
 	@JsonProperty("image")
 	private String imageUrl;
 
+	// 이미지 주소 업데이트
 	public void updateImageUrl(String imageUrl) {
 		this.imageUrl = imageUrl;
 	}

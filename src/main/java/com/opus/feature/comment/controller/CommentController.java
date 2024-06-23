@@ -31,7 +31,9 @@ public class CommentController {
 
 	private final CommentService commentService;
 
-	// 댓글 추가
+	/**
+	 * 댓글 추가
+	 */
 	@PostMapping
 	public ResponseEntity<String> addComment(@Valid @RequestBody CommentRequestDTO commentRequestDTO) {
 
@@ -39,19 +41,25 @@ public class CommentController {
 		return ApiResponse.of("OK");
 	}
 
-	// 댓글 리스트
+	/**
+	 * 댓글 리스트 조회
+	 */
 	@GetMapping("/list")
 	public ResponseEntity<List<CommentResponseDTO>> getCommentListByPinId(@RequestParam int pinId) {
 		return ApiResponse.of(commentService.getCommentListByPinId(pinId));
 	}
 
-	// 내 댓글 리스트
+	/**
+	 * 내 댓글 리스트 조회
+	 */
 	@GetMapping("/my-comments")
 	public ResponseEntity<List<CommentResponseDTO>> getMyCommentList() {
 		return ApiResponse.of(commentService.getMyCommentList());
 	}
 
-	// 댓글 수정
+	/**
+	 * 댓글 수정
+	 */
 	@PutMapping
 	public ResponseEntity<String> editComment(@Valid @RequestBody CommentUpdateDTO commentDTO) {
 
@@ -59,7 +67,9 @@ public class CommentController {
 		return ApiResponse.of("OK");
 	}
 
-	// 댓글 삭제
+	/**
+	 * 댓글 삭제
+	 */
 	@DeleteMapping("/{commentId}")
 	public ResponseEntity<String> removeComment(@PathVariable int commentId) {
 

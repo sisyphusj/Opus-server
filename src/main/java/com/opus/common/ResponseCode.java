@@ -3,6 +3,10 @@ package com.opus.common;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
+/**
+ * ResponseCode - 응답 코드 클래스
+ */
+
 @AllArgsConstructor
 @Getter
 public enum ResponseCode {

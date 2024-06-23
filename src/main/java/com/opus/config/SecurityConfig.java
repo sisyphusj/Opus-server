@@ -30,6 +30,7 @@ import lombok.RequiredArgsConstructor;
 /**
  * SecurityConfig - Spring Security 설정 클래스
  */
+
 @EnableWebSecurity
 @Configuration
 @RequiredArgsConstructor
@@ -67,23 +68,29 @@ public class SecurityConfig {
 	public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
 		httpSecurity
 
+			// CSRF 보안 설정 비활성화
 			.csrf(AbstractHttpConfigurer::disable)
 
+			// CORS 설정 추가
 			.cors(cors -> cors.configurationSource(corsConfigurationSource()))
 
+			// 예외 처리를 위한 핸들러 설정
 			.exceptionHandling(exceptionHandling -> exceptionHandling
 				.authenticationEntryPoint(jwtAuthenticationEntryPoint)
 				.accessDeniedHandler(jwtAccessDeniedHandler)
 			)
 
+			// X-Frame-Options 설정
 			.headers(headers -> headers.frameOptions(HeadersConfigurer.FrameOptionsConfig::sameOrigin)
 			)
 
+			// 세션 관리 설정
 			.sessionManagement(
 				sessionManagement -> sessionManagement
 					.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
 			)
 
+			// 인증 요청 설정
 			.authorizeHttpRequests(
 				authorizeRequests -> authorizeRequests
 					.requestMatchers(HttpMethod.GET, "/api/auth/test", "/api/likes/pin/**", "/api/likes/comment/**")
@@ -96,6 +103,7 @@ public class SecurityConfig {
 					.authenticated()
 			)
 
+			// JWT 필터 설정
 			.addFilterBefore(
 				new JwtFilter(tokenProvider),
 				UsernamePasswordAuthenticationFilter.class

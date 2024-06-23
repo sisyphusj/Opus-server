@@ -1,6 +1,6 @@
 package com.opus.feature.member.service;
 
-import java.util.NoSuchElementException;
+import java.util.Optional;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -77,9 +77,10 @@ public class MemberService {
 	@Transactional(readOnly = true)
 	public MemberResponseDTO getMyProfile() {
 
+		// memberId에 해당하는 회원이 없다면 BusinessException 발생
 		return memberMapper.selectMemberByMemberId(SecurityUtil.getCurrentUserId())
 			.map(MemberResponseDTO::of)
-			.orElseThrow(() -> new NoSuchElementException("해당 회원을 찾을 수 없습니다."));
+			.orElseThrow(() -> new BusinessException("해당 회원을 찾을 수 없습니다."));
 	}
 
 	/**
@@ -90,6 +91,7 @@ public class MemberService {
 
 		checkMemberDuplicated(memberEditRequestDTO);
 
+		// password 가 입력되었다면 인코딩
 		if (!StringUtils.isBlank(memberEditRequestDTO.getPassword())) {
 			memberEditRequestDTO.updatePassword(passwordEncoder.encode(memberEditRequestDTO.getPassword()));
 		}
@@ -103,8 +105,12 @@ public class MemberService {
 	@Transactional
 	public void removeMyProfile() {
 
-		memberMapper.selectMemberByMemberId(SecurityUtil.getCurrentUserId())
-			.orElseThrow(() -> new NoSuchElementException("해당 회원을 찾을 수 없습니다."));
+		// memberId에 해당하는 회원이 없다면 BusinessException 발생
+		Optional<MemberVO> memberVO = memberMapper.selectMemberByMemberId(SecurityUtil.getCurrentUserId());
+
+		if (memberVO.isEmpty()) {
+			throw new BusinessException("해당 회원을 찾을 수 없습니다.");
+		}
 
 		memberMapper.deleteMember(SecurityUtil.getCurrentUserId());
 	}

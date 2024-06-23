@@ -18,6 +18,7 @@ public class LoginDTO {
 	@Setter
 	private String password;
 
+	// UsernamePasswordAuthenticationToken으로 반환
 	public UsernamePasswordAuthenticationToken toAuthentication() {
 		return new UsernamePasswordAuthenticationToken(username, password);
 	}

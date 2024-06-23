@@ -5,6 +5,10 @@ import com.opus.feature.member.service.DuplicateCheckAttributes;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
 
+/**
+ * 회원 정보 수정 요청 DTO
+ */
+
 @Getter
 public class MemberEditRequestDTO implements DuplicateCheckAttributes {
 

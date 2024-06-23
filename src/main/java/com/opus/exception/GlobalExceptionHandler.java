@@ -29,6 +29,10 @@ import com.opus.common.ResponseCode;
 import io.jsonwebtoken.ExpiredJwtException;
 import lombok.extern.slf4j.Slf4j;
 
+/**
+ * GlobalExceptionHandler - 전역 예외 처리 클래스
+ */
+
 @RestControllerAdvice
 @Slf4j
 public class GlobalExceptionHandler {
