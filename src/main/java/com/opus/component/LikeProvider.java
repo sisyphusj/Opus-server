@@ -34,7 +34,7 @@ public class LikeProvider {
 			throw new BusinessException("이미 구독중입니다.");
 		}
 
-		// 새 SseEmitter 객체 생성 (만료 시간을 Long.MAX_VALUE로 설정)
+		// 새 SseEmitter 객체 생성
 		SseEmitter emitter = new SseEmitter(Long.MAX_VALUE);
 
 		// 클라이언트 정보 객체 생성
@@ -58,8 +58,9 @@ public class LikeProvider {
 	 */
 	private void unsubscribeClient(int pinId, ClientInfo clientInfo) {
 
-		if (!clients.containsKey(pinId))
+		if (!clients.containsKey(pinId)) {
 			return;
+		}
 
 		List<ClientInfo> clientList = clients.get(pinId);
 
@@ -110,10 +111,19 @@ public class LikeProvider {
 		// pinId에 해당하는 클라이언트 리스트를 가져옴
 		List<ClientInfo> clientList = clients.get(pinId);
 
+		// 클라이언트에게 좋아요 수를 전송
+		sendLikeUpdateToClients(pinId, likeCount, clientList);
+	}
+
+	/**
+	 * 클라이언트(사용자)에게 좋아요 수를 전송
+	 */
+	private void sendLikeUpdateToClients(int pinId, int likeCount, List<ClientInfo> clientList) {
+
 		for (ClientInfo clientInfo : clientList) {
 			try {
 				// 클라이언트에게 전송할 데이터, 맵 형태로 생성
-				Map<String, Object> eventData = Map.of("pinId", pinId, "likeCount", likeCount);
+				Map<String, Integer> eventData = Map.of("pinId", pinId, "likeCount", likeCount);
 
 				// 클라이언트에게 전송할 이벤트 빌더 생성
 				SseEmitter.SseEventBuilder eventBuilder = SseEmitter.event()
@@ -161,19 +171,22 @@ public class LikeProvider {
 	public void sendPingMessages() {
 
 		// 클라이언트 리스트를 순회하며 핑 메시지 전송
-		clients.forEach((pinId, clientList) ->
-			clientList.forEach(clientInfo -> sendPingToClient(clientInfo, pinId)));
+		clients.forEach(this::sendPingToClient);
 	}
 
 	/**
 	 * 클라이언트에게 핑 메시지 전송
 	 */
-	private void sendPingToClient(ClientInfo clientInfo, int pinId) {
-		try {
-			clientInfo.getEmitter().send(SseEmitter.event().name("ping").data("ping"));
-		} catch (IOException e) {
-			log.error("핑 전송 실패", e);
-			unsubscribeClient(pinId, clientInfo);
+	private void sendPingToClient(int pinId, List<ClientInfo> clientList) {
+
+		for (ClientInfo clientInfo : clientList) {
+
+			try {
+				clientInfo.getEmitter().send(SseEmitter.event().name("ping").data("ping"));
+			} catch (IOException e) {
+				log.error("핑 전송 실패", e);
+				unsubscribeClient(pinId, clientInfo);
+			}
 		}
 	}
 
