@@ -7,7 +7,7 @@ import lombok.RequiredArgsConstructor;
 
 @Component
 @RequiredArgsConstructor
-public class SseClientCleaner {
+public class SseClientScheduler {
 
 	private final LikeProvider likeProvider;
 
@@ -17,5 +17,13 @@ public class SseClientCleaner {
 	@Scheduled(fixedRate = 600000)
 	public void cleanupScheduler() {
 		likeProvider.cleanUpClients();
+	}
+
+	/**
+	 * 30초 간격으로 sendPingMessages 실행
+	 */
+	@Scheduled(fixedRate = 30000)
+	public void sendPingMessages() {
+		likeProvider.sendPingMessages();
 	}
 }

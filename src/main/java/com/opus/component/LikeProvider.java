@@ -133,10 +133,29 @@ public class LikeProvider {
 	}
 
 	/**
+	 * 주기적으로 모든 구독 클라이언트에게 핑 메시지 전송
+	 * 브라우저는 클라이언트-서버 간 연결이 45초 이상 유지되지 않으면 연결을 끊음
+	 */
+	public void sendPingMessages() {
+		clients.forEach((pinId, clientList) -> {
+			for (ClientInfo clientInfo : clientList) {
+				try {
+					clientInfo.getEmitter().send(SseEmitter.event().name("ping").data("ping"));
+					log.info("Ping sent to client: {}", clientInfo.getMemberId());
+				} catch (IOException e) {
+					log.error("Failed to send ping", e);
+					unsubscribeClient(pinId, clientInfo);
+				}
+			}
+		});
+	}
+
+	/**
 	 * 주기적으로 클라이언트를 정리하는 메소드
 	 */
 	public void cleanUpClients() {
 
+		log.info("정리 메소드 시작");
 		Instant now = Instant.now();
 		clients.forEach((pinId, clientList) -> {
 			clientList.removeIf(client -> client.getLastActiveTime().isBefore(now.minusSeconds(600)));
