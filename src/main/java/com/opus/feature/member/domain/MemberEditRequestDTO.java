@@ -4,12 +4,11 @@ import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
 
 @Getter
-public class MemberInsertDTO {
+public class MemberEditRequestDTO {
 
 	@NotBlank
 	private String username;
 
-	@NotBlank
 	private String password;
 
 	@NotBlank

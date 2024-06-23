@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.opus.exception.BusinessException;
-import com.opus.feature.comment.domain.CommentInsertDTO;
+import com.opus.feature.comment.domain.CommentRequestDTO;
 import com.opus.feature.comment.domain.CommentResponseDTO;
 import com.opus.feature.comment.domain.CommentUpdateDTO;
 import com.opus.feature.comment.domain.CommentVO;
@@ -25,9 +25,9 @@ public class CommentService {
 	private final CommentMapper commentMapper;
 
 	@Transactional
-	public void addComment(CommentInsertDTO commentInsertDTO) {
+	public void addComment(CommentRequestDTO commentRequestDTO) {
 
-		CommentVO comment = CommentVO.of(commentInsertDTO);
+		CommentVO comment = CommentVO.of(commentRequestDTO);
 		commentMapper.insertComment(comment);
 	}
 

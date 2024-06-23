@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.opus.common.ApiResponse;
-import com.opus.feature.comment.domain.CommentInsertDTO;
+import com.opus.feature.comment.domain.CommentRequestDTO;
 import com.opus.feature.comment.domain.CommentResponseDTO;
 import com.opus.feature.comment.domain.CommentUpdateDTO;
 import com.opus.feature.comment.service.CommentService;
@@ -33,9 +33,9 @@ public class CommentController {
 
 	// 댓글 추가
 	@PostMapping
-	public ResponseEntity<String> addComment(@Valid @RequestBody CommentInsertDTO commentInsertDTO) {
+	public ResponseEntity<String> addComment(@Valid @RequestBody CommentRequestDTO commentRequestDTO) {
 
-		commentService.addComment(commentInsertDTO);
+		commentService.addComment(commentRequestDTO);
 		return ApiResponse.of("OK");
 	}
 

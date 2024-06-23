@@ -11,9 +11,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.opus.common.ApiResponse;
-import com.opus.feature.member.domain.MemberInsertDTO;
+import com.opus.feature.member.domain.MemberEditRequestDTO;
+import com.opus.feature.member.domain.MemberRequestDTO;
 import com.opus.feature.member.domain.MemberResponseDTO;
-import com.opus.feature.member.domain.MemberUpdateInsertDTO;
 import com.opus.feature.member.service.MemberService;
 
 import jakarta.validation.Valid;
@@ -29,9 +29,9 @@ public class MemberController {
 
 	// 회원가입
 	@PostMapping("/register")
-	public ResponseEntity<String> registerMember(@Valid @RequestBody MemberInsertDTO memberInsertDTO) {
+	public ResponseEntity<String> registerMember(@Valid @RequestBody MemberRequestDTO memberRequestDTO) {
 
-		memberService.registerMember(memberInsertDTO);
+		memberService.registerMember(memberRequestDTO);
 		return ApiResponse.of("OK");
 	}
 
@@ -61,9 +61,9 @@ public class MemberController {
 
 	// 프로필 수정
 	@PutMapping
-	public ResponseEntity<String> editMyProfile(@Valid @RequestBody MemberUpdateInsertDTO memberUpdateInsertDTO) {
+	public ResponseEntity<String> editMyProfile(@Valid @RequestBody MemberEditRequestDTO memberEditRequestDTO) {
 
-		memberService.editMyProfile(memberUpdateInsertDTO);
+		memberService.editMyProfile(memberEditRequestDTO);
 		return ApiResponse.of("OK");
 	}
 

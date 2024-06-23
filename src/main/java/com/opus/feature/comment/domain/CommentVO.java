@@ -33,15 +33,15 @@ public class CommentVO {
 
 	private String nickname;
 
-	public static CommentVO of(CommentInsertDTO commentInsertDTO) {
+	public static CommentVO of(CommentRequestDTO commentRequestDTO) {
 
 		return CommentVO.builder()
-			.pinId(commentInsertDTO.getPinId())
+			.pinId(commentRequestDTO.getPinId())
 			.memberId(SecurityUtil.getCurrentUserId())
-			.topLevelCommentId(commentInsertDTO.getTopLevelCommentId())
-			.level(commentInsertDTO.getLevel())
-			.content(commentInsertDTO.getContent())
-			.parentNickname(commentInsertDTO.getParentNickname())
+			.topLevelCommentId(commentRequestDTO.getTopLevelCommentId())
+			.level(commentRequestDTO.getLevel())
+			.content(commentRequestDTO.getContent())
+			.parentNickname(commentRequestDTO.getParentNickname())
 			.build();
 	}
 

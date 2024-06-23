@@ -6,9 +6,9 @@ import java.util.NoSuchElementException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.opus.feature.pin.domain.PinInsertDTO;
 import com.opus.feature.pin.domain.PinListRequestVO;
 import com.opus.feature.pin.domain.PinListResponseDTO;
+import com.opus.feature.pin.domain.PinRequestDTO;
 import com.opus.feature.pin.domain.PinResponseDTO;
 import com.opus.feature.pin.domain.PinVO;
 import com.opus.feature.pin.mapper.PinMapper;
@@ -25,8 +25,8 @@ public class PinService {
 	private final PinMapper pinMapper;
 
 	@Transactional
-	public void addPin(PinInsertDTO pinInsertDTO) {
-		pinMapper.insertPin(PinVO.of(pinInsertDTO));
+	public void addPin(PinRequestDTO pinRequestDTO) {
+		pinMapper.insertPin(PinVO.of(pinRequestDTO));
 	}
 
 	@Transactional(readOnly = true)

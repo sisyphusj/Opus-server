@@ -19,23 +19,23 @@ public class MemberVO {
 
 	private String email;
 
-	public static MemberVO fromRegistrationDTO(MemberInsertDTO memberInsertDTO) {
+	public static MemberVO fromRegistrationDTO(MemberRequestDTO memberRequestDTO) {
 
 		return MemberVO.builder()
-			.username(memberInsertDTO.getUsername())
-			.password(memberInsertDTO.getPassword())
-			.nickname(memberInsertDTO.getNickname())
-			.email(memberInsertDTO.getEmail())
+			.username(memberRequestDTO.getUsername())
+			.password(memberRequestDTO.getPassword())
+			.nickname(memberRequestDTO.getNickname())
+			.email(memberRequestDTO.getEmail())
 			.build();
 	}
 
-	public static MemberVO of(MemberUpdateInsertDTO memberUpdateInsertDTO) {
+	public static MemberVO of(MemberEditRequestDTO memberEditRequestDTO) {
 
 		return MemberVO.builder()
-			.username(memberUpdateInsertDTO.getUsername())
-			.password(memberUpdateInsertDTO.getPassword())
-			.nickname(memberUpdateInsertDTO.getNickname())
-			.email(memberUpdateInsertDTO.getEmail())
+			.username(memberEditRequestDTO.getUsername())
+			.password(memberEditRequestDTO.getPassword())
+			.nickname(memberEditRequestDTO.getNickname())
+			.email(memberEditRequestDTO.getEmail())
 			.build();
 	}
 }

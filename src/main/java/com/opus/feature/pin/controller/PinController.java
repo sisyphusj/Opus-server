@@ -13,8 +13,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.opus.common.ApiResponse;
-import com.opus.feature.pin.domain.PinInsertDTO;
 import com.opus.feature.pin.domain.PinListResponseDTO;
+import com.opus.feature.pin.domain.PinRequestDTO;
 import com.opus.feature.pin.domain.PinResponseDTO;
 import com.opus.feature.pin.service.PinService;
 
@@ -32,9 +32,9 @@ public class PinController {
 
 	// pin 추가
 	@PostMapping("/register")
-	public ResponseEntity<String> addPin(@Valid @RequestBody PinInsertDTO pinInsertDTO) {
+	public ResponseEntity<String> addPin(@Valid @RequestBody PinRequestDTO pinRequestDTO) {
 
-		pinService.addPin(pinInsertDTO);
+		pinService.addPin(pinRequestDTO);
 		return ApiResponse.of("OK");
 	}
 
