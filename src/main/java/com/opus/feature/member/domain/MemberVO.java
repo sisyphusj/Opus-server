@@ -1,5 +1,7 @@
 package com.opus.feature.member.domain;
 
+import com.opus.utils.SecurityUtil;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -32,6 +34,7 @@ public class MemberVO {
 	public static MemberVO of(MemberEditRequestDTO memberEditRequestDTO) {
 
 		return MemberVO.builder()
+			.memberId(SecurityUtil.getCurrentUserId())
 			.username(memberEditRequestDTO.getUsername())
 			.password(memberEditRequestDTO.getPassword())
 			.nickname(memberEditRequestDTO.getNickname())

@@ -7,9 +7,10 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.opus.feature.member.domain.MemberInsertDTO;
+import com.opus.exception.BusinessException;
+import com.opus.feature.member.domain.MemberEditRequestDTO;
+import com.opus.feature.member.domain.MemberRequestDTO;
 import com.opus.feature.member.domain.MemberResponseDTO;
-import com.opus.feature.member.domain.MemberUpdateInsertDTO;
 import com.opus.feature.member.domain.MemberVO;
 import com.opus.feature.member.mapper.MemberMapper;
 import com.opus.utils.SecurityUtil;
@@ -26,31 +27,53 @@ public class MemberService {
 
 	private final PasswordEncoder passwordEncoder;
 
+	/**
+	 * 회원 가입
+	 */
 	@Transactional
-	public void registerMember(MemberInsertDTO memberInsertDTO) {
+	public void registerMember(MemberRequestDTO memberRequestDTO) {
 
-		memberInsertDTO.updatePassword(passwordEncoder.encode(memberInsertDTO.getPassword()));
-		memberMapper.insertMember(MemberVO.fromRegistrationDTO(memberInsertDTO));
+		checkMemberDuplicated(memberRequestDTO);
+
+		// 원본 password 인코딩
+		memberRequestDTO.updatePassword(passwordEncoder.encode(memberRequestDTO.getPassword()));
+
+		memberMapper.insertMember(MemberVO.fromRegistrationDTO(memberRequestDTO));
 	}
 
+	/**
+	 * username 중복 체크
+	 * username 이 포함된 정보가 1 이상 존재하면 true 반환
+	 */
 	@Transactional(readOnly = true)
-	public Boolean isUsernameDuplicated(String userName) {
+	public Boolean isUsernameDuplicated(String username) {
 
-		return memberMapper.selectCountByUsername(userName) > 0;
+		return memberMapper.selectCountByUsername(username) > 0;
 	}
 
+	/**
+	 * nickname 중복 체크
+	 * nickname 이 포함된 정보가 1 이상 존재하면 true 반환
+	 */
 	@Transactional(readOnly = true)
 	public Boolean isNicknameDuplicated(String nickname) {
 
 		return memberMapper.selectCountByNickname(nickname) > 0;
 	}
 
+	/**
+	 * email 중복 체크
+	 * email 이 포함된 정보가 1 이상 존재하면 true 반환
+	 */
 	@Transactional(readOnly = true)
 	public Boolean isEmailDuplicated(String email) {
 
 		return memberMapper.selectCountByEmail(email) > 0;
 	}
 
+	/**
+	 * memberId에 따른 회원정보 조회
+	 */
 	@Transactional(readOnly = true)
 	public MemberResponseDTO getMyProfile() {
 
@@ -59,16 +82,24 @@ public class MemberService {
 			.orElseThrow(() -> new NoSuchElementException("해당 회원을 찾을 수 없습니다."));
 	}
 
+	/**
+	 * 회원 정보 업데이트
+	 */
 	@Transactional
-	public void editMyProfile(MemberUpdateInsertDTO memberUpdateInsertDTO) {
+	public void editMyProfile(MemberEditRequestDTO memberEditRequestDTO) {
 
-		if (!StringUtils.isBlank(memberUpdateInsertDTO.getPassword())) {
-			memberUpdateInsertDTO.updatePassword(passwordEncoder.encode(memberUpdateInsertDTO.getPassword()));
+		checkMemberDuplicated(memberEditRequestDTO);
+
+		if (!StringUtils.isBlank(memberEditRequestDTO.getPassword())) {
+			memberEditRequestDTO.updatePassword(passwordEncoder.encode(memberEditRequestDTO.getPassword()));
 		}
-		
-		memberMapper.updateMember(MemberVO.of(memberUpdateInsertDTO));
+
+		memberMapper.updateMember(MemberVO.of(memberEditRequestDTO));
 	}
 
+	/**
+	 * 회원 정보 삭제
+	 */
 	@Transactional
 	public void removeMyProfile() {
 
@@ -78,4 +109,17 @@ public class MemberService {
 		memberMapper.deleteMember(SecurityUtil.getCurrentUserId());
 	}
 
+	/**
+	 * DTO 의 password 를 제외한 각 필드 중복 체크
+	 */
+	private void checkMemberDuplicated(DuplicateCheckAttributes requestDTO) {
+
+		if (memberMapper.selectCountByUsername(requestDTO.getUsername()) > 0)
+			throw new BusinessException("아이디 중복");
+		if (memberMapper.selectCountByNickname(requestDTO.getNickname()) > 0)
+			throw new BusinessException("닉네임 중복");
+		if (memberMapper.selectCountByEmail(requestDTO.getEmail()) > 0)
+			throw new BusinessException("이메일 중복");
+
+	}
 }
