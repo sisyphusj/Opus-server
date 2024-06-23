@@ -141,9 +141,8 @@ public class LikeProvider {
 			for (ClientInfo clientInfo : clientList) {
 				try {
 					clientInfo.getEmitter().send(SseEmitter.event().name("ping").data("ping"));
-					log.info("Ping sent to client: {}", clientInfo.getMemberId());
 				} catch (IOException e) {
-					log.error("Failed to send ping", e);
+					log.error("핑 전송 실패", e);
 					unsubscribeClient(pinId, clientInfo);
 				}
 			}
@@ -155,7 +154,6 @@ public class LikeProvider {
 	 */
 	public void cleanUpClients() {
 
-		log.info("정리 메소드 시작");
 		Instant now = Instant.now();
 		clients.forEach((pinId, clientList) -> {
 			clientList.removeIf(client -> client.getLastActiveTime().isBefore(now.minusSeconds(600)));
