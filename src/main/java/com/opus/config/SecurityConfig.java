@@ -20,6 +20,8 @@ import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import com.opus.common.PermittedUrls;
+import com.opus.component.JwtAccessDeniedHandler;
+import com.opus.component.JwtAuthenticationEntryPoint;
 import com.opus.component.TokenProvider;
 import com.opus.filter.JwtFilter;
 
@@ -85,6 +87,8 @@ public class SecurityConfig {
 			.authorizeHttpRequests(
 				authorizeRequests -> authorizeRequests
 					.requestMatchers(HttpMethod.GET, "/api/auth/test").permitAll()
+					.requestMatchers(HttpMethod.GET, "/api/likes/pin/**").permitAll()
+					.requestMatchers(HttpMethod.GET, "/api/likes/comment/**").permitAll()
 					.requestMatchers(PermittedUrls.PERMITTED_URLS).permitAll()
 					.requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
 					.anyRequest().authenticated()
