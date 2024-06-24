@@ -5,10 +5,10 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.opus.component.CheckMemberField;
+import com.opus.component.CheckMemberFieldComponent;
 import com.opus.exception.BusinessException;
 import com.opus.feature.member.domain.MemberEditRequestDTO;
-import com.opus.feature.member.domain.MemberRequestDTO;
+import com.opus.feature.member.domain.MemberRegisterRequestDTO;
 import com.opus.feature.member.domain.MemberResponseDTO;
 import com.opus.feature.member.domain.MemberVO;
 import com.opus.feature.member.domain.PasswordConfirmDTO;
@@ -27,21 +27,21 @@ public class MemberService {
 
 	private final PasswordEncoder passwordEncoder;
 
-	private final CheckMemberField checkMemberField;
+	private final CheckMemberFieldComponent checkMemberFieldComponent;
 
 	/**
 	 * 회원 가입
 	 */
 	@Transactional
-	public void registerMember(MemberRequestDTO memberRequestDTO) {
+	public void registerMember(MemberRegisterRequestDTO memberRegisterRequestDTO) {
 
 		// member 필드 유효, 중복 체크
-		checkMemberField.checkDuplicatedFields(memberRequestDTO);
+		checkMemberFieldComponent.checkDuplicatedFields(memberRegisterRequestDTO);
 
 		// 원본 password 인코딩
-		memberRequestDTO.updatePassword(passwordEncoder.encode(memberRequestDTO.getPassword()));
+		memberRegisterRequestDTO.updatePassword(passwordEncoder.encode(memberRegisterRequestDTO.getPassword()));
 
-		memberMapper.insertMember(MemberVO.fromRegistrationDTO(memberRequestDTO));
+		memberMapper.insertMember(MemberVO.fromRegistrationDTO(memberRegisterRequestDTO));
 	}
 
 	/**
@@ -93,7 +93,8 @@ public class MemberService {
 	public boolean confirmPassword(PasswordConfirmDTO passwordDTO) {
 
 		// memberId에 해당하는 회원이 없다면 BusinessException 발생
-		MemberVO memberVO = checkMemberField.getExistingMember();
+		MemberVO memberVO = memberMapper.selectMemberByMemberId(SecurityUtil.getCurrentUserId())
+			.orElseThrow(() -> new BusinessException("해당 회원을 찾을 수 없습니다."));
 
 		// password 일치 여부 반환
 		return passwordEncoder.matches(passwordDTO.getPassword(), memberVO.getPassword());
@@ -106,9 +107,9 @@ public class MemberService {
 	public void editMyProfile(MemberEditRequestDTO memberEditRequestDTO) {
 
 		// 중복 체크
-		checkMemberField.checkDuplicatedFields(memberEditRequestDTO);
+		checkMemberFieldComponent.checkDuplicatedFields(memberEditRequestDTO);
 
-		if (!StringUtils.isBlank(memberEditRequestDTO.getPassword())) {
+		if (StringUtils.isNotBlank(memberEditRequestDTO.getPassword())) {
 			// password 인코딩
 			memberEditRequestDTO.updatePassword(passwordEncoder.encode(memberEditRequestDTO.getPassword()));
 		}
@@ -124,7 +125,7 @@ public class MemberService {
 	public void removeMyProfile() {
 
 		// memberId에 해당하는 회원이 없다면 BusinessException 발생
-		checkMemberField.checkMemberExist();
+		checkMemberFieldComponent.checkMemberExist();
 
 		memberMapper.deleteMember(SecurityUtil.getCurrentUserId());
 	}
