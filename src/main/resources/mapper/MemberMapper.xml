@@ -39,9 +39,10 @@
             <if test="password != null and password != ''">
                 password = #{password},
             </if>
+
+            nickname = #{nickname},
+            email = #{email},
         </set>
-        nickname = #{nickname},
-        email = #{email}
         where member_id = #{memberId}
     </update>
 
