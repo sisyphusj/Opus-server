@@ -1,7 +1,5 @@
 package com.opus.feature.member.service;
 
-import java.util.Optional;
-
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -95,7 +93,7 @@ public class MemberService {
 	public boolean confirmPassword(PasswordConfirmDTO passwordDTO) {
 
 		// memberId에 해당하는 회원이 없다면 BusinessException 발생
-		MemberVO memberVO = getExistingMember();
+		MemberVO memberVO = checkMemberField.getExistingMember();
 
 		// password 일치 여부 반환
 		return passwordEncoder.matches(passwordDTO.getPassword(), memberVO.getPassword());
@@ -126,27 +124,9 @@ public class MemberService {
 	public void removeMyProfile() {
 
 		// memberId에 해당하는 회원이 없다면 BusinessException 발생
-		checkMemberExist();
+		checkMemberField.checkMemberExist();
 
 		memberMapper.deleteMember(SecurityUtil.getCurrentUserId());
 	}
 
-	/**
-	 * memberId에 해당하는 MemberVO 반환
-	 */
-	private MemberVO getExistingMember() {
-		return memberMapper.selectMemberByMemberId(SecurityUtil.getCurrentUserId())
-			.orElseThrow(() -> new BusinessException("해당 회원을 찾을 수 없습니다."));
-	}
-
-	/*
-	 * memberId에 해당하는 Member 가 존재하는지 확인
-	 */
-	private void checkMemberExist() {
-		Optional<MemberVO> memberVO = memberMapper.selectMemberByMemberId(SecurityUtil.getCurrentUserId());
-
-		if (memberVO.isEmpty()) {
-			throw new BusinessException("해당 회원을 찾을 수 없습니다.");
-		}
-	}
 }
