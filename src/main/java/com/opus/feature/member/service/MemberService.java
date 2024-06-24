@@ -2,6 +2,7 @@ package com.opus.feature.member.service;
 
 import java.util.Optional;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -109,7 +110,10 @@ public class MemberService {
 		// 중복 체크
 		checkMemberField.checkDuplicatedFields(memberEditRequestDTO);
 
-		memberEditRequestDTO.updatePassword(passwordEncoder.encode(memberEditRequestDTO.getPassword()));
+		if (!StringUtils.isBlank(memberEditRequestDTO.getPassword())) {
+			// password 인코딩
+			memberEditRequestDTO.updatePassword(passwordEncoder.encode(memberEditRequestDTO.getPassword()));
+		}
 
 		memberMapper.updateMember(MemberVO.of(memberEditRequestDTO));
 
