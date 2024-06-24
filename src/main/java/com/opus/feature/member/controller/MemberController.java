@@ -14,6 +14,7 @@ import com.opus.common.ApiResponse;
 import com.opus.feature.member.domain.MemberEditRequestDTO;
 import com.opus.feature.member.domain.MemberRequestDTO;
 import com.opus.feature.member.domain.MemberResponseDTO;
+import com.opus.feature.member.domain.PasswordConfirmDTO;
 import com.opus.feature.member.service.MemberService;
 
 import jakarta.validation.Valid;
@@ -67,6 +68,14 @@ public class MemberController {
 	@GetMapping("/profile")
 	public ResponseEntity<MemberResponseDTO> getMyProfile() {
 		return ApiResponse.of(memberService.getMyProfile());
+	}
+
+	/**
+	 * 비밀번호 확인
+	 */
+	@PostMapping("/confirm/password")
+	public ResponseEntity<Boolean> confirmPassword(@Valid @RequestBody PasswordConfirmDTO passwordDTO) {
+		return ApiResponse.of(memberService.confirmPassword(passwordDTO));
 	}
 
 	/**

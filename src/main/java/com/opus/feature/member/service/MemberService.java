@@ -12,6 +12,7 @@ import com.opus.feature.member.domain.MemberEditRequestDTO;
 import com.opus.feature.member.domain.MemberRequestDTO;
 import com.opus.feature.member.domain.MemberResponseDTO;
 import com.opus.feature.member.domain.MemberVO;
+import com.opus.feature.member.domain.PasswordConfirmDTO;
 import com.opus.feature.member.mapper.MemberMapper;
 import com.opus.utils.SecurityUtil;
 
@@ -81,6 +82,23 @@ public class MemberService {
 		return memberMapper.selectMemberByMemberId(SecurityUtil.getCurrentUserId())
 			.map(MemberResponseDTO::of)
 			.orElseThrow(() -> new BusinessException("해당 회원을 찾을 수 없습니다."));
+	}
+
+	/**
+	 * password 확인
+	 */
+	@Transactional(readOnly = true)
+	public boolean confirmPassword(PasswordConfirmDTO passwordDTO) {
+
+		// memberId에 해당하는 회원이 없다면 BusinessException 발생
+		Optional<MemberVO> memberVO = memberMapper.selectMemberByMemberId(SecurityUtil.getCurrentUserId());
+
+		if (memberVO.isEmpty()) {
+			throw new BusinessException("해당 회원을 찾을 수 없습니다.");
+		}
+
+		// password 일치 여부 반환
+		return passwordEncoder.matches(passwordDTO.getPassword(), memberVO.get().getPassword());
 	}
 
 	/**
