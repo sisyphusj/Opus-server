@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.opus.common.ApiResponse;
-import com.opus.feature.auth.domain.LoginDTO;
+import com.opus.feature.auth.domain.LoginReqDTO;
 import com.opus.feature.auth.domain.TokenDTO;
 import com.opus.feature.auth.service.AuthService;
 
@@ -27,8 +27,8 @@ public class AuthController {
 	 * 로그인
 	 */
 	@PostMapping("/login")
-	public ResponseEntity<TokenDTO> login(@Valid @RequestBody LoginDTO loginDTO) {
-		return ApiResponse.of(authService.login(loginDTO));
+	public ResponseEntity<TokenDTO> login(@Valid @RequestBody LoginReqDTO loginReqDTO) {
+		return ApiResponse.of(authService.login(loginReqDTO));
 	}
 
 	/**

@@ -15,19 +15,19 @@ public class LikeVO {
 	// pinId/commentId
 	private int id;
 
-	public static LikeVO of(PinLikeDTO pinLikeDTO) {
+	public static LikeVO of(PinLikeReqDTO pinLikeReqDTO) {
 
 		return LikeVO.builder()
 			.memberId(SecurityUtil.getCurrentUserId())
-			.id(pinLikeDTO.getPinId())
+			.id(pinLikeReqDTO.getPinId())
 			.build();
 	}
 
-	public static LikeVO of(CommentLikeDTO commentLikeDTO) {
+	public static LikeVO of(CommentLikeReqDTO commentLikeReqDTO) {
 
 		return LikeVO.builder()
 			.memberId(SecurityUtil.getCurrentUserId())
-			.id(commentLikeDTO.getCommentId())
+			.id(commentLikeReqDTO.getCommentId())
 			.build();
 	}
 

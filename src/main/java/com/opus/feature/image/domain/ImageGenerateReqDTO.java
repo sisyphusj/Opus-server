@@ -11,7 +11,7 @@ import lombok.Getter;
 @Builder
 @Getter
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class ImageGenerateDTO {
+public class ImageGenerateReqDTO {
 
 	@NotBlank
 	private String version;

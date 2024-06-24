@@ -13,7 +13,7 @@ import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
 import com.opus.common.ApiResponse;
 import com.opus.component.LikeProvider;
-import com.opus.feature.like.domain.PinLikeDTO;
+import com.opus.feature.like.domain.PinLikeReqDTO;
 import com.opus.feature.like.service.LikeService;
 
 import jakarta.validation.Valid;
@@ -42,8 +42,9 @@ public class SubscribeController {
 	 * 구독한 클라이언트들에게 좋아요 카운트를 브로드캐스트
 	 */
 	@PostMapping("/broadcast")
-	public void updateLikeCount(@Valid @RequestBody PinLikeDTO pinLikeDTO) {
-		likeProvider.updateLatestLikeCount(pinLikeDTO.getPinId(), likeService.countPinLike(pinLikeDTO.getPinId()));
+	public void updateLikeCount(@Valid @RequestBody PinLikeReqDTO pinLikeReqDTO) {
+		likeProvider.updateLatestLikeCount(pinLikeReqDTO.getPinId(),
+			likeService.countPinLike(pinLikeReqDTO.getPinId()));
 	}
 
 	// 구독 취소

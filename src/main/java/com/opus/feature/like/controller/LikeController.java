@@ -10,8 +10,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.opus.common.ApiResponse;
-import com.opus.feature.like.domain.CommentLikeDTO;
-import com.opus.feature.like.domain.PinLikeDTO;
+import com.opus.feature.like.domain.CommentLikeReqDTO;
+import com.opus.feature.like.domain.PinLikeReqDTO;
 import com.opus.feature.like.service.LikeService;
 
 import jakarta.validation.Valid;
@@ -30,9 +30,9 @@ public class LikeController {
 	 * 게시글에 좋아요 추가
 	 */
 	@PostMapping("/pin")
-	public ResponseEntity<String> addPinLike(@Valid @RequestBody PinLikeDTO pinLikeDTO) {
+	public ResponseEntity<String> addPinLike(@Valid @RequestBody PinLikeReqDTO pinLikeReqDTO) {
 
-		likeService.addPinLike(pinLikeDTO);
+		likeService.addPinLike(pinLikeReqDTO);
 		return ApiResponse.of("OK");
 	}
 
@@ -48,9 +48,9 @@ public class LikeController {
 	 * 댓글에 좋아요 추가
 	 */
 	@PostMapping("/comment")
-	public ResponseEntity<String> addCommentLike(@Valid @RequestBody CommentLikeDTO commentLikeDTO) {
+	public ResponseEntity<String> addCommentLike(@Valid @RequestBody CommentLikeReqDTO commentLikeReqDTO) {
 
-		likeService.addCommentLike(commentLikeDTO);
+		likeService.addCommentLike(commentLikeReqDTO);
 		return ApiResponse.of("OK");
 	}
 

@@ -6,7 +6,10 @@ import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 
 @Getter
-public class CommentRequestDTO {
+public class CommentUpdateReqDTO {
+
+	@NotNull
+	private Integer commentId;
 
 	@NotNull
 	private Integer pinId;
@@ -18,6 +21,8 @@ public class CommentRequestDTO {
 	@Max(1)
 	private int level;
 
-	@NotBlank
+	@NotBlank(message = "내용을 입력해주세요.")
 	private String content;
 }
+
+

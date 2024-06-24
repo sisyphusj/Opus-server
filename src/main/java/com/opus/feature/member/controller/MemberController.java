@@ -11,10 +11,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.opus.common.ApiResponse;
-import com.opus.feature.member.domain.MemberEditRequestDTO;
-import com.opus.feature.member.domain.MemberRegisterRequestDTO;
-import com.opus.feature.member.domain.MemberResponseDTO;
-import com.opus.feature.member.domain.PasswordConfirmDTO;
+import com.opus.feature.member.domain.MemberEditReqDTO;
+import com.opus.feature.member.domain.MemberRegisterReqDTO;
+import com.opus.feature.member.domain.MemberResDTO;
+import com.opus.feature.member.domain.PasswordConfirmReqDTO;
 import com.opus.feature.member.service.MemberService;
 
 import jakarta.validation.Valid;
@@ -33,9 +33,9 @@ public class MemberController {
 	 */
 	@PostMapping("/register")
 	public ResponseEntity<String> registerMember(
-		@Valid @RequestBody MemberRegisterRequestDTO memberRegisterRequestDTO) {
+		@Valid @RequestBody MemberRegisterReqDTO memberRegisterReqDTO) {
 
-		memberService.registerMember(memberRegisterRequestDTO);
+		memberService.registerMember(memberRegisterReqDTO);
 		return ApiResponse.of("OK");
 	}
 
@@ -67,7 +67,7 @@ public class MemberController {
 	 * 내 프로필 조회
 	 */
 	@GetMapping("/profile")
-	public ResponseEntity<MemberResponseDTO> getMyProfile() {
+	public ResponseEntity<MemberResDTO> getMyProfile() {
 		return ApiResponse.of(memberService.getMyProfile());
 	}
 
@@ -75,7 +75,7 @@ public class MemberController {
 	 * 비밀번호 확인
 	 */
 	@PostMapping("/confirm/password")
-	public ResponseEntity<Boolean> confirmPassword(@Valid @RequestBody PasswordConfirmDTO passwordDTO) {
+	public ResponseEntity<Boolean> confirmPassword(@Valid @RequestBody PasswordConfirmReqDTO passwordDTO) {
 		return ApiResponse.of(memberService.confirmPassword(passwordDTO));
 	}
 
@@ -83,9 +83,9 @@ public class MemberController {
 	 * 내 프로필 수정
 	 */
 	@PutMapping
-	public ResponseEntity<String> editMyProfile(@Valid @RequestBody MemberEditRequestDTO memberEditRequestDTO) {
+	public ResponseEntity<String> editMyProfile(@Valid @RequestBody MemberEditReqDTO memberEditReqDTO) {
 
-		memberService.editMyProfile(memberEditRequestDTO);
+		memberService.editMyProfile(memberEditReqDTO);
 		return ApiResponse.of("OK");
 	}
 

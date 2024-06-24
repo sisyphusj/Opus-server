@@ -13,7 +13,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @Getter
 @Builder
-public class PinListResponseDTO {
+public class PinListResDTO {
 
 	private Integer pinId;
 
@@ -31,9 +31,9 @@ public class PinListResponseDTO {
 
 	private String seed;
 
-	public static PinListResponseDTO of(PinListVO pinListVO) {
+	public static PinListResDTO of(PinListVO pinListVO) {
 
-		return PinListResponseDTO.builder()
+		return PinListResDTO.builder()
 			.pinId(pinListVO.getPinId())
 			.nickname(pinListVO.getNickname())
 			.imagePath(pinListVO.getImagePath())
@@ -45,10 +45,10 @@ public class PinListResponseDTO {
 			.build();
 	}
 
-	public static List<PinListResponseDTO> of(List<PinListVO> pinListVO) {
+	public static List<PinListResDTO> of(List<PinListVO> pinListVO) {
 
 		return pinListVO.stream()
-			.map(PinListResponseDTO::of)
+			.map(PinListResDTO::of)
 			.toList();
 	}
 }

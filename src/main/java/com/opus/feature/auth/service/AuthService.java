@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.opus.component.TokenProvider;
-import com.opus.feature.auth.domain.LoginDTO;
+import com.opus.feature.auth.domain.LoginReqDTO;
 import com.opus.feature.auth.domain.RefreshTokenVO;
 import com.opus.feature.auth.domain.TokenDTO;
 import com.opus.feature.auth.mapper.RefreshTokenMapper;
@@ -32,10 +32,10 @@ public class AuthService {
 	 * 로그인 처리
 	 */
 	@Transactional
-	public TokenDTO login(LoginDTO loginDTO) {
+	public TokenDTO login(LoginReqDTO loginReqDTO) {
 
 		// 로그인 정보를 기반으로 AuthenticationToken 생성
-		UsernamePasswordAuthenticationToken authToken = loginDTO.toAuthentication();
+		UsernamePasswordAuthenticationToken authToken = loginReqDTO.toAuthentication();
 
 		// 실제 인증 과정
 		Authentication authentication = authenticationManagerBuilder.getObject()

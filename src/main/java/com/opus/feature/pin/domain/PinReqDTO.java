@@ -8,7 +8,7 @@ import lombok.Getter;
  */
 
 @Getter
-public class PinRequestDTO {
+public class PinReqDTO {
 
 	@NotBlank
 	private String imagePath;

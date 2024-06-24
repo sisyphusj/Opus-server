@@ -7,9 +7,9 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
 
 @Getter
-public class ImageResponseDTO {
+public class ImageApiResponseDTO {
 
 	// 이미지 생성 결과
 	@JsonProperty("images")
-	private List<ImageDetailDTO> imageDetails;
+	private List<ImageDetailResDTO> imageDetails;
 }

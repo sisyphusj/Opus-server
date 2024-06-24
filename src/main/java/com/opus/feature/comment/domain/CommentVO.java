@@ -33,28 +33,28 @@ public class CommentVO {
 
 	private String nickname;
 
-	public static CommentVO of(CommentRequestDTO commentRequestDTO) {
+	public static CommentVO of(CommentReqDTO commentReqDTO) {
 
 		return CommentVO.builder()
-			.pinId(commentRequestDTO.getPinId())
+			.pinId(commentReqDTO.getPinId())
 			.memberId(SecurityUtil.getCurrentUserId())
-			.topLevelCommentId(commentRequestDTO.getTopLevelCommentId())
-			.level(commentRequestDTO.getLevel())
-			.content(commentRequestDTO.getContent())
-			.parentNickname(commentRequestDTO.getParentNickname())
+			.topLevelCommentId(commentReqDTO.getTopLevelCommentId())
+			.level(commentReqDTO.getLevel())
+			.content(commentReqDTO.getContent())
+			.parentNickname(commentReqDTO.getParentNickname())
 			.build();
 	}
 
-	public static CommentVO of(CommentUpdateDTO commentUpdateDTO) {
+	public static CommentVO of(CommentUpdateReqDTO commentUpdateReqDTO) {
 
 		return CommentVO.builder()
-			.commentId(commentUpdateDTO.getCommentId())
-			.pinId(commentUpdateDTO.getPinId())
+			.commentId(commentUpdateReqDTO.getCommentId())
+			.pinId(commentUpdateReqDTO.getPinId())
 			.memberId(SecurityUtil.getCurrentUserId())
-			.topLevelCommentId(commentUpdateDTO.getTopLevelCommentId())
-			.parentNickname(commentUpdateDTO.getParentNickname())
-			.level(commentUpdateDTO.getLevel())
-			.content(commentUpdateDTO.getContent())
+			.topLevelCommentId(commentUpdateReqDTO.getTopLevelCommentId())
+			.parentNickname(commentUpdateReqDTO.getParentNickname())
+			.level(commentUpdateReqDTO.getLevel())
+			.content(commentUpdateReqDTO.getContent())
 			.build();
 	}
 

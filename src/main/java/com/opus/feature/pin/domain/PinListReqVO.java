@@ -11,7 +11,7 @@ import lombok.Getter;
 @Getter
 @Builder
 @AllArgsConstructor
-public class PinListRequestVO {
+public class PinListReqVO {
 
 	private Integer memberId;
 

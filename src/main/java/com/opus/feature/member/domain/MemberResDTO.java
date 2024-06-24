@@ -7,7 +7,7 @@ import lombok.Getter;
 @Getter
 @Builder
 @AllArgsConstructor
-public class MemberResponseDTO {
+public class MemberResDTO {
 
 	private String username;
 
@@ -15,9 +15,9 @@ public class MemberResponseDTO {
 
 	private String email;
 
-	public static MemberResponseDTO of(MemberVO member) {
-		
-		return MemberResponseDTO.builder()
+	public static MemberResDTO of(MemberVO member) {
+
+		return MemberResDTO.builder()
 			.username(member.getUsername())
 			.nickname(member.getNickname())
 			.email(member.getEmail())

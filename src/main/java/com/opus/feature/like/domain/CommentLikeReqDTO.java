@@ -4,9 +4,9 @@ import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 
 @Getter
-public class PinLikeDTO {
+public class CommentLikeReqDTO {
 
 	@NotNull
-	private Integer pinId;
+	private Integer commentId;
 
 }

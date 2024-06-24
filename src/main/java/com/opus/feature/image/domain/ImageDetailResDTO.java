@@ -5,7 +5,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
 
 @Getter
-public class ImageDetailDTO {
+public class ImageDetailResDTO {
 
 	// 이미지 고유의 id
 	private String id;

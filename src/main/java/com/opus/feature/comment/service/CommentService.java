@@ -7,9 +7,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.opus.exception.BusinessException;
-import com.opus.feature.comment.domain.CommentRequestDTO;
-import com.opus.feature.comment.domain.CommentResponseDTO;
-import com.opus.feature.comment.domain.CommentUpdateDTO;
+import com.opus.feature.comment.domain.CommentReqDTO;
+import com.opus.feature.comment.domain.CommentResDTO;
+import com.opus.feature.comment.domain.CommentUpdateReqDTO;
 import com.opus.feature.comment.domain.CommentVO;
 import com.opus.feature.comment.mapper.CommentMapper;
 import com.opus.utils.SecurityUtil;
@@ -28,9 +28,9 @@ public class CommentService {
 	 * 댓글 추가
 	 */
 	@Transactional
-	public void addComment(CommentRequestDTO commentRequestDTO) {
+	public void addComment(CommentReqDTO commentReqDTO) {
 
-		CommentVO comment = CommentVO.of(commentRequestDTO);
+		CommentVO comment = CommentVO.of(commentReqDTO);
 		commentMapper.insertComment(comment);
 	}
 
@@ -38,13 +38,13 @@ public class CommentService {
 	 * 댓글 리스트 조회
 	 */
 	@Transactional(readOnly = true)
-	public List<CommentResponseDTO> getCommentListByPinId(int pinId) {
+	public List<CommentResDTO> getCommentListByPinId(int pinId) {
 
 		List<CommentVO> comments = commentMapper.selectCommentsByPinId(pinId);
 
 		// 댓글 리스트를 CommentResponseDTO로 변환
 		return comments.stream()
-			.map(CommentResponseDTO::of)
+			.map(CommentResDTO::of)
 			.toList();
 	}
 
@@ -52,23 +52,23 @@ public class CommentService {
 	 * 내 댓글 리스트 조회
 	 */
 	@Transactional(readOnly = true)
-	public List<CommentResponseDTO> getMyCommentList() {
+	public List<CommentResDTO> getMyCommentList() {
 
 		List<CommentVO> comments = commentMapper.selectCommentsByMemberId(
 			SecurityUtil.getCurrentUserId());
 
 		// 댓글 리스트를 CommentResponseDTO로 변환
 		return comments.stream()
-			.map(CommentResponseDTO::of)
+			.map(CommentResDTO::of)
 			.toList();
 	}
 
 	/**
 	 * 댓글 수정
 	 */
-	public void editComment(CommentUpdateDTO commentUpdateDTO) {
+	public void editComment(CommentUpdateReqDTO commentUpdateReqDTO) {
 
-		CommentVO comment = CommentVO.of(commentUpdateDTO);
+		CommentVO comment = CommentVO.of(commentUpdateReqDTO);
 		commentMapper.updateComment(comment);
 	}
 

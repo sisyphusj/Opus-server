@@ -5,7 +5,7 @@ import java.util.Optional;
 
 import org.apache.ibatis.annotations.Mapper;
 
-import com.opus.feature.pin.domain.PinListRequestVO;
+import com.opus.feature.pin.domain.PinListReqVO;
 import com.opus.feature.pin.domain.PinListVO;
 import com.opus.feature.pin.domain.PinVO;
 
@@ -14,9 +14,9 @@ public interface PinMapper {
 
 	void insertPin(PinVO pin);
 
-	List<PinListVO> selectPinsByKeyword(PinListRequestVO pinListRequestVO);
+	List<PinListVO> selectPinsByKeyword(PinListReqVO pinListReqVO);
 
-	List<PinListVO> selectPinsByMemberId(PinListRequestVO pinListRequestVO);
+	List<PinListVO> selectPinsByMemberId(PinListReqVO pinListReqVO);
 
 	Optional<PinVO> selectPinByPinId(int pid);
 

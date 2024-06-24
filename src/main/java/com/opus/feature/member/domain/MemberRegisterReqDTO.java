@@ -4,13 +4,13 @@ import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
 
-/**
- * 회원 정보 수정 요청 DTO
- */
-
 @Getter
-public class MemberEditRequestDTO {
+public class MemberRegisterReqDTO {
 
+	@NotBlank
+	private String username;
+
+	@NotBlank
 	private String password;
 
 	@NotBlank
@@ -23,4 +23,5 @@ public class MemberEditRequestDTO {
 	public void updatePassword(String password) {
 		this.password = password;
 	}
+
 }

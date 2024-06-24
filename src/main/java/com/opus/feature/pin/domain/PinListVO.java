@@ -29,16 +29,16 @@ public class PinListVO {
 
 	private String nickname;
 
-	public static PinListVO of(PinRequestDTO pinRequestDTO, Integer memberId) {
+	public static PinListVO of(PinReqDTO pinReqDTO, Integer memberId) {
 
 		return PinListVO.builder()
 			.memberId(memberId)
-			.imagePath(pinRequestDTO.getImagePath())
-			.prompt(pinRequestDTO.getPrompt())
-			.negativePrompt(pinRequestDTO.getNegativePrompt())
-			.width(pinRequestDTO.getWidth())
-			.height(pinRequestDTO.getHeight())
-			.seed(pinRequestDTO.getSeed())
+			.imagePath(pinReqDTO.getImagePath())
+			.prompt(pinReqDTO.getPrompt())
+			.negativePrompt(pinReqDTO.getNegativePrompt())
+			.width(pinReqDTO.getWidth())
+			.height(pinReqDTO.getHeight())
+			.seed(pinReqDTO.getSeed())
 			.build();
 	}
 }

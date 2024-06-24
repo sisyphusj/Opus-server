@@ -13,9 +13,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.opus.common.ApiResponse;
-import com.opus.feature.pin.domain.PinListResponseDTO;
-import com.opus.feature.pin.domain.PinRequestDTO;
-import com.opus.feature.pin.domain.PinResponseDTO;
+import com.opus.feature.pin.domain.PinListResDTO;
+import com.opus.feature.pin.domain.PinReqDTO;
+import com.opus.feature.pin.domain.PinResDTO;
 import com.opus.feature.pin.service.PinService;
 
 import jakarta.validation.Valid;
@@ -34,9 +34,9 @@ public class PinController {
 	 * 핀 등록
 	 */
 	@PostMapping("/register")
-	public ResponseEntity<String> addPin(@Valid @RequestBody PinRequestDTO pinRequestDTO) {
+	public ResponseEntity<String> addPin(@Valid @RequestBody PinReqDTO pinReqDTO) {
 
-		pinService.addPin(pinRequestDTO);
+		pinService.addPin(pinReqDTO);
 		return ApiResponse.of("OK");
 	}
 
@@ -44,7 +44,7 @@ public class PinController {
 	 * 핀 리스트
 	 */
 	@GetMapping
-	public ResponseEntity<List<PinListResponseDTO>> getPinList(@RequestParam int offset,
+	public ResponseEntity<List<PinListResDTO>> getPinList(@RequestParam int offset,
 		@RequestParam int amount,
 		@RequestParam(required = false) String keyword) {
 
@@ -55,7 +55,7 @@ public class PinController {
 	 * 내 핀 리스트
 	 */
 	@GetMapping("/my-pins")
-	public ResponseEntity<List<PinListResponseDTO>> getMyPinList(@RequestParam int offset,
+	public ResponseEntity<List<PinListResDTO>> getMyPinList(@RequestParam int offset,
 		@RequestParam int amount) {
 		return ApiResponse.of(pinService.getMyPinList(offset, amount));
 	}
@@ -64,7 +64,7 @@ public class PinController {
 	 * pinId 로 핀 조회
 	 */
 	@GetMapping("/{pinId}")
-	public ResponseEntity<PinResponseDTO> getPinByPinId(@PathVariable int pinId) {
+	public ResponseEntity<PinResDTO> getPinByPinId(@PathVariable int pinId) {
 		return ApiResponse.of(pinService.getPinByPinId(pinId));
 	}
 

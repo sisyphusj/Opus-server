@@ -14,9 +14,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.opus.common.ApiResponse;
-import com.opus.feature.comment.domain.CommentRequestDTO;
-import com.opus.feature.comment.domain.CommentResponseDTO;
-import com.opus.feature.comment.domain.CommentUpdateDTO;
+import com.opus.feature.comment.domain.CommentReqDTO;
+import com.opus.feature.comment.domain.CommentResDTO;
+import com.opus.feature.comment.domain.CommentUpdateReqDTO;
 import com.opus.feature.comment.service.CommentService;
 
 import jakarta.validation.Valid;
@@ -35,9 +35,9 @@ public class CommentController {
 	 * 댓글 추가
 	 */
 	@PostMapping
-	public ResponseEntity<String> addComment(@Valid @RequestBody CommentRequestDTO commentRequestDTO) {
+	public ResponseEntity<String> addComment(@Valid @RequestBody CommentReqDTO commentReqDTO) {
 
-		commentService.addComment(commentRequestDTO);
+		commentService.addComment(commentReqDTO);
 		return ApiResponse.of("OK");
 	}
 
@@ -45,7 +45,7 @@ public class CommentController {
 	 * 댓글 리스트 조회
 	 */
 	@GetMapping("/list")
-	public ResponseEntity<List<CommentResponseDTO>> getCommentListByPinId(@RequestParam int pinId) {
+	public ResponseEntity<List<CommentResDTO>> getCommentListByPinId(@RequestParam int pinId) {
 		return ApiResponse.of(commentService.getCommentListByPinId(pinId));
 	}
 
@@ -53,7 +53,7 @@ public class CommentController {
 	 * 내 댓글 리스트 조회
 	 */
 	@GetMapping("/my-comments")
-	public ResponseEntity<List<CommentResponseDTO>> getMyCommentList() {
+	public ResponseEntity<List<CommentResDTO>> getMyCommentList() {
 		return ApiResponse.of(commentService.getMyCommentList());
 	}
 
@@ -61,7 +61,7 @@ public class CommentController {
 	 * 댓글 수정
 	 */
 	@PutMapping
-	public ResponseEntity<String> editComment(@Valid @RequestBody CommentUpdateDTO commentDTO) {
+	public ResponseEntity<String> editComment(@Valid @RequestBody CommentUpdateReqDTO commentDTO) {
 
 		commentService.editComment(commentDTO);
 		return ApiResponse.of("OK");

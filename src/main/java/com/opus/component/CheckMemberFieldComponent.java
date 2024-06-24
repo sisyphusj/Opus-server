@@ -6,8 +6,8 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.opus.exception.BusinessException;
-import com.opus.feature.member.domain.MemberEditRequestDTO;
-import com.opus.feature.member.domain.MemberRegisterRequestDTO;
+import com.opus.feature.member.domain.MemberEditReqDTO;
+import com.opus.feature.member.domain.MemberRegisterReqDTO;
 import com.opus.feature.member.domain.MemberVO;
 import com.opus.feature.member.mapper.MemberMapper;
 import com.opus.utils.SecurityUtil;
@@ -24,7 +24,7 @@ public class CheckMemberFieldComponent {
 	 * 회원 가입 시 중복 체크
 	 */
 	@Transactional(readOnly = true)
-	public void checkDuplicatedFields(MemberRegisterRequestDTO requestDTO) {
+	public void checkDuplicatedFields(MemberRegisterReqDTO requestDTO) {
 
 		if (memberMapper.selectCountByUsername(requestDTO.getUsername()) > 0) {
 			throw new BusinessException("아이디 중복");
@@ -44,7 +44,7 @@ public class CheckMemberFieldComponent {
 	 * 회원정보 수정 시 중복 체크
 	 */
 	@Transactional(readOnly = true)
-	public void checkDuplicatedFields(MemberEditRequestDTO memberRequestDTO) {
+	public void checkDuplicatedFields(MemberEditReqDTO memberRequestDTO) {
 
 		checkDuplicatedNickAtUpdate(memberRequestDTO.getNickname());
 

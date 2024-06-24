@@ -11,7 +11,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @Getter
 @Builder
-public class PinResponseDTO {
+public class PinResDTO {
 
 	private Integer pinId;
 
@@ -29,9 +29,9 @@ public class PinResponseDTO {
 
 	private String seed;
 
-	public static PinResponseDTO of(PinVO pinVO) {
+	public static PinResDTO of(PinVO pinVO) {
 
-		return PinResponseDTO.builder()
+		return PinResDTO.builder()
 			.pinId(pinVO.getPinId())
 			.imagePath(pinVO.getImagePath())
 			.prompt(pinVO.getPrompt())

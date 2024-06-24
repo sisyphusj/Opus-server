@@ -7,11 +7,11 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.opus.component.CheckMemberFieldComponent;
 import com.opus.exception.BusinessException;
-import com.opus.feature.member.domain.MemberEditRequestDTO;
-import com.opus.feature.member.domain.MemberRegisterRequestDTO;
-import com.opus.feature.member.domain.MemberResponseDTO;
+import com.opus.feature.member.domain.MemberEditReqDTO;
+import com.opus.feature.member.domain.MemberRegisterReqDTO;
+import com.opus.feature.member.domain.MemberResDTO;
 import com.opus.feature.member.domain.MemberVO;
-import com.opus.feature.member.domain.PasswordConfirmDTO;
+import com.opus.feature.member.domain.PasswordConfirmReqDTO;
 import com.opus.feature.member.mapper.MemberMapper;
 import com.opus.utils.SecurityUtil;
 
@@ -33,15 +33,15 @@ public class MemberService {
 	 * 회원 가입
 	 */
 	@Transactional
-	public void registerMember(MemberRegisterRequestDTO memberRegisterRequestDTO) {
+	public void registerMember(MemberRegisterReqDTO memberRegisterReqDTO) {
 
 		// member 필드 유효, 중복 체크
-		checkMemberFieldComponent.checkDuplicatedFields(memberRegisterRequestDTO);
+		checkMemberFieldComponent.checkDuplicatedFields(memberRegisterReqDTO);
 
 		// 원본 password 인코딩
-		memberRegisterRequestDTO.updatePassword(passwordEncoder.encode(memberRegisterRequestDTO.getPassword()));
+		memberRegisterReqDTO.updatePassword(passwordEncoder.encode(memberRegisterReqDTO.getPassword()));
 
-		memberMapper.insertMember(MemberVO.fromRegistrationDTO(memberRegisterRequestDTO));
+		memberMapper.insertMember(MemberVO.fromRegistrationDTO(memberRegisterReqDTO));
 	}
 
 	/**
@@ -78,11 +78,11 @@ public class MemberService {
 	 * memberId에 따른 회원정보 조회
 	 */
 	@Transactional(readOnly = true)
-	public MemberResponseDTO getMyProfile() {
+	public MemberResDTO getMyProfile() {
 
 		// memberId에 해당하는 회원이 없다면 BusinessException 발생
 		return memberMapper.selectMemberByMemberId(SecurityUtil.getCurrentUserId())
-			.map(MemberResponseDTO::of)
+			.map(MemberResDTO::of)
 			.orElseThrow(() -> new BusinessException("해당 회원을 찾을 수 없습니다."));
 	}
 
@@ -90,7 +90,7 @@ public class MemberService {
 	 * password 확인
 	 */
 	@Transactional(readOnly = true)
-	public boolean confirmPassword(PasswordConfirmDTO passwordDTO) {
+	public boolean confirmPassword(PasswordConfirmReqDTO passwordDTO) {
 
 		// memberId에 해당하는 회원이 없다면 BusinessException 발생
 		MemberVO memberVO = memberMapper.selectMemberByMemberId(SecurityUtil.getCurrentUserId())
@@ -104,17 +104,17 @@ public class MemberService {
 	 * 회원 정보 업데이트
 	 */
 	@Transactional
-	public void editMyProfile(MemberEditRequestDTO memberEditRequestDTO) {
+	public void editMyProfile(MemberEditReqDTO memberEditReqDTO) {
 
 		// 중복 체크
-		checkMemberFieldComponent.checkDuplicatedFields(memberEditRequestDTO);
+		checkMemberFieldComponent.checkDuplicatedFields(memberEditReqDTO);
 
-		if (StringUtils.isNotBlank(memberEditRequestDTO.getPassword())) {
+		if (StringUtils.isNotBlank(memberEditReqDTO.getPassword())) {
 			// password 인코딩
-			memberEditRequestDTO.updatePassword(passwordEncoder.encode(memberEditRequestDTO.getPassword()));
+			memberEditReqDTO.updatePassword(passwordEncoder.encode(memberEditReqDTO.getPassword()));
 		}
 
-		memberMapper.updateMember(MemberVO.of(memberEditRequestDTO));
+		memberMapper.updateMember(MemberVO.of(memberEditReqDTO));
 
 	}
 

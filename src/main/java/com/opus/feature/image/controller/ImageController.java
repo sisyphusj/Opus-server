@@ -9,8 +9,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.opus.common.ApiResponse;
-import com.opus.feature.image.domain.ImageDetailDTO;
-import com.opus.feature.image.domain.ImageGenerateDTO;
+import com.opus.feature.image.domain.ImageDetailResDTO;
+import com.opus.feature.image.domain.ImageGenerateReqDTO;
 import com.opus.feature.image.service.ImageService;
 
 import jakarta.validation.Valid;
@@ -29,8 +29,9 @@ public class ImageController {
 	 * 이미지 생성
 	 */
 	@PostMapping
-	public ResponseEntity<List<ImageDetailDTO>> generateImage(@Valid @RequestBody ImageGenerateDTO imageGenerateDTO) {
-		return ApiResponse.of(imageService.generateImage(imageGenerateDTO));
+	public ResponseEntity<List<ImageDetailResDTO>> generateImage(
+		@Valid @RequestBody ImageGenerateReqDTO imageGenerateReqDTO) {
+		return ApiResponse.of(imageService.generateImage(imageGenerateReqDTO));
 	}
 
 }

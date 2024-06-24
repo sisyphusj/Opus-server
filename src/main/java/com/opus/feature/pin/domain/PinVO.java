@@ -29,16 +29,16 @@ public class PinVO {
 
 	private String seed;
 
-	public static PinVO of(PinRequestDTO pinRequestDTO) {
+	public static PinVO of(PinReqDTO pinReqDTO) {
 
 		return PinVO.builder()
 			.memberId(SecurityUtil.getCurrentUserId())
-			.imagePath(pinRequestDTO.getImagePath())
-			.prompt(pinRequestDTO.getPrompt())
-			.negativePrompt(pinRequestDTO.getNegativePrompt())
-			.width(pinRequestDTO.getWidth())
-			.height(pinRequestDTO.getHeight())
-			.seed(pinRequestDTO.getSeed())
+			.imagePath(pinReqDTO.getImagePath())
+			.prompt(pinReqDTO.getPrompt())
+			.negativePrompt(pinReqDTO.getNegativePrompt())
+			.width(pinReqDTO.getWidth())
+			.height(pinReqDTO.getHeight())
+			.seed(pinReqDTO.getSeed())
 			.build();
 	}
 

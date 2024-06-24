@@ -8,7 +8,7 @@ import lombok.Getter;
 
 @Builder
 @Getter
-public class CommentResponseDTO {
+public class CommentResDTO {
 
 	private Integer commentId;
 
@@ -30,9 +30,9 @@ public class CommentResponseDTO {
 
 	private LocalDateTime deletedDate;
 
-	public static CommentResponseDTO of(CommentVO comment) {
-		
-		return CommentResponseDTO.builder()
+	public static CommentResDTO of(CommentVO comment) {
+
+		return CommentResDTO.builder()
 			.commentId(comment.getCommentId())
 			.pinId(comment.getPinId())
 			.nickname(comment.getNickname())
@@ -46,10 +46,10 @@ public class CommentResponseDTO {
 			.build();
 	}
 
-	public static List<CommentResponseDTO> of(List<CommentVO> commentVOList) {
+	public static List<CommentResDTO> of(List<CommentVO> commentVOList) {
 
 		return commentVOList.stream()
-			.map(CommentResponseDTO::of)
+			.map(CommentResDTO::of)
 			.toList();
 	}
 }

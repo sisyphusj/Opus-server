@@ -15,9 +15,9 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import com.opus.exception.BusinessException;
-import com.opus.feature.image.domain.ImageDetailDTO;
-import com.opus.feature.image.domain.ImageGenerateDTO;
-import com.opus.feature.image.domain.ImageResponseDTO;
+import com.opus.feature.image.domain.ImageDetailResDTO;
+import com.opus.feature.image.domain.ImageGenerateReqDTO;
+import com.opus.feature.image.domain.ImageApiResponseDTO;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -43,7 +43,7 @@ public class ImageService {
 	/**
 	 * 이미지 생성
 	 */
-	public List<ImageDetailDTO> generateImage(ImageGenerateDTO imageGenerateDTO) {
+	public List<ImageDetailResDTO> generateImage(ImageGenerateReqDTO imageGenerateReqDTO) {
 
 		// URI 생성
 		URI uri = UriComponentsBuilder
@@ -60,14 +60,15 @@ public class ImageService {
 		log.info("uri = {}", uri);
 
 		// 요청 객체 생성
-		RequestEntity<ImageGenerateDTO> requestEntity = RequestEntity
+		RequestEntity<ImageGenerateReqDTO> requestEntity = RequestEntity
 			.post(uri)
 			.contentType(MediaType.APPLICATION_JSON)
 			.headers(headers)
-			.body(imageGenerateDTO);
+			.body(imageGenerateReqDTO);
 
 		// rest template을 이용하여 요청
-		ResponseEntity<ImageResponseDTO> responseEntity = restTemplate.exchange(requestEntity, ImageResponseDTO.class);
+		ResponseEntity<ImageApiResponseDTO> responseEntity = restTemplate.exchange(requestEntity,
+			ImageApiResponseDTO.class);
 
 		// 응답에 문제가 있는 경우 예외 처리
 		if (responseEntity.getStatusCode() != HttpStatus.OK) {
@@ -81,7 +82,7 @@ public class ImageService {
 	/**
 	 * 이미지를 업로드하고 이미지 URL 리스트를 반환
 	 */
-	private List<ImageDetailDTO> processImages(ResponseEntity<ImageResponseDTO> responseEntity) {
+	private List<ImageDetailResDTO> processImages(ResponseEntity<ImageApiResponseDTO> responseEntity) {
 
 		// 응답이 null 인 경우 예외 처리
 		if (responseEntity.getBody() == null) {
@@ -89,17 +90,17 @@ public class ImageService {
 			throw new BusinessException("이미지를 생성할 수 없습니다.");
 		}
 
-		ImageResponseDTO responseDTO = responseEntity.getBody();
-		List<ImageDetailDTO> imageDetailDTOList = new ArrayList<>();
+		ImageApiResponseDTO responseDTO = responseEntity.getBody();
+		List<ImageDetailResDTO> imageDetailResDTOList = new ArrayList<>();
 
 		// imageDetails를 순회하며 이미지를 업로드
-		for (ImageDetailDTO imageDetailDTO : responseDTO.getImageDetails()) {
-			String originalUrl = imageDetailDTO.getImageUrl();
-			imageDetailDTO.updateImageUrl(s3Service.uploadFileFromUrl(originalUrl));
-			imageDetailDTOList.add(imageDetailDTO);
+		for (ImageDetailResDTO imageDetailResDTO : responseDTO.getImageDetails()) {
+			String originalUrl = imageDetailResDTO.getImageUrl();
+			imageDetailResDTO.updateImageUrl(s3Service.uploadFileFromUrl(originalUrl));
+			imageDetailResDTOList.add(imageDetailResDTO);
 		}
 
 		// aws 주소로 변경된 이미지 URL 리스트 반환
-		return imageDetailDTOList;
+		return imageDetailResDTOList;
 	}
 }

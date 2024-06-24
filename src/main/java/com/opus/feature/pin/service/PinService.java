@@ -7,10 +7,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.opus.exception.BusinessException;
-import com.opus.feature.pin.domain.PinListRequestVO;
-import com.opus.feature.pin.domain.PinListResponseDTO;
-import com.opus.feature.pin.domain.PinRequestDTO;
-import com.opus.feature.pin.domain.PinResponseDTO;
+import com.opus.feature.pin.domain.PinListReqVO;
+import com.opus.feature.pin.domain.PinListResDTO;
+import com.opus.feature.pin.domain.PinReqDTO;
+import com.opus.feature.pin.domain.PinResDTO;
 import com.opus.feature.pin.domain.PinVO;
 import com.opus.feature.pin.mapper.PinMapper;
 import com.opus.utils.SecurityUtil;
@@ -29,49 +29,49 @@ public class PinService {
 	 * 핀 추가
 	 */
 	@Transactional
-	public void addPin(PinRequestDTO pinRequestDTO) {
-		pinMapper.insertPin(PinVO.of(pinRequestDTO));
+	public void addPin(PinReqDTO pinReqDTO) {
+		pinMapper.insertPin(PinVO.of(pinReqDTO));
 	}
 
 	/**
 	 * 핀 리스트 조회
 	 */
 	@Transactional(readOnly = true)
-	public List<PinListResponseDTO> getPinList(int offset, int amount, String keyword) {
+	public List<PinListResDTO> getPinList(int offset, int amount, String keyword) {
 
-		PinListRequestVO pinListRequestVO = PinListRequestVO.builder()
+		PinListReqVO pinListReqVO = PinListReqVO.builder()
 			.offset(offset)
 			.amount(amount)
 			.keyword(keyword)
 			.build();
 
-		return PinListResponseDTO.of(pinMapper.selectPinsByKeyword(pinListRequestVO));
+		return PinListResDTO.of(pinMapper.selectPinsByKeyword(pinListReqVO));
 	}
 
 	/**
 	 * 내 핀 리스트 조회
 	 */
 	@Transactional(readOnly = true)
-	public List<PinListResponseDTO> getMyPinList(int offset, int amount) {
+	public List<PinListResDTO> getMyPinList(int offset, int amount) {
 
-		PinListRequestVO pinListRequestVO = PinListRequestVO.builder()
+		PinListReqVO pinListReqVO = PinListReqVO.builder()
 			.memberId(SecurityUtil.getCurrentUserId())
 			.offset(offset)
 			.amount(amount)
 			.build();
 
-		return PinListResponseDTO.of(pinMapper.selectPinsByMemberId(pinListRequestVO));
+		return PinListResDTO.of(pinMapper.selectPinsByMemberId(pinListReqVO));
 	}
 
 	/**
 	 * 핀 조회
 	 */
 	@Transactional
-	public PinResponseDTO getPinByPinId(int pinId) {
+	public PinResDTO getPinByPinId(int pinId) {
 
 		// 해당 핀이 존재하지 않으면 BusinessException 발생
 		return pinMapper.selectPinByPinId(pinId)
-			.map(PinResponseDTO::of)
+			.map(PinResDTO::of)
 			.orElseThrow(() -> new BusinessException("해당 핀을 찾을 수 없습니다."));
 	}
 

@@ -21,23 +21,23 @@ public class MemberVO {
 
 	private String email;
 
-	public static MemberVO fromRegistrationDTO(MemberRegisterRequestDTO memberRegisterRequestDTO) {
+	public static MemberVO fromRegistrationDTO(MemberRegisterReqDTO memberRegisterReqDTO) {
 
 		return MemberVO.builder()
-			.username(memberRegisterRequestDTO.getUsername())
-			.password(memberRegisterRequestDTO.getPassword())
-			.nickname(memberRegisterRequestDTO.getNickname())
-			.email(memberRegisterRequestDTO.getEmail())
+			.username(memberRegisterReqDTO.getUsername())
+			.password(memberRegisterReqDTO.getPassword())
+			.nickname(memberRegisterReqDTO.getNickname())
+			.email(memberRegisterReqDTO.getEmail())
 			.build();
 	}
 
-	public static MemberVO of(MemberEditRequestDTO memberEditRequestDTO) {
+	public static MemberVO of(MemberEditReqDTO memberEditReqDTO) {
 
 		return MemberVO.builder()
 			.memberId(SecurityUtil.getCurrentUserId())
-			.password(memberEditRequestDTO.getPassword())
-			.nickname(memberEditRequestDTO.getNickname())
-			.email(memberEditRequestDTO.getEmail())
+			.password(memberEditReqDTO.getPassword())
+			.nickname(memberEditReqDTO.getNickname())
+			.email(memberEditReqDTO.getEmail())
 			.build();
 	}
 }

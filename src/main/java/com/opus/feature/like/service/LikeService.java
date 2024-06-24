@@ -8,9 +8,9 @@ import org.springframework.transaction.annotation.Transactional;
 import com.opus.exception.BusinessException;
 import com.opus.feature.comment.domain.CommentVO;
 import com.opus.feature.comment.mapper.CommentMapper;
-import com.opus.feature.like.domain.CommentLikeDTO;
+import com.opus.feature.like.domain.CommentLikeReqDTO;
 import com.opus.feature.like.domain.LikeVO;
-import com.opus.feature.like.domain.PinLikeDTO;
+import com.opus.feature.like.domain.PinLikeReqDTO;
 import com.opus.feature.like.mapper.LikeMapper;
 import com.opus.feature.pin.domain.PinVO;
 import com.opus.feature.pin.mapper.PinMapper;
@@ -34,16 +34,16 @@ public class LikeService {
 	 * 핀에 대한 좋아요 추가
 	 */
 	@Transactional
-	public void addPinLike(PinLikeDTO pinLikeDTO) {
+	public void addPinLike(PinLikeReqDTO pinLikeReqDTO) {
 
-		checkPinIsPresent(pinLikeDTO.getPinId());
+		checkPinIsPresent(pinLikeReqDTO.getPinId());
 
 		// 이미 좋아요를 한 상태인지 확인
-		if (likeMapper.countPinLikeByMemberId(SecurityUtil.getCurrentUserId(), pinLikeDTO.getPinId()) > 0) {
+		if (likeMapper.countPinLikeByMemberId(SecurityUtil.getCurrentUserId(), pinLikeReqDTO.getPinId()) > 0) {
 			throw new BusinessException("이미 좋아요를 눌렀습니다.");
 		}
 
-		likeMapper.insertPinLike(LikeVO.of(pinLikeDTO));
+		likeMapper.insertPinLike(LikeVO.of(pinLikeReqDTO));
 	}
 
 	/**
@@ -62,16 +62,17 @@ public class LikeService {
 	 * 댓글에 좋아요 추가
 	 */
 	@Transactional
-	public void addCommentLike(CommentLikeDTO commentLikeDTO) {
+	public void addCommentLike(CommentLikeReqDTO commentLikeReqDTO) {
 
-		checkCommentIsPresent(commentLikeDTO.getCommentId());
+		checkCommentIsPresent(commentLikeReqDTO.getCommentId());
 
 		// 이미 좋아요를 한 상태인지 확인
-		if (likeMapper.countCommentLikeByMemberId(SecurityUtil.getCurrentUserId(), commentLikeDTO.getCommentId()) > 0) {
+		if (likeMapper.countCommentLikeByMemberId(SecurityUtil.getCurrentUserId(), commentLikeReqDTO.getCommentId())
+			> 0) {
 			throw new BusinessException("이미 좋아요를 눌렀습니다.");
 		}
 
-		likeMapper.insertCommentLike(LikeVO.of(commentLikeDTO));
+		likeMapper.insertCommentLike(LikeVO.of(commentLikeReqDTO));
 	}
 
 	/**
