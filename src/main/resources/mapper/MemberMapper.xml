@@ -36,16 +36,28 @@
     <update id="updateMember">
         update member
         <set>
-            username = #{username},
+
+            <!-- 공백 또는 NULL이 아닌 필드만 갱신 -->
+
+            <if test="username != null and username != ''">
+                username = #{username},
+            </if>
+
             <if test="password != null and password != ''">
                 password = #{password},
             </if>
-            nickname = #{nickname},
-            email = #{email}
+
+            <if test="nickname != null and nickname != ''">
+                nickname = #{nickname},
+            </if>
+
+            <if test="email != null and email != ''">
+                email = #{email}
+            </if>
+
         </set>
         where member_id = #{memberId}
     </update>
-
 
     <delete id="deleteMember">
         delete

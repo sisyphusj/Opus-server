@@ -2,11 +2,11 @@ package com.opus.feature.member.service;
 
 import java.util.Optional;
 
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.opus.component.CheckMemberField;
 import com.opus.exception.BusinessException;
 import com.opus.feature.member.domain.MemberEditRequestDTO;
 import com.opus.feature.member.domain.MemberRequestDTO;
@@ -28,13 +28,16 @@ public class MemberService {
 
 	private final PasswordEncoder passwordEncoder;
 
+	private final CheckMemberField checkMemberField;
+
 	/**
 	 * 회원 가입
 	 */
 	@Transactional
 	public void registerMember(MemberRequestDTO memberRequestDTO) {
 
-		checkMemberDuplicated(memberRequestDTO);
+		// member 필드 유효, 중복 체크
+		checkMemberField.checkDuplicatedFields(memberRequestDTO);
 
 		// 원본 password 인코딩
 		memberRequestDTO.updatePassword(passwordEncoder.encode(memberRequestDTO.getPassword()));
@@ -91,14 +94,10 @@ public class MemberService {
 	public boolean confirmPassword(PasswordConfirmDTO passwordDTO) {
 
 		// memberId에 해당하는 회원이 없다면 BusinessException 발생
-		Optional<MemberVO> memberVO = memberMapper.selectMemberByMemberId(SecurityUtil.getCurrentUserId());
-
-		if (memberVO.isEmpty()) {
-			throw new BusinessException("해당 회원을 찾을 수 없습니다.");
-		}
+		MemberVO memberVO = getExistingMember();
 
 		// password 일치 여부 반환
-		return passwordEncoder.matches(passwordDTO.getPassword(), memberVO.get().getPassword());
+		return passwordEncoder.matches(passwordDTO.getPassword(), memberVO.getPassword());
 	}
 
 	/**
@@ -107,14 +106,15 @@ public class MemberService {
 	@Transactional
 	public void editMyProfile(MemberEditRequestDTO memberEditRequestDTO) {
 
-		checkMemberDuplicated(memberEditRequestDTO);
+		// memberId에 해당하는 회원이 없다면 BusinessException 발생
+		MemberVO oldMemberVO = getExistingMember();
 
-		// password 가 입력되었다면 인코딩
-		if (!StringUtils.isBlank(memberEditRequestDTO.getPassword())) {
-			memberEditRequestDTO.updatePassword(passwordEncoder.encode(memberEditRequestDTO.getPassword()));
-		}
+		// member 필드 유효, 중복 체크
+		// 기존 값과 동일한 필드는 null로 처리
+		MemberVO updatedMemberVO = checkMemberField.validateAndCheckDuplicatedFields(memberEditRequestDTO, oldMemberVO);
 
-		memberMapper.updateMember(MemberVO.of(memberEditRequestDTO));
+		memberMapper.updateMember(updatedMemberVO);
+
 	}
 
 	/**
@@ -124,26 +124,27 @@ public class MemberService {
 	public void removeMyProfile() {
 
 		// memberId에 해당하는 회원이 없다면 BusinessException 발생
-		Optional<MemberVO> memberVO = memberMapper.selectMemberByMemberId(SecurityUtil.getCurrentUserId());
-
-		if (memberVO.isEmpty()) {
-			throw new BusinessException("해당 회원을 찾을 수 없습니다.");
-		}
+		checkMemberExist();
 
 		memberMapper.deleteMember(SecurityUtil.getCurrentUserId());
 	}
 
 	/**
-	 * DTO 의 password 를 제외한 각 필드 중복 체크
+	 * memberId에 해당하는 MemberVO 반환
 	 */
-	private void checkMemberDuplicated(DuplicateCheckAttributes requestDTO) {
+	private MemberVO getExistingMember() {
+		return memberMapper.selectMemberByMemberId(SecurityUtil.getCurrentUserId())
+			.orElseThrow(() -> new BusinessException("해당 회원을 찾을 수 없습니다."));
+	}
 
-		if (memberMapper.selectCountByUsername(requestDTO.getUsername()) > 0)
-			throw new BusinessException("아이디 중복");
-		if (memberMapper.selectCountByNickname(requestDTO.getNickname()) > 0)
-			throw new BusinessException("닉네임 중복");
-		if (memberMapper.selectCountByEmail(requestDTO.getEmail()) > 0)
-			throw new BusinessException("이메일 중복");
+	/*
+	 * memberId에 해당하는 Member 가 존재하는지 확인
+	 */
+	private void checkMemberExist() {
+		Optional<MemberVO> memberVO = memberMapper.selectMemberByMemberId(SecurityUtil.getCurrentUserId());
 
+		if (memberVO.isEmpty()) {
+			throw new BusinessException("해당 회원을 찾을 수 없습니다.");
+		}
 	}
 }

@@ -41,4 +41,20 @@ public class MemberVO {
 			.email(memberEditRequestDTO.getEmail())
 			.build();
 	}
+
+	public void updateUsername(String username) {
+		this.username = username;
+	}
+
+	public void updatePassword(String password) {
+		this.password = password;
+	}
+
+	public void updateNickname(String nickname) {
+		this.nickname = nickname;
+	}
+
+	public void updateEmail(String email) {
+		this.email = email;
+	}
 }
