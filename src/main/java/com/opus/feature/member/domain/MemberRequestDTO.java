@@ -1,12 +1,10 @@
 package com.opus.feature.member.domain;
 
-import com.opus.feature.member.service.DuplicateCheckAttributes;
-
 import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
 
 @Getter
-public class MemberRequestDTO implements DuplicateCheckAttributes {
+public class MemberRequestDTO {
 
 	@NotBlank
 	private String username;
