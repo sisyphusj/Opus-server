@@ -1,4 +1,4 @@
-package com.opus.component;
+package com.opus.feature.like.domain;
 
 import java.time.Instant;
 

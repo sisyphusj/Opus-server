@@ -11,6 +11,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
 import com.opus.exception.BusinessException;
+import com.opus.feature.like.domain.ClientInfo;
 import com.opus.utils.SecurityUtil;
 
 import lombok.Getter;
