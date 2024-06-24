@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.opus.common.ApiResponse;
 import com.opus.feature.member.domain.MemberEditRequestDTO;
-import com.opus.feature.member.domain.MemberRequestDTO;
+import com.opus.feature.member.domain.MemberRegisterRequestDTO;
 import com.opus.feature.member.domain.MemberResponseDTO;
 import com.opus.feature.member.domain.PasswordConfirmDTO;
 import com.opus.feature.member.service.MemberService;
@@ -32,9 +32,10 @@ public class MemberController {
 	 * 회원가입
 	 */
 	@PostMapping("/register")
-	public ResponseEntity<String> registerMember(@Valid @RequestBody MemberRequestDTO memberRequestDTO) {
+	public ResponseEntity<String> registerMember(
+		@Valid @RequestBody MemberRegisterRequestDTO memberRegisterRequestDTO) {
 
-		memberService.registerMember(memberRequestDTO);
+		memberService.registerMember(memberRegisterRequestDTO);
 		return ApiResponse.of("OK");
 	}
 

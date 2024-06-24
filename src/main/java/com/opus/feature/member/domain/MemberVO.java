@@ -21,13 +21,13 @@ public class MemberVO {
 
 	private String email;
 
-	public static MemberVO fromRegistrationDTO(MemberRequestDTO memberRequestDTO) {
+	public static MemberVO fromRegistrationDTO(MemberRegisterRequestDTO memberRegisterRequestDTO) {
 
 		return MemberVO.builder()
-			.username(memberRequestDTO.getUsername())
-			.password(memberRequestDTO.getPassword())
-			.nickname(memberRequestDTO.getNickname())
-			.email(memberRequestDTO.getEmail())
+			.username(memberRegisterRequestDTO.getUsername())
+			.password(memberRegisterRequestDTO.getPassword())
+			.nickname(memberRegisterRequestDTO.getNickname())
+			.email(memberRegisterRequestDTO.getEmail())
 			.build();
 	}
 
