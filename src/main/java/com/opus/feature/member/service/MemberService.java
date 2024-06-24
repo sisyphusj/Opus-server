@@ -106,14 +106,12 @@ public class MemberService {
 	@Transactional
 	public void editMyProfile(MemberEditRequestDTO memberEditRequestDTO) {
 
-		// memberId에 해당하는 회원이 없다면 BusinessException 발생
-		MemberVO oldMemberVO = getExistingMember();
+		// 중복 체크
+		checkMemberField.checkDuplicatedFields(memberEditRequestDTO);
 
-		// member 필드 유효, 중복 체크
-		// 기존 값과 동일한 필드는 null로 처리
-		MemberVO updatedMemberVO = checkMemberField.validateAndCheckDuplicatedFields(memberEditRequestDTO, oldMemberVO);
+		memberEditRequestDTO.updatePassword(passwordEncoder.encode(memberEditRequestDTO.getPassword()));
 
-		memberMapper.updateMember(updatedMemberVO);
+		memberMapper.updateMember(MemberVO.of(memberEditRequestDTO));
 
 	}
 

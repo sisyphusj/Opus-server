@@ -1,5 +1,6 @@
 package com.opus.feature.member.domain;
 
+import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
 
@@ -16,6 +17,7 @@ public class MemberRequestDTO {
 	private String nickname;
 
 	@NotBlank
+	@Email
 	private String email;
 
 	public void updatePassword(String password) {

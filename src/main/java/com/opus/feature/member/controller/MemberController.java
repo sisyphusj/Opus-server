@@ -82,7 +82,7 @@ public class MemberController {
 	 * 내 프로필 수정
 	 */
 	@PutMapping
-	public ResponseEntity<String> editMyProfile(@RequestBody MemberEditRequestDTO memberEditRequestDTO) {
+	public ResponseEntity<String> editMyProfile(@Valid @RequestBody MemberEditRequestDTO memberEditRequestDTO) {
 
 		memberService.editMyProfile(memberEditRequestDTO);
 		return ApiResponse.of("OK");
