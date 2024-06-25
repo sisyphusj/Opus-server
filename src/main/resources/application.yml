@@ -36,7 +36,7 @@ spring:
 jwt:
   secret: ENC(fg9kODJ9UjVeq0byMaQOdtqiRUCyEZLvqvbE8jonnEWUnUrCssFcGxPjZDVPbQwcYNdmPRm+O8i8/ME5/xwfdk5nB01jbgn1aHM5PYSN7PY6Pm+obkhOv0ti26BSvZJa0MZBpx8lYMx2ze5ByLi7guKHgw8WKzY55FK8y8wKts00IPrKMPzVkr/BAgSbMKek)
   header: Authorization
-  token-validity-in-seconds: 300
+  token-validity-in-seconds: 1800
 
 cloud:
   aws:
@@ -44,9 +44,9 @@ cloud:
       accessKey: ENC(GYPCDY/ip5LiI4NC0VQRY4Zdx7E7o4NQg/NKCJTGGy0=)
       secretKey: ENC(qjr/nCczvRLshZ9aNNaIBGXHCNrtHqgVtpmZQd93VQgBYSEzDU3IuEj9QVsMzoRXPPFeXbkASvk=)
     s3:
-      bucket: sisyphusj-bucket/opus-image
+      bucket: sisyphus-bucket/opus-image
     region:
-      static: us-east-1
+      static: ap-northeast-2
 
 kakao:
   accessKey: ENC(eGTNJfDjBQD1GOfIx5xb4c4hCBaUxWYeoYkhRiJPRbx9NlU67OsPQymBrBAYF6i4)
