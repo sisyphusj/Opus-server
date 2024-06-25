@@ -28,8 +28,6 @@ public class CommentResDTO {
 
 	private LocalDateTime updatedDate;
 
-	private LocalDateTime deletedDate;
-
 	public static CommentResDTO of(CommentVO comment) {
 
 		return CommentResDTO.builder()
@@ -42,7 +40,6 @@ public class CommentResDTO {
 			.content(comment.getContent())
 			.createdDate(comment.getCreatedDate())
 			.updatedDate(comment.getUpdatedDate())
-			.deletedDate(comment.getDeletedDate())
 			.build();
 	}
 

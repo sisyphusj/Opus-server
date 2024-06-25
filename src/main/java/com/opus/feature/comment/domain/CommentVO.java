@@ -27,8 +27,6 @@ public class CommentVO {
 
 	private LocalDateTime updatedDate;
 
-	private LocalDateTime deletedDate;
-
 	private String parentNickname;
 
 	private String nickname;

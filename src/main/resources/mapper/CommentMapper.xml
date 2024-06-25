@@ -18,13 +18,11 @@
                content,
                created_at,
                updated_at,
-               deleted_at,
                parent_nickname,
                member.nickname
         FROM comments
                  INNER JOIN member ON comments.member_id = member.member_id
         WHERE comments.pin_id = #{pinId}
-          and comments.is_deleted = 0
         ORDER BY comment_id ASC, level ASC
     </select>
 
@@ -37,13 +35,11 @@
                content,
                created_at,
                updated_at,
-               deleted_at,
                parent_nickname,
                member.nickname
         FROM comments
                  INNER JOIN member ON comments.member_id = member.member_id
         WHERE comments.member_id = #{memberId}
-          and comments.is_deleted = 0
         ORDER BY comment_id ASC, level ASC
     </select>
 
@@ -56,20 +52,17 @@
                content,
                created_at,
                updated_at,
-               deleted_at,
                parent_nickname,
                member.nickname
         FROM comments
                  INNER JOIN member ON comments.member_id = member.member_id
         WHERE comment_id = #{commentId}
-          and comments.is_deleted = 0
     </select>
 
     <select id="countChildCommentsByCommentId" resultType="int">
         SELECT COUNT(*)
         FROM comments
         WHERE top_level_comment_id = #{commentId}
-          and comments.is_deleted = 0
     </select>
 
     <update id="updateComment">
@@ -96,7 +89,6 @@
         <result property="content" column="content"/>
         <result property="createdDate" column="created_at"/>
         <result property="updatedDate" column="updated_at"/>
-        <result property="deletedDate" column="deleted_at"/>
         <result property="parentNickname" column="parent_nickname"/>
         <result property="nickname" column="member.nickname"/>
     </resultMap>
