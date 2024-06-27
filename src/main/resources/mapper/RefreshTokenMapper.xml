@@ -4,20 +4,20 @@
 <mapper namespace="com.opus.feature.auth.mapper.RefreshTokenMapper">
 
     <insert id="insertRefreshToken">
-        insert into TOKENS
+        insert into tokens
             (r_key, r_value)
         values (#{key}, #{value})
     </insert>
 
     <select id="selectRefreshTokenByToken" resultType="com.opus.feature.auth.domain.RefreshTokenVO">
         select r_key as "key", r_value as "value"
-        from TOKENS
+        from tokens
         where r_value = #{value}
     </select>
 
     <delete id="deleteRefreshToken">
         delete
-        from TOKENS
+        from tokens
         where r_key = #{key}
     </delete>
 
