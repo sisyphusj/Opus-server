@@ -9,5 +9,8 @@ import lombok.Getter;
 public class ReissueTokenReqDTO {
 
 	@NotBlank
+	private String accessToken;
+
+	@NotBlank
 	private String refreshToken;
 }
