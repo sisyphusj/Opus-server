@@ -10,7 +10,8 @@ import org.springframework.transaction.annotation.Transactional;
 import com.opus.component.TokenProvider;
 import com.opus.feature.auth.domain.LoginReqDTO;
 import com.opus.feature.auth.domain.RefreshTokenVO;
-import com.opus.feature.auth.domain.TokenDTO;
+import com.opus.feature.auth.domain.ReissueTokenReqDTO;
+import com.opus.feature.auth.domain.TokenResDTO;
 import com.opus.feature.auth.mapper.RefreshTokenMapper;
 import com.opus.utils.SecurityUtil;
 
@@ -32,7 +33,7 @@ public class AuthService {
 	 * 로그인 처리
 	 */
 	@Transactional
-	public TokenDTO login(LoginReqDTO loginReqDTO) {
+	public TokenResDTO login(LoginReqDTO loginReqDTO) {
 
 		// 로그인 정보를 기반으로 AuthenticationToken 생성
 		UsernamePasswordAuthenticationToken authToken = loginReqDTO.toAuthentication();
@@ -42,34 +43,35 @@ public class AuthService {
 			.authenticate(authToken);
 
 		// 인증 정보를 기반으로 JWT 토큰 생성
-		TokenDTO tokenDTO = tokenProvider.createToken(authentication);
+		TokenResDTO tokenResDTO = tokenProvider.createToken(authentication);
 
 		// Refresh Token 저장
 		RefreshTokenVO refreshTokenVO = RefreshTokenVO.builder()
 			.key(Integer.parseInt(authentication.getName()))
-			.value(tokenDTO.getRefreshToken())
+			.value(tokenResDTO.getRefreshToken())
 			.build();
 
 		refreshTokenMapper.deleteRefreshToken(refreshTokenVO.getKey());
 
 		refreshTokenMapper.insertRefreshToken(refreshTokenVO);
 
-		return tokenDTO;
+		return tokenResDTO;
 	}
 
 	/**
 	 * Refresh Token을 이용한 토큰 재발급
 	 */
 	@Transactional
-	public TokenDTO reissueToken(TokenDTO requestTokenDTO) {
+	public TokenResDTO reissueToken(ReissueTokenReqDTO reissueTokenReqDTO) {
 
 		// Refresh Token 유효성 검증
-		if (!tokenProvider.validateToken(requestTokenDTO.getRefreshToken())) {
+		if (!tokenProvider.validateToken(reissueTokenReqDTO.getRefreshToken())) {
 			throw new BadCredentialsException("Refresh Token이 유효하지 않습니다.");
 		}
 
 		// DB 저장된 Refresh Token 조회
-		RefreshTokenVO refreshTokenVO = refreshTokenMapper.selectRefreshTokenByToken(requestTokenDTO.getRefreshToken())
+		RefreshTokenVO refreshTokenVO = refreshTokenMapper.selectRefreshTokenByToken(
+				reissueTokenReqDTO.getRefreshToken())
 			.orElseThrow(() -> new BadCredentialsException("로그아웃된 사용자입니다"));
 
 		// Access Token을 재발급

@@ -19,7 +19,7 @@ import org.springframework.stereotype.Component;
 
 import com.opus.common.ResponseCode;
 import com.opus.exception.CustomException;
-import com.opus.feature.auth.domain.TokenDTO;
+import com.opus.feature.auth.domain.TokenResDTO;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
@@ -78,7 +78,7 @@ public class TokenProvider implements InitializingBean {
 	/**
 	 * 토큰 생성 메서드
 	 */
-	public TokenDTO createToken(Authentication authentication) {
+	public TokenResDTO createToken(Authentication authentication) {
 
 		// 권한 정보를 콤마로 구분하여 authorities 변수에 할당
 		// 토큰 생성에 사용되는 권한 정보는 문자열 형태로 저장
@@ -103,12 +103,12 @@ public class TokenProvider implements InitializingBean {
 		// 리프레시 토큰 생성
 		String refreshToken = Jwts.builder()
 			// 만료기한 설정
-			.setExpiration(new Date(now + this.tokenValidityInMilliseconds * 2016))
+			.setExpiration(new Date(now + this.tokenValidityInMilliseconds * 336))
 			.signWith(key, SignatureAlgorithm.HS512)
 			.compact();
 
 		// 토큰 DTO 생성
-		return TokenDTO.builder()
+		return TokenResDTO.builder()
 			.accessToken(accessToken)
 			.refreshToken(refreshToken)
 			.accessTokenExpiresIn(validity.getTime())
@@ -143,7 +143,7 @@ public class TokenProvider implements InitializingBean {
 	/**
 	 * 리프레시 토큰에서 인증 정보 추출 메서드
 	 */
-	public TokenDTO reissueTokenFromMemberId(int memberId, String refreshToken) {
+	public TokenResDTO reissueTokenFromMemberId(int memberId, String refreshToken) {
 
 		// User 객체 생성
 		UserDetails userDetails = new User(String.valueOf(memberId), "",
@@ -169,7 +169,7 @@ public class TokenProvider implements InitializingBean {
 			.compact();
 
 		// 토큰 DTO 생성
-		return TokenDTO.builder()
+		return TokenResDTO.builder()
 			.accessToken(accessToken)
 			.refreshToken(refreshToken)
 			.accessTokenExpiresIn(validity.getTime())
