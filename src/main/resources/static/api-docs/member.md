@@ -64,7 +64,7 @@ GET /api/member/check/email/{email}
 
 ---
 
-## 프로필_조회
+## 프로필 조회
 
 로그인한 회원의 프로필을 조회합니다. <br>
 
@@ -96,7 +96,7 @@ Authorization: Bearer {access_token}
 
 ---
 
-## 비밀번호_확인
+## 비밀번호 확인
 
 비밀번호를 확인합니다. <br>
 비밀번호가 일치하면 **true**, 일치하지 않으면 **false**를 반환합니다.
@@ -124,7 +124,7 @@ Authorization: Bearer {access_token}
 
 ---
 
-## 프로필_수정
+## 프로필 수정
 
 로그인한 회원의 프로필을 수정합니다. <br>
 수정된 필드만 구분하여 수정할 수 있습니다.
