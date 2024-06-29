@@ -36,7 +36,7 @@ Authorization: Bearer {access_token}
 
 ---
 
-## 핀_좋아요_체크
+## 핀_좋아요_체크_조회
 
 사용자의 특정 핀에 대한 좋아요 여부를 확인합니다.
 반환은 boolean 타입으로 이루어집니다.
@@ -64,7 +64,7 @@ Authorization: Bearer {access_token}
 
 ---
 
-## 핀_좋아요_개수
+## 핀_좋아요_개수_조회
 
 특정 핀에 대한 좋아요 개수를 조회합니다.
 
@@ -146,7 +146,7 @@ Authorization: Bearer {access_token}
 
 ---
 
-## 댓글_좋아요_체크
+## 댓글_좋아요_체크_조회
 
 사용자의 특정 댓글에 대한 좋아요 여부를 확인합니다.
 반환은 boolean 타입으로 이루어집니다.
@@ -174,7 +174,7 @@ Authorization: Bearer {access_token}
 
 ---
 
-## 댓글_좋아요_개수
+## 댓글_좋아요_개수_조회
 
 특정 댓글에 대한 좋아요 개수를 조회합니다.
 

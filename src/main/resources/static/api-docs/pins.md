@@ -47,7 +47,7 @@ Authorization: Bearer {access_token}
 
 ---
 
-## 핀_리스트
+## 핀_리스트_조회
 
 핀 목록을 조회합니다. <br> `offset`, `amount`를 이용하여 페이징 처리를 합니다. 1개 이상의 핀을 조회할 수 있습니다.
 
@@ -106,7 +106,7 @@ GET /api/pins?offset=0&amount=4
 
 ---
 
-## 내_핀_리스트
+## 내_핀_리스트_조회
 
 내가 작성한 핀 목록을 조회합니다. <br> `offset`, `amount`를 이용하여 페이징 처리를 합니다. 1개 이상의 핀을 조회할 수 있습니다.
 
@@ -217,7 +217,7 @@ Authorization: Bearer {access_token}
 
 ---
 
-## 핀_개수
+## 핀_개수_조회
 
 전체 핀 개수를 반환하거나, `keyword`를 통한 검색 결과의 핀 개수를 반환합니다.
 
