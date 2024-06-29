@@ -13,6 +13,7 @@ public class PinReqDTO {
 	@NotBlank
 	private String imagePath;
 
+	@NotBlank
 	private String prompt;
 
 	private String negativePrompt;
