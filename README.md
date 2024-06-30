@@ -15,7 +15,7 @@
 - 사용자는 다른 사용자가 생성한 이미지를 보고 좋아요를 누르거나 댓글을 작성할 수 있습니다.
   <br> <br>
 
----
+<br>
 
 ## ⭐ 주요 구현 내용
 
@@ -31,7 +31,7 @@
 
 #### - 기본 CRUD 구현
 
----
+<br>
 
 ## 📽️ Preview
 
@@ -43,7 +43,7 @@
 
 자세한 시연은 [Opus-front](https://github.com/sisyphusj/Opus-front)의 README.md를 참고해주세요.
 
----
+<br>
 
 ## 🛠️ 기술 스택
 
@@ -59,13 +59,13 @@
 
 #### API : Kakao Karlo API
 
----
+<br>
 
 ## 🌐 인프라
 
 ![Wardiere Inc  Site Map (2)](https://github.com/sisyphusj/Opus-server/assets/83945228/25056641-c613-4c00-944e-85f0e4b390a6)
 
----
+<br>
 
 ## 📚 API Docs
 
@@ -73,7 +73,7 @@
 
 ![Wardiere Inc  Site Map (1)](https://github.com/sisyphusj/Opus-server/assets/83945228/256e02ea-39c7-43ca-a66d-258f271e91b2)
 
----
+<br>
 
 ## 📟 ERD
 
