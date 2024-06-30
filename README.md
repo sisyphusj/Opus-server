@@ -1,8 +1,16 @@
 # Opus-Backend
 
-## Opus project backend 소개
--  
+<div style="text-align: center;">
+  <img src="https://github.com/sisyphusj/Opus-server/assets/83945228/05aa3045-74a2-4fb2-bd5a-941bd7eee976" alt="opus" width="1000"/>
+</div>
 
+## Opus project backend 소개
+
+- **Opus**는 카카오의 이미지 생성 AI인 Karlo 모델을 활용한 이미지 공유 서비스입니다.
+- 사용자는 Karlo 모델을 사용하여 프롬프트를 포함한 다양한 설정을 통해 이미지를 생성하고 이를 다른 사용자들과 공유할 수 있습니다.
+- 사용자는 다른 사용자가 생성한 이미지를 보고 좋아요를 누르거나 댓글을 작성할 수 있습니다.
+
+## 1. 개발환경
 
 Opus project backend server
 ![opus_db_erd](https://github.com/sisyphusj/Opus-server/assets/83945228/13897e95-55c0-4181-a143-2a6d2d43b95d)
