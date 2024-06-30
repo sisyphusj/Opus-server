@@ -27,9 +27,24 @@
 
 자세한 시연은 [Opus-front](https://github.com/sisyphusj/Opus-front)의 README.md를 참고해주세요.
 
-## 1. 개발환경
+---
 
-Opus project backend server
+## 프로젝트 구조
+
+<img width="1000" alt="Opus 프로젝트 구조" src="https://github.com/sisyphusj/Opus-server/assets/83945228/c0a3d497-f7f2-4880-a294-732174ab8a86">
+
+<br>
+<br>
+
+![Wardiere Inc  Site Map](https://github.com/sisyphusj/Opus-server/assets/83945228/04b81514-88e3-46a2-96ec-07ba8a25b7d8)
+
+### OPUS DB ER
+
 ![opus_db_erd](https://github.com/sisyphusj/Opus-server/assets/83945228/13897e95-55c0-4181-a143-2a6d2d43b95d)
 
+---
+
+### API Docs
+
+**Opus Backend의 API 문서는 오른쪽 링크에서 확인하실 수 있습니다.**
 [API 문서](/src/main/resources/static/api-docs/index.md)
