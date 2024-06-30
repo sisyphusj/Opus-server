@@ -36,7 +36,7 @@
 <br>
 <br>
 
-![Wardiere Inc  Site Map](https://github.com/sisyphusj/Opus-server/assets/83945228/04b81514-88e3-46a2-96ec-07ba8a25b7d8)
+![Wardiere Inc  Site Map (1)](https://github.com/sisyphusj/Opus-server/assets/83945228/256e02ea-39c7-43ca-a66d-258f271e91b2)
 
 ### OPUS DB ER
 
